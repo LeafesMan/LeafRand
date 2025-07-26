@@ -14,15 +14,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName ="newWeightedObjectList", menuName = "Weighted Object List")]
 public class WeightedObjectList : ScriptableObject
 {
-    [SerializeField] List<Weighted<GameObject>> weightedObjects;
+    [SerializeField] WeightedList<GameObject> weightedObjects = new();
 
     // Returns a copy of WeightedObjects
     // We do not want anyone to ever take a ref to weighted objects and edit it
     // as those changes would save and we could lose fine tuned objects and weights
-    public List<Weighted<GameObject>> GetWeightedListCopy()
-    {
-        List<Weighted<GameObject>> copy = new List<Weighted<GameObject>>();
-        foreach(Weighted<GameObject> weighted in weightedObjects) copy.Add(weighted);
-        return copy;
-    }
+    public WeightedList<GameObject> GetWeightedListCopy() => weightedObjects.Clone();
 }

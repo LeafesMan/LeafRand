@@ -13,7 +13,6 @@
 using UnityEditor;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
-using static UnityEngine.Rendering.DebugUI.MessageBox;
 
 [CustomPropertyDrawer(typeof(Weighted<>))]
 public class WeightedDrawer : PropertyDrawer
