@@ -1,11 +1,11 @@
 {
   "name": "com.leafesman.leafrand",
   "version": "1.0.0",
-  "displayName": "LeafRand",
+  "displayName": "Leaf Rand",
   "description": "A deterministic random library with high-level helper functions and weighted list class.",
   "unity": "2022.3",
   "dependencies": {
-    "com.leafesman.leafeditor": "1.0.0",
+    "com.leafesman.leafeditor": "1.0.0"
  },
   "author": {
     "name": "LeafesMan",
