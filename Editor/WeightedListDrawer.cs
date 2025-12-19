@@ -3,7 +3,6 @@ using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.VisualScripting;
 using System.Linq;
 using LeafEditor;
 
@@ -139,7 +138,7 @@ namespace LeafRand
 
             // If there is at least one identifier being dragged --> Accept
             // Otherwise --> Deny
-            bool foundPrefab = false;
+            /*bool foundPrefab = false;
             foreach (var obj in DragAndDrop.objectReferences)
                 if (obj.IsPrefabDefinition())
                 {
@@ -147,7 +146,9 @@ namespace LeafRand
                     break;
                 }
 
-            DragAndDrop.visualMode = foundPrefab ? DragAndDropVisualMode.Copy : DragAndDropVisualMode.None;
+            DragAndDrop.visualMode = foundPrefab ? DragAndDropVisualMode.Copy : DragAndDropVisualMode.None;*/
+
+            DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
         }
         private void DragPerform(DragPerformEvent evt, SerializedProperty prop)
         {   // Only Purge Duplicates after a drag and drop
@@ -166,11 +167,11 @@ namespace LeafRand
             foreach (var draggedObject in DragAndDrop.objectReferences)
             {
                 // Dragged Object is a Prefab Gate
-                if (!draggedObject.IsPrefabDefinition())
+                /*if (!draggedObject.IsPrefabDefinition())
                 {
                     Debug.LogWarning($"Skipping {draggedObject.name}, not a GameObject");
                     continue;
-                }
+                }*/
 
                 // Add to array
                 items.arraySize++;

@@ -1,3 +1,6 @@
+### Leaf Rand
+A deterministic random library with high-level helper functions and weighted list class for Unity.
+
 ### Motivation
 - Convenient Random methods (Chance, Range(Taking a vector), Direction, Element, WeightedElement)
 - No need to reimplement these methods, a Weighted interface, or Generic type

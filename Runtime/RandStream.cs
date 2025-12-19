@@ -5,18 +5,13 @@ using System.Linq;
 
 namespace LeafRand
 {
-    /// <summary>
-    /// A System.Random wrapper providing extensive helper functions and a static instance.
-    /// </summary>
     public class RandStream
     {
         #region Main
-        readonly System.Random rand;
+        readonly System.Random rand;    
         public RandStream(int seed = 0) => rand = new System.Random(seed);
-
-        [Tooltip("The Static Rand Instance.\n Seed is based on system clock at startup.")]
-        public static RandStream S { get; } = new(Environment.TickCount);
         #endregion
+        #region Helpers
         #region Chance
         ///<summary>
         ///Random roll with SuccessChance of returning true.
@@ -811,4 +806,5 @@ namespace LeafRand
         #endregion
     }
     #endregion
+        #endregion
 }

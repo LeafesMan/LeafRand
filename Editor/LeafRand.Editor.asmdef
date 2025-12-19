@@ -1,0 +1,17 @@
+{
+    "name": "LeafRand.Editor",
+    "rootNamespace": "LeafRand",
+    "references": [
+        "GUID:347bb22a9474ff9408ab139a61e78152",
+        "GUID:06513a343db47e0478e7f7e6dbb87926"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
