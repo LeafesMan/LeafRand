@@ -5,6 +5,11 @@ using System.Linq;
 
 namespace LeafRand
 {
+    /// <summary>
+    /// Deterministic random number generator with high-level helper functions.<br></br>
+    /// Helpers for random numbers, chance, sampling, direction, color, and points. <br></br>
+    /// Backed by a configurable core RNG (currently System.Random).
+    /// </summary>
     public class RandStream
     {
         #region Main
