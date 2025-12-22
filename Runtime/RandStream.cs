@@ -12,223 +12,59 @@ namespace LeafRand
     /// </summary>
     public class RandStream
     {
-        #region Main
-        readonly System.Random rand;    
+        #region Core
+        readonly System.Random rand;
         public RandStream(int seed = 0) => rand = new System.Random(seed);
         #endregion
         #region Helpers
-        #region Chance
-        ///<summary>
-        ///Random roll with SuccessChance of returning true.
-        ///</summary>
-        public bool Chance(float successChance) => rand.NextDouble() < successChance;
-        ///<summary>
-        ///Random roll with SuccessChance of returning true.
-        ///</summary>
-        public bool Chance(double successChance) => rand.NextDouble() < successChance;
-        #endregion
-        #region Int
-        /// <summary>
-        /// Returns a random integer in: [0, MaxValue)
-        /// </summary>
-        public int Int() => rand.Next();
+        #region Num
         /// <summary>
         /// Returns a random integer in: [0, max)
         /// </summary>
-        public int Int(int max) => rand.Next(max);
+        public int Num(int max) => rand.Next(max);
         /// <summary>
         /// Returns a random integer in: [min, max)
         /// </summary>
-        public int Int(int min, int max) => rand.Next(min, max);
+        public int Num(int min, int max) => rand.Next(min, max);
         /// <summary>
         /// Returns a random integer in: [range.x, range.y)
         /// </summary>
-        public int Int(Vector2Int range) => rand.Next(range.x, range.y);
+        public int Num(Vector2Int range) => rand.Next(range.x, range.y);
         /// <summary>
-        /// Returns a uniformly random integer from within the given ranges.<br></br>
-        /// * Overlapping ranges will have a larger chance of being chosen. <br></br>
-        /// ** Use <paramref name="purgeOverlap"/> to avoid this at an O(nlog(n)) cost.
+        /// Returns a random float in: [0, 1)
         /// </summary>
-        public float Int(bool purgeOverlap, List<Vector2Int> ranges)
-        {   // Exceptions
-            if (ranges == null) throw new ArgumentException("Passed in null \"ranges\". Ensure you pass in a non-null ranges array.");
-            if (ranges.Count == 0) throw new ArgumentException("Passed in empty \"ranges\".  Ensure you pass in at least 1 Vector2.");
-
-            // Purge overlap if requested
-            if (purgeOverlap)
-            {
-                // Ensure smaller value is in x-slot
-                for (int i = 0; i < ranges.Count; i++)
-                    if (ranges[i].y < ranges[i].x) // Y is smaller -> Swap 
-                        ranges[i] = new(ranges[i].y, ranges[i].x);
-
-                // Sort the list by ascending x value
-                List<Vector2Int> sortedRanges = ranges.ToList();
-                sortedRanges.Sort((a, b) => a.x.CompareTo(b.x));
-
-
-                // Purge overlapping ranges
-                ranges.Clear();
-                ranges.Add(sortedRanges[0]);
-                foreach (var toAdd in ranges)
-                {
-                    // ToAdd starts within the largest range added --> Combine the two ranges
-                    if (toAdd.x <= ranges.Last().y)
-                        ranges[ranges.Count - 1] = new Vector2Int(ranges.Last().x, Mathf.Max(ranges.Last().y, toAdd.y));
-                    else // Don't meet --> Add Range
-                        ranges.Add(toAdd);
-                }
-            }
-
-            // Cache width of each range + total width
-            int totalWidth = 0;
-            int[] rangeWidths = new int[ranges.Count];
-            for (int i = 0; i < rangeWidths.Length; i++)
-            {
-                rangeWidths[i] = Mathf.Abs(ranges[i].x - ranges[i].y);
-                totalWidth += rangeWidths[i];
-            }
-
-
-            // Edge Case: All ranges are points (total width is 0)
-            // Returns a random point in this case
-            // * x or y will be same so choice doesnt matter
-            if (totalWidth == 0) return Pick(ranges).x;
-
-            // Remove Ranges with 0 Width
-            // a point range may technically be chosen suppose we have (0, 0) and (1, 2)
-            // chosenDistance could be 0, since 0 <= 0 -> return 0
-            // if we use < then we have the same problem in the opposite case (0, 1) and (2, 2)
-            for (int i = ranges.Count - 1; i >= 0; i--)
-                if (rangeWidths[i] == 0)
-                    ranges.RemoveAt(i);
-
-            // Choose random distance along total width
-            int chosenDistance = Int(totalWidth);
-
-            // Grab value at chosen distance in ranges
-            int widthTraversed = 0;
-            for (int i = 0; i < ranges.Count; i++)
-            {   // Chosen Distance is within the current range -> Find value within said range
-                if (chosenDistance < widthTraversed + rangeWidths[i])
-                    return Mathf.Lerp(ranges[i].x, ranges[i].y, (chosenDistance - widthTraversed) / rangeWidths[i]);
-
-                widthTraversed += rangeWidths[i];
-            }
-
-            throw new Exception("Unexpected Case: Ranges completely failed, I'm sorry. ChosenDistance was greater than total width!");
-        }
+        public float Num() => (float)rand.NextDouble();
         /// <summary>
-        /// Returns a uniformly random float from within the given ranges.<br></br>
-        /// * Overlapping ranges will have a larger chance of being chosen. <br></br>
-        /// ** Use <paramref name="purgeOverlap"/> to avoid this at an O(nlog(n)) cost.
+        /// Returns a random float in: [0, max)
         /// </summary>
-        public float Int(bool purgeOverlap, params Vector2Int[] ranges) => Int(purgeOverlap, ranges.ToList());
-        #endregion
-        #region Float
+        public float Num(float max) => Num() * max;
         /// <summary>
-        /// Returns a random float in: [0, 1]
+        /// Returns a random float in: [min, max)
         /// </summary>
-        public float Float() => (float)rand.Next() / (int.MaxValue - 1);
-        /// <summary>
-        /// Returns a random float in: [0, max]
-        /// </summary>
-        public float Float(float max) => Float() * max;
-        public float FloatFast(float max) => (float)rand.Next() / (int.MaxValue - 1) * max;
-        /// <summary>
-        /// Returns a random float in: [min, max]
-        /// </summary>
-        public float Float(float min, float max) => min + Float() * (max - min);
-        public float FloatFast(float min, float max) => min + (float)rand.Next() / (int.MaxValue - 1) * max * (max - min);
+        public float Num(float min, float max) => min + Num() * (max - min);
         /// <summary>
         /// Returns a random float in: [range.x, range.y]
         /// </summary>
-        public float Float(Vector2 range) => Float(range.x, range.y);
+        public float Num(Vector2 range) => Num(range.x, range.y);
         /// <summary>
-        /// Returns a uniformly random float from within the given ranges.<br></br>
-        /// * Overlapping ranges will have a larger chance of being chosen. <br></br>
-        /// ** Use <paramref name="purgeOverlap"/> to avoid this at an O(nlog(n)) cost.
+        /// Returns a random index within the size of Source.
         /// </summary>
-        public float Float(bool purgeOverlap, List<Vector2> ranges)
-        {   // Exceptions
-            if (ranges == null) throw new ArgumentException("Passed in null \"ranges\". Ensure you pass in a non-null ranges array.");
-            if (ranges.Count == 0) throw new ArgumentException("Passed in empty \"ranges\".  Ensure you pass in at least 1 Vector2.");
-
-            // Purge overlap if requested
-            if (purgeOverlap)
-            {
-                // Ensure smaller value is in x-slot
-                for (int i = 0; i < ranges.Count; i++)
-                    if (ranges[i].y < ranges[i].x) // Y is smaller -> Swap 
-                        ranges[i] = new(ranges[i].y, ranges[i].x);
-
-                // Sort the list by ascending x value
-                List<Vector2> sortedRanges = ranges.ToList();
-                sortedRanges.Sort((a, b) => a.x.CompareTo(b.x));
-
-
-                // Purge overlapping ranges
-                ranges.Clear();
-                ranges.Add(sortedRanges[0]);
-                foreach (var toAdd in ranges)
-                {
-                    // ToAdd starts within the largest range added --> Combine the two ranges
-                    if (toAdd.x <= ranges.Last().y)
-                        ranges[ranges.Count - 1] = new Vector2(ranges.Last().x, Mathf.Max(ranges.Last().y, toAdd.y));
-                    else // Don't meet --> Add Range
-                        ranges.Add(toAdd);
-                }
-            }
-
-            // Cache width of each range + total width
-            float totalWidth = 0;
-            float[] rangeWidths = new float[ranges.Count];
-            for (int i = 0; i < rangeWidths.Length; i++)
-            {
-                rangeWidths[i] = Mathf.Abs(ranges[i].x - ranges[i].y);
-                totalWidth += rangeWidths[i];
-            }
-
-
-            // Edge Case: All ranges are points (total width is 0)
-            // Returns a random point in this case
-            // * x or y will be same so choice doesnt matter
-            if (totalWidth == 0) return Pick(ranges).x;
-
-            // Remove Ranges with 0 Width
-            // a point range may technically be chosen suppose we have (0, 0) and (1, 2)
-            // chosenDistance could be 0, since 0 <= 0 -> return 0
-            // if we use < then we have the same problem in the opposite case (0, 1) and (2, 2)
-            for (int i = ranges.Count - 1; i >= 0; i--)
-                if (rangeWidths[i] == 0)
-                    ranges.RemoveAt(i);
-
-            // Choose random distance along total width
-            float chosenDistance = Float(totalWidth);
-
-            // Grab value at chosen distance in ranges
-            float widthTraversed = 0;
-            for (int i = 0; i < ranges.Count; i++)
-            {   // Chosen Distance is within the current range -> Find value within said range
-                if (chosenDistance <= widthTraversed + rangeWidths[i])
-                    return Mathf.Lerp(ranges[i].x, ranges[i].y, (chosenDistance - widthTraversed) / rangeWidths[i]);
-
-                widthTraversed += rangeWidths[i];
-            }
-
-            throw new Exception("Unexpected Case: Ranges completely failed, I'm sorry. Chosen Distance was greater than Total Width!");
-        }
+        public int Index<T>(IReadOnlyCollection<T> source) => Num(source.Count);
+        #endregion
+        #region Angle
         /// <summary>
-        /// Returns a uniformly random float from within the given ranges.<br></br>
-        /// * Overlapping ranges will have a larger chance of being chosen. <br></br>
-        /// ** Use <paramref name="purgeOverlap"/> to avoid this at an O(nlog(n)) cost.
+        /// Returns a random angle in: [minRadians, maxRadians)
         /// </summary>
-        public float Float(bool purgeOverlap, params Vector2[] ranges) => Float(purgeOverlap, ranges.ToList());
+        public float Angle(float minRadians = 0, float maxRadians = 2 * Mathf.PI) { return Num(minRadians, maxRadians);  }
+        #endregion
+        #region Bool
+        ///<summary>
+        /// Returns a random bool with SuccessChance of returning true.
+        ///</summary>
+        public bool Bool(float successChance = 0.5f) => rand.NextDouble() < successChance;
         #endregion
         #region Direction
-        #region 1D
-        public int Dir1D() => Int(2) * 2 - 1;
-        #endregion
+        public int Sign() => Num(2) * 2 - 1;
         #region 2D
         /// <summary>
         /// Returns a random 2D direction.
@@ -239,7 +75,7 @@ namespace LeafRand
         /// </summary>
         public Vector2 Dir2D(float thetaRangeX, float thetaRangeY)
         {
-            float thetaRadians = Float(thetaRangeX, thetaRangeY) * Mathf.Deg2Rad;
+            float thetaRadians = Num(thetaRangeX, thetaRangeY) * Mathf.Deg2Rad;
             return new(Mathf.Cos(thetaRadians), Mathf.Sin(thetaRadians));
         }
         /// <summary>
@@ -254,7 +90,7 @@ namespace LeafRand
             basis.Normalize();
 
             // Get Random Rotate in the passed range and convert to RADs
-            float randomDegrees = Float(degreesRangeX, degreesRangeY) * Mathf.Deg2Rad;
+            float randomDegrees = Num(degreesRangeX, degreesRangeY) * Mathf.Deg2Rad;
 
             // Calculate direction relative to basis rotating randomDegrees
             float newX = basis.x * Mathf.Cos(randomDegrees) - basis.y * Mathf.Sin(randomDegrees);
@@ -284,10 +120,10 @@ namespace LeafRand
         /// </summary>
         public Vector3 Dir3D(float thetaRangeX, float thetaRangeY, float phiRangeX, float phiRangeY)
         {   // Get Random Theta
-            float thetaRadians = Float(thetaRangeX, thetaRangeY) * Mathf.Deg2Rad;
+            float thetaRadians = Num(thetaRangeX, thetaRangeY) * Mathf.Deg2Rad;
 
             // Get Random Phi
-            float randPhiDegrees = Float(phiRangeX, phiRangeY);
+            float randPhiDegrees = Num(phiRangeX, phiRangeY);
             //if (randPhiDegrees > 180) randPhiDegrees %= 180;  // Inputs above 180 wrap back around to 0
             //else if (randPhiDegrees < 0) randPhiDegrees = 1;
             float randPhi01 = randPhiDegrees / 180;           // Remap to (0,1)
@@ -341,85 +177,27 @@ namespace LeafRand
         #endregion
         #endregion
         #region Color
-        /// <summary>
-        /// Takes a Hue, Saturation, and Lightness range. <br></br>
-        /// Hue may be outside the range [0,1) inputs above or below this range will wrap around 1 -> 0. <br></br>
-        /// Saturation and Lightness must be within [0,1].
-        /// </summary>
-        /// <returns>A random Color with HSL within the given ranges.</returns>
-        public Color ColorHSL(Vector2 hueRange, Vector2 saturationRange, Vector2 lightnessRange)
-        {
-            float hue = Float(hueRange);
-            float saturation = Float(saturationRange);
-            float lightness = Float(lightnessRange);
 
-            return HSLToRGB(hue, saturation, lightness);
-
-
-            Color HSLToRGB(float hue, float saturation, float lightness)
-            {   // Formula derived from: https://en.wikipedia.org/wiki/HSL_and_HSV
-                hue %= 1; // Wrap back around if outside of hue range [0,1)
-
-                // Calculate RGB components
-                float chroma = (1 - Mathf.Abs(2 * lightness - 1)) * saturation;
-                float huePrime = hue * 6;
-                float medium = chroma * (1 - Mathf.Abs((huePrime % 2) - 1));
-
-                float r;
-                float g;
-                float b;
-
-                // Determine RGB
-                if (huePrime >= 0 && huePrime < 1) { r = chroma; g = medium; b = 0; }
-                else if (huePrime >= 1 && huePrime < 2) { r = medium; g = chroma; b = 0; }
-                else if (huePrime >= 2 && huePrime < 3) { r = 0; g = chroma; b = medium; }
-                else if (huePrime >= 3 && huePrime < 4) { r = 0; g = medium; b = chroma; }
-                else if (huePrime >= 4 && huePrime < 5) { r = medium; g = 0; b = chroma; }
-                else if (huePrime >= 5 && huePrime < 6) { r = chroma; g = 0; b = medium; }
-                else throw new System.Exception("Unexpected Outcome: Sorry! Hue was >= 1 or < 0");
-
-                // Apply Lightness Modification
-                float m = lightness - chroma / 2;
-                r += m;
-                g += m;
-                b += m;
-
-                // Color
-                return new Color(r, g, b);
-            }
-        }
         /// <summary>
         /// Takes a Hue, Saturation, and Value range all within [0,1] (Inclusive).
         /// </summary>
         /// <returns>A random Color with HSV within the given ranges.</returns>
-        public Color ColorHSV(Vector2 hueRange, Vector2 saturationRange, Vector2 valueRange) => Color.HSVToRGB(Float(hueRange), Float(saturationRange), Float(valueRange));
-        /// <summary>
-        /// Takes an R, G, and B range all within [0,1] (Inclusive).
-        /// </summary>
-        /// <returns>A random Color with RGB within the given ranges.</returns>
-        public Color ColorRGB(Vector2 redRange, Vector2 greenRange, Vector2 blueRange) => new Color(Float(redRange), Float(greenRange), Float(blueRange));
+        public Color Color(Vector2 hueRange, Vector2 saturationRange, Vector2 valueRange) => UnityEngine.Color.HSVToRGB(Num(hueRange), Num(saturationRange), Num(valueRange));
         #endregion
-        #region Pick
+        #region Item
         #region Single
         /// <summary>
-        /// Picks a single uniformly random item from <paramref name="source"/><br></br>
-        /// Time Complexity:<br></br>
-        /// - Indexed IEnumerable: O(1)<br></br>
-        /// - Non-Indexed IEnumerable: O(n)<br></br>
-        /// * If you need multiple picks DO NOT loop Pick<br></br>
-        /// (Instead call PickWith or WithoutReplacement they are optimized for the task)
+        /// Takes a single item uniformly random Item from <paramref name="source"/>.<br></br>
+        /// * If you need multiple picks DO NOT loop this mehtod<br></br>
         /// </summary>
-        /// <returns>
-        /// The chosen item.
-        /// </returns>
-        public T Pick<T>(IReadOnlyList<T> source) => source[Int(source.Count)];
-        public T Pick<T>(IReadOnlyList<T> source, IReadOnlyList<float> weights)
+        public T Item<T>(IReadOnlyList<T> source) => source[Num(source.Count)];
+        public T Item<T>(IReadOnlyList<T> source, IReadOnlyList<float> weights)
         {   // Prevents O(n^2) picking for Non-Indexed Enumerables
             // (Count() and ElementAt() both execute in O(n) time for many Enumerables)
 
             float totalWeight = weights.Sum();
 
-            if (totalWeight == 0) return Pick(source);
+            if (totalWeight == 0) return Item(source);
 
             // Return Weighted Random Element
             double randVal = rand.NextDouble() * totalWeight;
@@ -434,7 +212,7 @@ namespace LeafRand
             // This should be impossible!
             throw new Exception($"LeafNoise: rand weight of: {rand} > totalweight: {totalWeight}! Sorry! My fault LOL");
         }
-        public T Pick<T>(WeightedList<T> weightedList) => Pick(weightedList.Items, weightedList.Weights);
+        public T Item<T>(WeightedList<T> weightedList) => Item(weightedList.Items, weightedList.Weights);
         #endregion
         #region Multi
         /// <summary>
@@ -446,7 +224,7 @@ namespace LeafRand
         /// * values under 1 result in the return of an empty array<br></br></param>
         /// <param name="withReplacement">Whether the same item may be picked multiple times.</param>
         /// <returns> An array containing the chosen items </returns>
-        public T[] Pick<T>(IReadOnlyList<T> items, int k, bool withReplacement = true)
+        public T[] Item<T>(IReadOnlyList<T> items, int k, bool withReplacement = true)
         {   // Input validation
             if (items == null) throw new ArgumentNullException("Pick failed. Items is null!");
             if (items.Count == 0) throw new ArgumentException("Pick failed. Items is empty!");
@@ -454,13 +232,13 @@ namespace LeafRand
             if (!withReplacement && items.Count < k) throw new ArgumentNullException($"Pick failed. Requested more items ({k}) than are available({items.Count}!");
 
             // With Replacement
-            if (withReplacement) return PickWithReplacement(items, k);
+            if (withReplacement) return ItemUniformWithReplacement(items, k);
 
             // Without Replacement
             // Determine Best Algorithm based on use resivoir threshold
             float USERESEVOIRTHRESHOLD = 0.14f;
-            if ((float)k / items.Count > USERESEVOIRTHRESHOLD) return PickWithoutReplacementResevoirMethod(items, k);
-            else return PickWithoutReplacementRetryMethod(items, k);
+            if ((float)k / items.Count > USERESEVOIRTHRESHOLD) return ItemUniformWithoutReplacementResevoirMethod(items, k);
+            else return ItemUniformWithoutReplacementRetryMethod(items, k);
         }
         /// <summary>
         /// Picks <paramref name="k"/> items from <paramref name="items"/> with <paramref name="weights"/>.
@@ -470,7 +248,7 @@ namespace LeafRand
         /// <param name="k">How many items should be picked.<br></br>
         /// <param name="withReplacement">Whether the same item may be picked multiple times.</param>
         /// <returns> An array containing the chosen items </returns>
-        public T[] Pick<T>(IReadOnlyList<T> items, IReadOnlyList<float> weights, int k, bool withReplacement = true)
+        public T[] Item<T>(IReadOnlyList<T> items, IReadOnlyList<float> weights, int k, bool withReplacement = true)
         {   // Input Validation
             if (items == null) throw new ArgumentNullException("Pick failed. Items is null!");
             if (items.Count == 0) throw new ArgumentException("Pick failed. Items is empty!");
@@ -483,14 +261,14 @@ namespace LeafRand
             // With Replacement
             if (withReplacement)
             {
-                if (items.Count * k < 100 || (float)items.Count / 5 > k) return PickWeightedWithReplacementBinarySearch(items, weights, k);
-                else return PickWeightedWithReplacementAliasMethod(items, weights, k);
+                if (items.Count * k < 100 || (float)items.Count / 5 > k) return ItemWeightedWithReplacementBinarySearch(items, weights, k);
+                else return ItemWeightedWithReplacementAliasMethod(items, weights, k);
             }
 
             // Without Replacement
-            else return PickWeightedWithoutReplacement(items, weights, k);
+            else return ItemWeightedWithoutReplacement(items, weights, k);
         }
-        public T[] Pick<T>(WeightedList<T> weightedList, int k, bool withReplacement = true) => Pick(weightedList.Items, weightedList.Weights, k, withReplacement);
+        public T[] Item<T>(WeightedList<T> weightedList, int k, bool withReplacement = true) => Item(weightedList.Items, weightedList.Weights, k, withReplacement);
         /// <summary>
         /// Picks <paramref name="count"/> uniformly random items from <paramref name="source"/> with replacement<br></br>
         /// - Executes in O(n) time
@@ -498,11 +276,11 @@ namespace LeafRand
         /// <returns>
         /// An array containing the chosen items
         /// </returns>
-        T[] PickWithReplacement<T>(IReadOnlyList<T> source, int count)
+        T[] ItemUniformWithReplacement<T>(IReadOnlyList<T> source, int count)
         {
             T[] chosen = new T[count];
 
-            for (int i = 0; i < count; i++) chosen[i] = source.ElementAt(Int(source.Count));
+            for (int i = 0; i < count; i++) chosen[i] = source.ElementAt(Num(source.Count));
 
             return chosen;
         }
@@ -514,7 +292,7 @@ namespace LeafRand
         /// <returns>
         /// An array containing the chosen items
         /// </returns>
-        T[] PickWithoutReplacementRetryMethod<T>(IReadOnlyList<T> source, int count)
+        T[] ItemUniformWithoutReplacementRetryMethod<T>(IReadOnlyList<T> source, int count)
         {   // Kind of weird but pretty much O(infinity) worst case and O(n) best case
             // in practice lightning fast for small pick ratios (Picking < 15% of source)
 
@@ -531,9 +309,9 @@ namespace LeafRand
             {
                 // Keep Picking Until Distinct Index found
                 // This can be very slow if Count is close to SourceLength
-                int randIndex = Int(source.Count());
+                int randIndex = Num(source.Count());
                 while (removed.ContainsKey(randIndex))
-                    randIndex = Int(source.Count());
+                    randIndex = Num(source.Count());
 
                 removed.Add(randIndex, true);
                 chosen[i] = source[randIndex];
@@ -541,7 +319,7 @@ namespace LeafRand
 
             return chosen;
         }
-        T[] PickWithoutReplacementResevoirMethod<T>(IEnumerable<T> source, int count)
+        T[] ItemUniformWithoutReplacementResevoirMethod<T>(IEnumerable<T> source, int count)
         {   // An O(n) unform random sampling approach with IEnumerable source
             T[] resevior = new T[count];
 
@@ -555,10 +333,10 @@ namespace LeafRand
                 resevior[i] = enumerator.Current;
             }
 
-            // Sample
+            // Item
             while (enumerator.MoveNext())
             {
-                int random = Int(++i);
+                int random = Num(++i);
                 if (random < count) resevior[random] = enumerator.Current;
             }
 
@@ -577,7 +355,7 @@ namespace LeafRand
         /// <returns>
         /// An array containing the results
         /// </returns>
-        T[] PickWeightedWithReplacementAliasMethod<T>(IReadOnlyList<T> source, IReadOnlyList<float> weights, int count)
+        T[] ItemWeightedWithReplacementAliasMethod<T>(IReadOnlyList<T> source, IReadOnlyList<float> weights, int count)
         {   // Uses Vose's Alias method.
             // A lovely method for effecient generation of weighted random values
             // Time Complexity: O(n) setup and O(1) picks
@@ -607,7 +385,7 @@ namespace LeafRand
             }
 
             // Edge case: All weights are equal fall back to PickNonWeighted
-            if (allWeightsEqual) return PickWithReplacement(source, count);
+            if (allWeightsEqual) return ItemUniformWithReplacement(source, count);
 
             // Grab one from less and one from more
             while (belowIndices.Count != 0 && aboveIndices.Count != 0)
@@ -640,7 +418,7 @@ namespace LeafRand
 
             for (int i = 0; i < count; i++)
             {
-                int bucket = Int(weights.Count);
+                int bucket = Num(weights.Count);
 
                 // Flip a weighted coin between the two possibilities in this slot
                 picked[i] = source[rand.NextDouble() < probability[bucket] ? bucket : alias[bucket]];
@@ -650,7 +428,7 @@ namespace LeafRand
 
             return picked;
         }
-        T[] PickWeightedWithReplacementBinarySearch<T>(IReadOnlyList<T> source, IReadOnlyList<float> weights, int count)
+        T[] ItemWeightedWithReplacementBinarySearch<T>(IReadOnlyList<T> source, IReadOnlyList<float> weights, int count)
         {
             // Prevents O(n^2) picking for Non-Indexed Enumerables
             // (Count() and ElementAt() both execute in O(n) time for many Enumerables)
@@ -667,7 +445,7 @@ namespace LeafRand
             }
 
             // Edge case: All weights are equal fall back to PickNonWeighted
-            if (allWeightsEqual) return PickWithReplacement(source, count);
+            if (allWeightsEqual) return ItemUniformWithReplacement(source, count);
 
             // Choose
             T[] chosen = new T[count];
@@ -699,7 +477,7 @@ namespace LeafRand
         /// <returns>
         /// An array containing the results.
         /// </returns>
-        T[] PickWeightedWithoutReplacement<T>(IReadOnlyList<T> source, IReadOnlyList<float> weights, int count)
+        T[] ItemWeightedWithoutReplacement<T>(IReadOnlyList<T> source, IReadOnlyList<float> weights, int count)
         {   // Prep vars to detect edge cases
             bool allWeightsEqual = true;
             float firstWeight = weights[0];
@@ -715,7 +493,7 @@ namespace LeafRand
             }
 
             // Edge case: All weights are equal fall back to PickNonWeighted
-            if (allWeightsEqual) return Pick(source, count, false);
+            if (allWeightsEqual) return Item(source, count, false);
 
             // Edge Case: Requested pick of more items than the number of items with non-zero weights
             // - All weighted items should be returned
@@ -733,7 +511,7 @@ namespace LeafRand
                     else picked[pickIndex++] = source[i];
 
                 // Than grab remaining items randomly from non weighted items
-                T[] nonWeightedPicks = Pick(nonWeightedItems, count, false);
+                T[] nonWeightedPicks = Item(nonWeightedItems, count, false);
 
                 // Concat nonWeightedPicks with picked
                 int remaining = count - numNonZeroWeights;
@@ -809,7 +587,7 @@ namespace LeafRand
             return picked;
         }*/
         #endregion
-    }
-    #endregion
         #endregion
+        #endregion
+    }
 }
