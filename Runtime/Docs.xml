@@ -146,6 +146,9 @@
     </WeightedList>
   </Item>
   <Items>
+    <Class>
+      <Summary>Choose a variant .WithReplacement() or .WithoutReplacement()</Summary>
+    </Class>
     <WithReplacement>
       <ListInt>
         <Summary>Picks <paramref name="count"/> uniformly random items with replacement in O(n) time.</Summary>

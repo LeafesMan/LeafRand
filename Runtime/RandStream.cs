@@ -13,9 +13,7 @@ namespace LeafRand
     public class RandStream
     {
         #region Core
-        /// <summary>
-        /// Choose a variant .WithReplacement() or .WithoutReplacement()
-        /// </summary>
+        /// <include file="Docs.xml" path="Doc/Items/Class"/>
         public readonly ItemsVariants Items;
         readonly System.Random rand;
 
