@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Numerics;
+using UnityEngine.XR;
 
 namespace LeafRand
 {
@@ -14,6 +16,6 @@ namespace LeafRand
         /// <summary>
         /// The Static RandStream Instance.<br></br> Seed is based on system clock at startup.
         /// </summary>
-        static RandStream Stream { get; } = new(Environment.TickCount);
+        public static RandStream Stream { get; } = new(Environment.TickCount);
     }
 }

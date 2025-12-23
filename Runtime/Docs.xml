@@ -1,0 +1,214 @@
+<?xml version="1.0"?>
+<!-- Documentation for each method is found at Doc/MethodName/ParamTypes -->
+<!-- Methods with no paramaters are found at Doc/MethodName -->
+
+<Doc>
+  <Num>
+    <Summary>
+      Returns a random float in [0, 1)
+    </Summary>
+    <Float>
+      <Summary>
+        Returns a random float in [0, <paramref name="max"/>)
+      </Summary>
+    </Float>
+    <FloatFloat>
+      <Summary>
+        Returns a random float in [<paramref name="min"/>, <paramref name="max"/>)
+      </Summary>
+    </FloatFloat>
+    <Vector2>
+      <Summary>
+        Returns a random float in [<paramref name="range"/>.x, <paramref name="range"/>.y)
+      </Summary>
+    </Vector2>
+    <Int>
+      <Summary>
+        Returns a random integer in [0, <paramref name="max"/>)
+      </Summary>
+    </Int>
+    <IntInt>
+      <Summary>
+        Returns a random integer in [<paramref name="min"/>, <paramref name="max"/>)
+      </Summary>
+    </IntInt>
+    <Vector2Int>
+      <Summary>
+        Returns a random integer in [<paramref name="range"/>.x, <paramref name="range"/>.y)
+      </Summary>
+    </Vector2Int>
+  </Num>
+  <Angle>
+    <Summary>
+      Returns a random angle in [0, 2 PI)
+    </Summary>
+  </Angle>
+  <Bool>
+    <Summary>
+      Returns a random bool with <paramref name="successChance"/> of returning true.
+    </Summary>
+  </Bool>
+  <Chance>
+    <Summary>
+      Returns a random bool with <paramref name="successChance"/> of returning true. <br/><br/> An alias for Rand.Bool().
+    </Summary>
+  </Chance>
+  <Sign>
+    <Summary>
+      Returns a random integer direction -1 or 1
+    </Summary>
+  </Sign>
+  <Dir2D>
+    <Summary>
+      Returns a random 2D Direction
+    </Summary>
+    <FloatFloat>
+      <Summary>
+        Returns random 2D direction in [<paramref name="minTheta"/>, <paramref name="maxTheta"/>)
+      </Summary>
+    </FloatFloat>
+    <Vector2>
+      <Summary>
+        Returns random 2D direction in [<paramref name="thetaRange"/>.x, <paramref name="thetaRange"/>.y)
+      </Summary>
+    </Vector2>
+    <Vector2Float>
+      <Summary>
+        Returns random 2D direction within <paramref name="withinDegrees"/> of a <paramref name="basis"/>.
+      </Summary>
+    </Vector2Float>
+    <Vector2FloatFloat>
+      <Summary>
+        Returns the <paramref name="basis"/> direction rotated by a random value in [<paramref name="minDegrees"/>, <paramref name="maxDegrees"/>)
+      </Summary>
+    </Vector2FloatFloat>
+    <Vector2Vector2>
+      <Summary>
+        Returns the <paramref name="basis"/> direction rotated by a random value in [<paramref name="degreesRange"/>.x, <paramref name="degreesRange"/>.y)
+      </Summary>
+    </Vector2Vector2>
+  </Dir2D>
+  <Dir>
+    <Summary>
+      Returns a random 3D Direction
+    </Summary>
+    <FloatFloatFloatFloat>
+      <Summary>
+        Returns random 3D direction within the given theta and phi ranges.<br></br>
+        Takes Theta and Phi in degrees. <br></br>
+        Theta takes values (0,360) values outside this range will contine to rotate CC facing down at the XZ plane.<br></br>
+        Phi takes values (0,180) values above will snap back to 0 and below will snap back to 180.<br></br>      
+      </Summary>
+    </FloatFloatFloatFloat>
+    <Vector2Vector2>
+      <Summary>
+        Returns random 3D direction in <paramref name="thetaRange"/> and <paramref name="phiRange"/>
+      </Summary>
+    </Vector2Vector2>
+    <Vector3Float>
+      <Summary>
+        Returns random 3D direction <paramref name="withinDegrees"/> of a <paramref name="basis"/>.
+      </Summary>
+    </Vector3Float>
+    <Vector3FloatFloat>
+      <Summary>
+        Returns the <paramref name="basis"/> direction rotated by a random value in [<paramref name="minDegrees"/>, <paramref name="maxDegrees"/>)
+      </Summary>
+    </Vector3FloatFloat>
+    <Vector3Vector2>
+      <Summary>
+        Returns the <paramref name="basis"/> direction rotated by a random value in [<paramref name="degreesRange"/>.x, <paramref name="degreesRange"/>.y)
+      </Summary>
+    </Vector3Vector2>
+  </Dir>
+  <Color>
+    <Summary>
+      Returns a random color in <paramref name="hueRange"/>, <paramref name="saturationRange"/>, and <paramref name="valueRange"/>.
+    </Summary>
+  </Color>
+  <Item>
+    <List>
+      <Summary>
+        Returns a single uniformly random item from <paramref name="source"/>.
+      </Summary>
+    </List>
+    <ListList>
+      <Summary>
+        Returns a single weighted random item from <paramref name="source"/> using <paramref name="weights"/>.<br/>
+        Consider using Rand.Items() for multiple picks it is significantly faster.
+      </Summary>
+    </ListList>
+    <WeightedList>
+      <Summary>
+        Returns a single weighted random item from <paramref name="weightedList"/>.<br/>
+        Consider using Rand.Items() for multiple picks it is significantly faster.
+      </Summary>
+    </WeightedList>
+  </Item>
+  <Items>
+    <WithReplacement>
+      <ListInt>
+        <Summary>Picks <paramref name="count"/> uniformly random items with replacement in O(n) time.</Summary>
+        <param name="items">Items to pick from.</param>
+        <param name="count">Number of items to pick. Must be non-negative.</param>
+        <Returns> An array containing the selected random items. </Returns>
+      </ListInt>
+      <ListListInt>
+        <Summary>Picks <paramref name="count"/> weighted random items with replacement in O(nlog(k)) time.</Summary>
+        <param name="items">Items to pick from.</param>
+        <param name="weights"> Weights associated with each item by index. Must be the same length as <paramref name="items"/>.</param>
+        <param name="count">Number of items to pick. Must be non-negative.</param>
+        <Returns> An array containing the selected random items. </Returns>
+      </ListListInt>
+      <WeightedListInt>
+        <Summary>
+          Picks <paramref name="count"/> weighted random items with replacement in O(nlog(k)) time.
+        </Summary>
+        <param name="items">Items to pick from.</param>
+        <param name="weights">
+          Weights associated with each item by index. Must be the same length as <paramref name="items"/>.
+        </param>
+        <param name="count">Number of items to pick. Must be non-negative.</param>
+        <Returns> An array containing the selected random items. </Returns>
+      </WeightedListInt>
+    </WithReplacement>
+    <WithoutReplacement>
+      <ListInt>
+        <Summary>
+          Picks <paramref name="count"/> uniformly random items with replacement in O(n * k) time.<br/>
+          Consider using Rand.Take() for faster selection if modifying the input list is acceptable.
+        </Summary>
+        <param name="items">Items to pick from.</param>
+        <param name="count">Number of items to pick. Must be non-negative.</param>
+        <Returns> An array containing the selected random items. </Returns>
+      </ListInt>
+      <ListListInt>
+        <Summary>
+          Picks <paramref name="count"/> weighted random items without replacement in O(n^2) time.
+        </Summary>
+        <param name="items">Items to pick from.</param>
+        <param name="weights">
+          Weights associated with each item by index. Must be the same length as <paramref name="items"/>.
+        </param>
+        <param name="count">Number of items to pick. Must be non-negative.</param>
+        <Returns>An array containing the selected random items. </Returns>
+      </ListListInt>
+      <WeightedListInt>
+        <Summary>
+          Picks <paramref name="count"/> weighted random items without replacement in O(n^2) time.
+        </Summary>
+        <param name="items">Items to pick from.</param>
+        <param name="weights">
+          Weights associated with each item by index. Must be the same length as <paramref name="items"/>.
+        </param>
+        <param name="count">Number of items to pick. Must be non-negative.</param>
+        <Returns> An array containing the selected random items. </Returns>
+      </WeightedListInt>
+    </WithoutReplacement>
+  </Items>
+  <Index>
+    <Summary>
+      Returns a random index from <paramref name="source"/>.
+    </Summary>
+  </Index>
+</Doc>
