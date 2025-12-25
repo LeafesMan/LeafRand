@@ -71,23 +71,23 @@ namespace LeafRand
         public static T Item<T>(IReadOnlyList<T> items, IReadOnlyList<float> weights) => Stream.Item(items, weights);
         /// <include file="Docs.xml" path="Doc/Item/WeightedList"/>
         public static T Item<T>(WeightedList<T> weightedList) => Stream.Item(weightedList.Items, weightedList.Weights);
-        /// <include file="Docs.xml" path="Doc/Items/Class"/>
-        public static class Items
-        {
-            /// <include file="Docs.xml" path="Doc/Items/WithReplacement/ListInt"/>
-            public static T[] WithReplacement<T>(IReadOnlyList<T> items, int count) => Stream.Items.WithReplacement(items, count);
-            /// <include file="Docs.xml" path="Doc/Items/WithoutReplacement/ListInt"/>
-            public static T[] WithoutReplacement<T>(IReadOnlyList<T> items, int count) => Stream.Items.WithoutReplacement(items, count);
-            /// <include file="Docs.xml" path="Doc/Items/WithReplacement/ListListInt"/>
-            public static T[] WithReplacement<T>(IReadOnlyList<T> items, IReadOnlyList<float> weights, int count) => Stream.Items.WithReplacement(items, weights, count);
-            /// <include file="Docs.xml" path="Doc/Items/WithoutReplacement/ListListInt"/>
-            public static T[] WithoutReplacement<T>(IReadOnlyList<T> items, IReadOnlyList<float> weights, int count) => Stream.Items.WithoutReplacement(items, weights, count);
-            /// <include file="Docs.xml" path="Doc/Items/WithReplacement/WeightedListInt"/>
-            public static T[] WithReplacement<T>(WeightedList<T> weightedList, int count) => Stream.Items.WithReplacement(weightedList.Items, weightedList.Weights, count);
-            /// <include file="Docs.xml" path="Doc/Items/WithoutReplacement/WeightedListInt"/>
-            public static T[] WithoutReplacement<T>(WeightedList<T> weightedList, int count) => Stream.Items.WithoutReplacement(weightedList.Items, weightedList.Weights, count);
-        }
+        /// <include file="Docs.xml" path="Doc/Items/WithReplacement/ListInt"/>
+        public static T[] ItemsWithReplacement<T>(IReadOnlyList<T> items, int count) => Stream.ItemsWithReplacement(items, count);
+        /// <include file="Docs.xml" path="Doc/Items/WithoutReplacement/ListInt"/>
+        public static T[] ItemsWithoutReplacement<T>(IReadOnlyList<T> items, int count) => Stream.ItemsWithoutReplacement(items, count);
+        /// <include file="Docs.xml" path="Doc/Items/WithReplacement/ListListInt"/>
+        public static T[] ItemsWithReplacement<T>(IReadOnlyList<T> items, IReadOnlyList<float> weights, int count) => Stream.ItemsWithReplacement(items, weights, count);
+        /// <include file="Docs.xml" path="Doc/Items/WithoutReplacement/ListListInt"/>
+        public static T[] ItemsWithoutReplacement<T>(IReadOnlyList<T> items, IReadOnlyList<float> weights, int count) => Stream.ItemsWithReplacement(items, weights, count);
+        /// <include file="Docs.xml" path="Doc/Items/WithReplacement/WeightedListInt"/>
+        public static T[] ItemsWithReplacement<T>(WeightedList<T> weightedList, int count) => Stream.ItemsWithReplacement(weightedList.Items, weightedList.Weights, count);
+        /// <include file="Docs.xml" path="Doc/Items/WithoutReplacement/WeightedListInt"/>
+        public static T[] ItemsWithoutReplacement<T>(WeightedList<T> weightedList, int count) => Stream.ItemsWithoutReplacement(weightedList.Items, weightedList.Weights, count);
+        /// <include file="Docs.xml" path="Doc/Items/Extract/ListInt"/>
+        public static T[] ItemsExtract<T>(List<T> source, int count) => Stream.ItemsExtract(source, count);
         /// <include file="Docs.xml" path="Doc/Index"/>
         public static int Index<T>(IReadOnlyCollection<T> items) => Stream.Index(items);
+        /// <include file="Docs.xml" path="Doc/Shuffle"/>
+        public static void Shuffle<T>(IList<T> toShuffle) => Stream.Shuffle(toShuffle);
     }
 }

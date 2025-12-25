@@ -129,89 +129,108 @@
   <Item>
     <List>
       <Summary>
-        Returns a single uniformly random item from <paramref name="source"/>.
+        Picks a single item from <paramref name="source"/> using uniform random sampling.<br/>
       </Summary>
+      <param name="source">The collection to pick an item from. Must be non-empty.</param>
+      <Returns> The picked item.</Returns>
     </List>
     <ListList>
       <Summary>
-        Returns a single weighted random item from <paramref name="source"/> using <paramref name="weights"/>.<br/>
-        Consider using Rand.Items() for multiple picks it is significantly faster.
+        Picks a single item from <paramref name="source"/> using weighting random sampling.<br/>
+        Consider using the faseter Rand.Items() for multiple picks.
       </Summary>
+      <param name="source">The collection to pick an item from. Must be non-empty.</param>
+      <Returns> The picked item.</Returns>
     </ListList>
     <WeightedList>
       <Summary>
-        Returns a single weighted random item from <paramref name="weightedList"/>.<br/>
-        Consider using Rand.Items() for multiple picks it is significantly faster.
+        Picks a single item from <paramref name="source"/> using uniform random sampling.<br/>
+        Consider using the faster Rand.Items() for multiple picks.
       </Summary>
+      <param name="weightedList">The weighted list to pick an item from. Must be non-empty.</param>
+      <Returns> The picked item.</Returns>
     </WeightedList>
   </Item>
-  <Items>
-    <Class>
-      <Summary>Choose a variant .WithReplacement() or .WithoutReplacement()</Summary>
-    </Class>
-    <WithReplacement>
-      <ListInt>
-        <Summary>Picks <paramref name="count"/> uniformly random items with replacement in O(n) time.</Summary>
-        <param name="items">Items to pick from.</param>
-        <param name="count">Number of items to pick. Must be non-negative.</param>
-        <Returns> An array containing the selected random items. </Returns>
-      </ListInt>
-      <ListListInt>
-        <Summary>Picks <paramref name="count"/> weighted random items with replacement in O(nlog(k)) time.</Summary>
-        <param name="items">Items to pick from.</param>
-        <param name="weights"> Weights associated with each item by index. Must be the same length as <paramref name="items"/>.</param>
-        <param name="count">Number of items to pick. Must be non-negative.</param>
-        <Returns> An array containing the selected random items. </Returns>
-      </ListListInt>
-      <WeightedListInt>
-        <Summary>
-          Picks <paramref name="count"/> weighted random items with replacement in O(nlog(k)) time.
-        </Summary>
-        <param name="items">Items to pick from.</param>
-        <param name="weights">
-          Weights associated with each item by index. Must be the same length as <paramref name="items"/>.
-        </param>
-        <param name="count">Number of items to pick. Must be non-negative.</param>
-        <Returns> An array containing the selected random items. </Returns>
-      </WeightedListInt>
-    </WithReplacement>
-    <WithoutReplacement>
-      <ListInt>
-        <Summary>
-          Picks <paramref name="count"/> uniformly random items with replacement in O(n * k) time.<br/>
-          Consider using Rand.Take() for faster selection if modifying the input list is acceptable.
-        </Summary>
-        <param name="items">Items to pick from.</param>
-        <param name="count">Number of items to pick. Must be non-negative.</param>
-        <Returns> An array containing the selected random items. </Returns>
-      </ListInt>
-      <ListListInt>
-        <Summary>
-          Picks <paramref name="count"/> weighted random items without replacement in O(n^2) time.
-        </Summary>
-        <param name="items">Items to pick from.</param>
-        <param name="weights">
-          Weights associated with each item by index. Must be the same length as <paramref name="items"/>.
-        </param>
-        <param name="count">Number of items to pick. Must be non-negative.</param>
-        <Returns>An array containing the selected random items. </Returns>
-      </ListListInt>
-      <WeightedListInt>
-        <Summary>
-          Picks <paramref name="count"/> weighted random items without replacement in O(n^2) time.
-        </Summary>
-        <param name="items">Items to pick from.</param>
-        <param name="weights">
-          Weights associated with each item by index. Must be the same length as <paramref name="items"/>.
-        </param>
-        <param name="count">Number of items to pick. Must be non-negative.</param>
-        <Returns> An array containing the selected random items. </Returns>
-      </WeightedListInt>
-    </WithoutReplacement>
-  </Items>
+  <ItemsWithReplacement>
+    <ListInt>
+      Picks <paramref name="count"/> items from <paramref name="source"/> using uniform random sampling with replacement.<br/>
+      <param name="source">The collection to pick items from. Must be non-empty.</param>
+      <param name="count">Number of items to pick. Must be non-negative.</param>
+      <Returns> An array containing the picked items.</Returns>
+    </ListInt>
+    <ListListInt>
+      <Summary>
+        Picks <paramref name="count"/> items from <paramref name="source"/> using weighted random sampling with replacement.<br/>
+      </Summary>
+      <param name="source">The collection to pick items from. Must be non-empty.</param>
+      <param name="weights"> Weights associated with each item by index. Must be the same length as <paramref name="items"/>.</param>
+      <param name="count">Number of items to pick. Must be non-negative.</param>
+      <Returns> An array containing the picked items.</Returns>
+    </ListListInt>
+    <WeightedListInt>
+      <Summary>
+        Picks <paramref name="count"/> items from <paramref name="source"/> using weighted random sampling with replacement.<br/>
+      </Summary>
+      <param name="source">The collection to pick items from. Must be non-empty.</param>
+      <param name="weights">Weights associated with each item by index. Must be the same length as <paramref name="items"/>.</param>
+      <param name="count">The number of items to pick. Must be non-negative.</param>
+      <Returns> An array containing the picked items.</Returns>
+    </WeightedListInt>
+  </ItemsWithReplacement>
+  <ItemsWithoutReplacement>
+    <ListInt>
+      <Summary>
+        Picks <paramref name="count"/> items from <paramref name="source"/> using uniform random sampling without replacement.<br/>
+        Consider using the faster Rand.ItemsExtract() if mutation is acceptable.
+      </Summary>
+      <param name="source">The collection to pick items from. Must be non-empty.</param>
+      <param name="count">Number of items to pick. Must be non-negative.</param>
+      <Returns> An array containing the picked items.</Returns>
+    </ListInt>
+    <ListListInt>
+      <Summary>
+        Picks <paramref name="count"/> items from <paramref name="source"/> using weighted random sampling without replacement.<br/>
+      </Summary>
+      <param name="source">The collection to pick items from. Must be non-empty.</param>
+      <param name="weights">
+        Weights associated with each item by index. Must be the same length as <paramref name="items"/>.
+      </param>
+      <param name="count">Number of items to pick. Must be non-negative.</param>
+      <Returns> An array containing the picked items.</Returns>
+    </ListListInt>
+    <WeightedListInt>
+      <Summary>
+        Picks <paramref name="count"/> items from <paramref name="source"/> using weighted random sampling without replacement.<br/>
+      </Summary>
+      <param name="source">The collection to pick items from. Must be non-empty.</param>
+      <param name="weights">Weights associated with each item by index. Must be the same length as <paramref name="items"/>.</param>
+      <param name="count">Number of items to pick. Must be non-negative.</param>
+      <Returns> An array containing the picked items.</Returns>
+    </WeightedListInt>
+  </ItemsWithoutReplacement>
+  <ItemsExtract>
+    <ListInt>
+      <Summary>
+        Picks <paramref name="count"/> items from <paramref name="source"/> using uniform random sampling without replacement.<br/>
+        Picked items are removed and relative order is destroyed.<br/>
+        Time Complexity: O(k)<br/><br/>
+        Consider using the slower Rand.ItemsWithoutReplacement() if mutation is not acceptable.<br/>
+      </Summary>
+      <param name="source">The collection to pick items from. Must be non-empty.</param>
+      <param name="count">The number of items to pick. Must be non-negative.</param>
+      <Returns> An array containing the picked items.</Returns>
+    </ListInt>
+  </ItemsExtract>
   <Index>
     <Summary>
-      Returns a random index from <paramref name="source"/>.
+      Picks a single index from <paramref name="source"/> using uniform random sampling with replacement.<br/>
+      Time Complexity: O(k)
     </Summary>
+    <param name="source">The collection to pick an index from. Must be non-empty.</param>
+    <Returns> The picked index.</Returns>
   </Index>
+  <Shuffle>
+    <Summary>Shuffles <paramref name="toShuffle"/> in place in O(n) time.</Summary>
+    <param name="toShuffle">The collection to shuffle.</param>
+  </Shuffle>
 </Doc>
