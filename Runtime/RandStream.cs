@@ -14,27 +14,34 @@ namespace LeafRand
     {
         #region Core
         /// <include file="Docs.xml" path="Doc/Items/Class"/>
-        readonly System.Random rand;
+        Unity.Mathematics.Random rand;
 
-        public RandStream(int seed = 0)
+        public RandStream(uint seed = 1)
         {
-            rand = new System.Random(seed);
+            rand = new(seed);
         }
         #endregion
         #region Helpers
         #region Num
         /// <include file="Docs.xml" path="Doc/Num/Int"/>
-        public int Num(int max) => rand.Next(max);
+        public int Num(int max) => rand.NextInt(max);
         /// <include file="Docs.xml" path="Doc/Num/IntInt"/>
-        public int Num(int min, int max) => rand.Next(min, max);
+        public int Num(int min, int max) => rand.NextInt(min, max);
         /// <include file="Docs.xml" path="Doc/Num/Vector2Int"/>
-        public int Num(Vector2Int range) => rand.Next(range.x, range.y);
+        public int Num(Vector2Int range) => rand.NextInt(range.x, range.y);
         /// <include file="Docs.xml" path="Doc/Num"/>
-        public float Num() => (float)rand.NextDouble();
+        public float Num() => rand.NextFloat();
         /// <include file="Docs.xml" path="Doc/Num/Float"/>
-        public float Num(float max) => Num() * max;
+        public float Num(float max) => rand.NextFloat(max);
         /// <include file="Docs.xml" path="Doc/Num/FloatFloat"/>
-        public float Num(float min, float max) => min + Num() * (max - min);
+        public float Num(float min, float max) => rand.NextFloat(min, max);
+
+        public float NumFromDouble() => (float)rand.NextDouble();
+        /// <include file="Docs.xml" path="Doc/Num/Float"/>
+        public float NumFromDouble(float max) => (float)rand.NextDouble() * max;
+        /// <include file="Docs.xml" path="Doc/Num/FloatFloat"/>
+        public float NumFromDouble(float min, float max) => (float)rand.NextDouble() * (max - min) + min;
+
         /// <include file="Docs.xml" path="Doc/Num/Vector2"/>
         public float Num(Vector2 range) => Num(range.x, range.y);
         public double Num(double max) => rand.NextDouble() * max;

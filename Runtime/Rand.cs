@@ -14,7 +14,7 @@ namespace LeafRand
         /// <summary>
         /// The Static RandStream Instance.<br></br> Seed is based on system clock at startup.
         /// </summary>
-        public static RandStream Stream { get; } = new(Environment.TickCount);
+        static readonly RandStream Stream = new((uint)Environment.TickCount);
 
         /// <include file="Docs.xml" path="Doc/Num/Int"/>
         public static int Num(int max) => Stream.Num(max);
@@ -28,6 +28,13 @@ namespace LeafRand
         public static float Num(float max) => Stream.Num(max);
         /// <include file="Docs.xml" path="Doc/Num/FloatFloat"/>
         public static float Num(float min, float max) => Stream.Num(min, max);
+
+        public static float NumFromDouble() => Stream.NumFromDouble();
+        /// <include file="Docs.xml" path="Doc/Num/Float"/>
+        public static float NumFromDouble(float max) => Stream.NumFromDouble(max);
+        /// <include file="Docs.xml" path="Doc/Num/FloatFloat"/>
+        public static float NumFromDouble(float min, float max) => Stream.NumFromDouble(min, max);
+
         /// <include file="Docs.xml" path="Doc/Num/Vector2"/>
         public static float Num(Vector2 range) => Stream.Num(range.x, range.y);
         public static double Num(double max) => Stream.Num(max);
