@@ -3,6 +3,12 @@
 <!-- Methods with no paramaters are found at Doc/MethodName -->
 
 <Doc>
+  <Seed>
+    <summary>
+      Initialized the state of the Random instance with a given seed value. The seed must be non-zero.
+    </summary>
+    <param name="seed">The seed to initialize with. Must be non-zero.</param>
+  </Seed>
   <Num>
     <Summary>
       Returns a random float in [0, 1)

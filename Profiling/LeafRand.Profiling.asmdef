@@ -1,0 +1,20 @@
+{
+    "name": "LeafRand.Profiling",
+    "rootNamespace": "LeafRand.Profiling",
+    "references": [
+        "GUID:347bb22a9474ff9408ab139a61e78152",
+        "GUID:2665a8d13d1b3f18800f46e256720795",
+        "GUID:d8b63aba1907145bea998dd612889d6b",
+        "GUID:21e8a28d94e02ba4486d6e4240a383f1",
+        "GUID:06513a343db47e0478e7f7e6dbb87926"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

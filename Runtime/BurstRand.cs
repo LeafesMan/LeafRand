@@ -2,80 +2,119 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace LeafRand
 {
     /// <summary>
-    /// Deterministic random number generator with high-level helper functions.<br></br>
-    /// Helpers for random numbers, chance, sampling, direction, color, and points. <br></br>
-    /// Backed by a configurable core RNG (currently System.Random).
-    /// </summary>
-    public class RandStream
+    /// Burst-compatible RNG struct with high-level helper methods.<br></br>
+    /// Faster than Global and Managed Rand. State is a single uint.
+    /// </summary>    
+    public struct BurstRand
     {
         #region Core
         /// <include file="Docs.xml" path="Doc/Items/Class"/>
-        Unity.Mathematics.Random rand;
+        Unity.Mathematics.Random state;
 
-        public RandStream(uint seed = 1)
-        {
-            rand = new(seed);
-        }
+        /// <include file="Docs.xml" path="Doc/Seed"/>
+        public BurstRand(uint seed = 1) => state = new(seed);
+
+        /// <include file="Docs.xml" path="Doc/Seed"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void SetSeed(uint seed) => state.InitState(seed);
         #endregion
         #region Helpers
         #region Num
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public uint UInt() => state.NextUInt();
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public uint UInt(uint max) => state.NextUInt(max);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public uint UInt(uint min, uint max) => state.NextUInt(min, max);
+
         /// <include file="Docs.xml" path="Doc/Num/Int"/>
-        public int Num(int max) => rand.NextInt(max);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public int Int() => state.NextInt();
+        /// <include file="Docs.xml" path="Doc/Num/Int"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public int Int(int max) => state.NextInt(max);
         /// <include file="Docs.xml" path="Doc/Num/IntInt"/>
-        public int Num(int min, int max) => rand.NextInt(min, max);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public int Int(int min, int max) => state.NextInt(min, max);
         /// <include file="Docs.xml" path="Doc/Num/Vector2Int"/>
-        public int Num(Vector2Int range) => rand.NextInt(range.x, range.y);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public int Int(Vector2Int range) => state.NextInt(range.x, range.y);
+
         /// <include file="Docs.xml" path="Doc/Num"/>
-        public float Num() => rand.NextFloat();
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public float Float() => state.NextFloat();
         /// <include file="Docs.xml" path="Doc/Num/Float"/>
-        public float Num(float max) => rand.NextFloat(max);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public float Float(float max) => state.NextFloat(max);
         /// <include file="Docs.xml" path="Doc/Num/FloatFloat"/>
-        public float Num(float min, float max) => rand.NextFloat(min, max);
-
-        public float NumFromDouble() => (float)rand.NextDouble();
-        /// <include file="Docs.xml" path="Doc/Num/Float"/>
-        public float NumFromDouble(float max) => (float)rand.NextDouble() * max;
-        /// <include file="Docs.xml" path="Doc/Num/FloatFloat"/>
-        public float NumFromDouble(float min, float max) => (float)rand.NextDouble() * (max - min) + min;
-
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public float Float(float min, float max) => state.NextFloat(min, max);
         /// <include file="Docs.xml" path="Doc/Num/Vector2"/>
-        public float Num(Vector2 range) => Num(range.x, range.y);
-        public double Num(double max) => rand.NextDouble() * max;
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public float Float(Vector2 range) => state.NextFloat(range.x, range.y);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public double Double() => state.NextDouble();
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public double Double(double max) => state.NextDouble(max);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public double Double(double min, double max) => state.NextDouble(min, max);
         /// <include file="Docs.xml" path="Doc/Angle"/>
-        public float Angle() => Num(2 * Mathf.PI);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public float Angle() => state.NextFloat(2 * Mathf.PI);
         #endregion
         #region Bool
         /// <include file="Docs.xml" path="Doc/Bool"/>
-        public bool Bool(float successChance = 0.5f) => rand.NextDouble() < successChance;
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool Bool() => state.NextBool();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool BoolFloat(float chance) => state.NextFloat() < chance;
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool BoolDouble(double chance) => state.NextDouble() < chance;
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool BoolUInt(float chance) => state.NextUInt() < (uint)(chance * uint.MaxValue);
+
+
+        /// <include file="Docs.xml" path="Doc/Bool"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool Bool(float successChance) => state.NextDouble() < successChance;
         /// <include file="Docs.xml" path="Doc/Chance"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Chance(float successChance = 0.5f) => Bool(successChance);
         #endregion
         #region Direction
         /// <include file="Docs.xml" path="Doc/Sign"/>
-        public int Sign() => Num(2) * 2 - 1;
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public int Sign() => state.NextInt(2) * 2 - 1;
         #region 2D
         /// <include file="Docs.xml" path="Doc/Dir2D"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector2 Dir2D() => Dir2D(0, 360);
         /// <include file="Docs.xml" path="Doc/Dir2D/FloatFloat"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector2 Dir2D(float minTheta, float maxTheta)
         {
-            float thetaRadians = Num(minTheta, maxTheta) * Mathf.Deg2Rad;
+            float thetaRadians = state.NextFloat(minTheta, maxTheta) * Mathf.Deg2Rad;
             return new(Mathf.Cos(thetaRadians), Mathf.Sin(thetaRadians));
         }
 
         /// <include file="Docs.xml" path="Doc/Dir2D/Vector2"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector2 Dir2D(Vector2 thetaRange) => Dir2D(thetaRange.x, thetaRange.y);
         /// <include file="Docs.xml" path="Doc/Dir2D/Vector2FloatFloat"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector2 Dir2D(Vector2 basis, float minDegrees, float maxDegrees)
         {   // Normalize the basis to ensure direction is normal
             basis.Normalize();
 
             // Get Random Rotate in the passed range and convert to RADs
-            float randomDegrees = Num(minDegrees, maxDegrees) * Mathf.Deg2Rad;
+            float randomDegrees = state.NextFloat(minDegrees, maxDegrees) * Mathf.Deg2Rad;
 
             // Calculate direction relative to basis rotating randomDegrees
             float newX = basis.x * Mathf.Cos(randomDegrees) - basis.y * Mathf.Sin(randomDegrees);
@@ -84,21 +123,25 @@ namespace LeafRand
             return new(newX, newY);
         }
         /// <include file="Docs.xml" path="Doc/Dir2D/Vector2Vector2"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector2 Dir2D(Vector2 basis, Vector2 degreesRange) => Dir2D(basis, degreesRange.x, degreesRange.y);
 
         /// <include file="Docs.xml" path="Doc/Dir2D/Vector2Float"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector2 Dir2D(Vector2 basis, float withinDegrees) => Dir2D(basis, -withinDegrees, withinDegrees);
         #endregion
         #region 3D
         /// <include file="Docs.xml" path="Doc/Dir"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector3 Dir() => Dir(0, 360, 0, 180);
         /// <include file="Docs.xml" path="Doc/Dir/FloatFloatFloatFloat"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector3 Dir(float thetaRangeX, float thetaRangeY, float phiRangeX, float phiRangeY)
         {   // Get Random Theta
-            float thetaRadians = Num(thetaRangeX, thetaRangeY) * Mathf.Deg2Rad;
+            float thetaRadians = state.NextFloat(thetaRangeX, thetaRangeY) * Mathf.Deg2Rad;
 
             // Get Random Phi
-            float randPhiDegrees = Num(phiRangeX, phiRangeY);
+            float randPhiDegrees = state.NextFloat(phiRangeX, phiRangeY);
             //if (randPhiDegrees > 180) randPhiDegrees %= 180;  // Inputs above 180 wrap back around to 0
             //else if (randPhiDegrees < 0) randPhiDegrees = 1;
             float randPhi01 = randPhiDegrees / 180;           // Remap to (0,1)
@@ -117,8 +160,10 @@ namespace LeafRand
         }
 
         /// <include file="Docs.xml" path="Doc/Dir/Vector2Vector2"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector3 Dir(Vector2 thetaRange, Vector2 phiRange) => Dir(thetaRange.x, thetaRange.y, phiRange.x, phiRange.y);
         /// <include file="Docs.xml" path="Doc/Dir/Vector3FloatFloat"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector3 Dir(Vector3 basis, float minDegrees, float maxDegrees)
         {   // Normalize basis
             basis.Normalize();
@@ -132,8 +177,10 @@ namespace LeafRand
             return randRotation * chosenDirection;
         }
         /// <include file="Docs.xml" path="Doc/Dir/Vector3Vector2"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector3 Dir(Vector3 basis, Vector2 degreesRange) => Dir(basis, degreesRange.x, degreesRange.y);
         /// <include file="Docs.xml" path="Doc/Dir/Vector3Float"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector3 Dir(Vector3 basis, float withinDegrees)
         {
             Vector3 withinDegreesOfUp = Dir(0, 360, 0, withinDegrees);
@@ -146,12 +193,14 @@ namespace LeafRand
         #endregion
         #region Color
         /// <include file="Docs.xml" path="Doc/Color"/>
-        public Color Color(Vector2 hueRange, Vector2 saturationRange, Vector2 valueRange) => UnityEngine.Color.HSVToRGB(Num(hueRange), Num(saturationRange), Num(valueRange));
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Color Color(Vector2 hueRange, Vector2 saturationRange, Vector2 valueRange) => UnityEngine.Color.HSVToRGB(state.NextFloat(hueRange.x, hueRange.y), state.NextFloat(saturationRange.x, saturationRange.y), state.NextFloat(valueRange.x, valueRange.y));
         #endregion
         #region Item
         #region Single
         /// <include file="Docs.xml" path="Doc/Item/List"/>
-        public T Item<T>(IReadOnlyList<T> source) => source[Num(source.Count)];
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public T Item<T>(IReadOnlyList<T> source) => source[state.NextInt(source.Count)];
         /// <include file="Docs.xml" path="Doc/Item/ListList"/>
         public T Item<T>(IReadOnlyList<T> source, IReadOnlyList<float> weights)
         {   // Prevents O(n^2) picking for Non-Indexed Enumerables
@@ -162,7 +211,7 @@ namespace LeafRand
             if (totalWeight == 0) return Item(source);
 
             // Return Weighted Random Element
-            double randVal = rand.NextDouble() * totalWeight;
+            double randVal = state.NextDouble() * totalWeight;
             float weightPosition = 0;
             for (int i = 0; i < source.Count; i++)
             {
@@ -172,7 +221,7 @@ namespace LeafRand
             }
 
             // This should be impossible!
-            throw new Exception($"LeafNoise: rand weight of: {rand} > totalweight: {totalWeight}! Sorry! My fault LOL");
+            throw new Exception($"LeafNoise: state weight of: {state} > totalweight: {totalWeight}! Sorry! My fault LOL");
         }
         /// <include file="Docs.xml" path="Doc/Item/WeightedList"/>
         public T Item<T>(WeightedList<T> weightedList) => Item(weightedList.Items, weightedList.Weights);
@@ -251,7 +300,7 @@ namespace LeafRand
         {
             T[] chosen = new T[count];
 
-            for (int i = 0; i < count; i++) chosen[i] = source.ElementAt(Num(source.Count));
+            for (int i = 0; i < count; i++) chosen[i] = source.ElementAt(state.NextInt(source.Count));
 
             return chosen;
         }
@@ -277,9 +326,9 @@ namespace LeafRand
             {
                 // Keep Picking Until Distinct Index found
                 // This can be very slow if Count is close to itemsLength
-                int randIndex = Num(source.Count());
+                int randIndex = state.NextInt(source.Count());
                 while (removed.ContainsKey(randIndex))
-                    randIndex = Num(source.Count());
+                    randIndex = state.NextInt(source.Count());
 
                 removed.Add(randIndex, true);
                 chosen[i] = source[randIndex];
@@ -305,7 +354,7 @@ namespace LeafRand
             // Roll for each item
             for (; i < source.Count; i++)
             {
-                int random = Num(i + 1);
+                int random = state.NextInt(i + 1);
                 if (random < count) reservoir[random] = source[i];
             }
 
@@ -408,10 +457,10 @@ namespace LeafRand
 
             for (int i = 0; i < count; i++)
             {
-                int bucket = Num(weights.Count);
+                int bucket = state.NextInt(weights.Count);
 
                 // Flip a weighted coin between the two possibilities in this slot
-                picked[i] = source[Num(1.0) < probability[bucket] ? bucket : alias[bucket]];
+                picked[i] = source[Double() < probability[bucket] ? bucket : alias[bucket]];
             }
             #endregion
 
@@ -441,7 +490,7 @@ namespace LeafRand
             for (int i = 0; i < count; i++)
             {
                 // Return Weighted Random Element
-                double randVal = Num(1.0) * cumulativeWeights[cumulativeWeights.Count - 1];
+                double randVal = Double() * cumulativeWeights[cumulativeWeights.Count - 1];
                 int bottom = 0; // The current split size
                 int top = cumulativeWeights.Count - 1;
                 while (bottom != top)
@@ -511,7 +560,7 @@ namespace LeafRand
             for (int i = 0; i < count; i++)
             {
                 // Return Weighted Random Element
-                double randVal = Num(1.0) * cumulativeWeights[cumulativeWeights.Count - 1];
+                double randVal = Double() * cumulativeWeights[cumulativeWeights.Count - 1];
                 int bottom = 0; // The current split size
                 int top = cumulativeWeights.Count - 1;
                 while (bottom != top)
@@ -543,25 +592,25 @@ namespace LeafRand
             // just grabbing first Count elements into H
             while (H.Count < count && iter.MoveNext())
             {
-                float r = MathF.Pow((float)rand.NextDouble(), 1f / iter.Current.Weight);
+                float r = MathF.Pow((float)state.NextDouble(), 1f / iter.Current.Weight);
                 H.Add(r, iter.Current.Element);
             }
 
             // Process to end of iterator
             // (Do some Black Magic)
-            float X = MathF.Log((float)rand.NextDouble()) / MathF.Log(H.First().Key);
+            float X = MathF.Log((float)state.NextDouble()) / MathF.Log(H.First().Key);
             while (iter.MoveNext())
             {
                 X -= iter.Current.Weight;
                 if (X <= 0)
                 {
                     float t = MathF.Pow(H.First().Key, iter.Current.Weight);
-                    float r = MathF.Pow((float)rand.NextDouble() * (1f - t) + t, 1f / iter.Current.Weight);
+                    float r = MathF.Pow((float)state.NextDouble() * (1f - t) + t, 1f / iter.Current.Weight);
 
                     H.Remove(H.First().Key);
                     H[r] = iter.Current.Element;
 
-                    X = MathF.Log((float)rand.NextDouble()) / MathF.Log(H.First().Key);
+                    X = MathF.Log((float)state.NextDouble()) / MathF.Log(H.First().Key);
                 }
             }
 
@@ -577,7 +626,8 @@ namespace LeafRand
         #endregion
         #region Index
         /// <include file="Docs.xml" path="Doc/Index"/>
-        public int Index<T>(IReadOnlyCollection<T> items) => Num(items.Count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public int Index<T>(IReadOnlyCollection<T> items) => state.NextInt(items.Count);
         #endregion
         #region Shuffle
         /// <include file="Docs.xml" path="Doc/Shuffle"/>
@@ -586,7 +636,7 @@ namespace LeafRand
             for (int i = toShuffle.Count - 1; i > 1; i--)
             {
                 // Choose a random index to swap with in the remaining range
-                int randIndex = Num(0, i); // num 0-i inclusive
+                int randIndex = state.NextInt(0, i + 1);
 
                 // Swap
                 (toShuffle[i], toShuffle[randIndex]) = (toShuffle[i], toShuffle[randIndex]);

@@ -5,10 +5,18 @@
   "description": "A deterministic random library with high-level helper functions and weighted list class.",
   "unity": "2022.3",
   "dependencies": {
-    "com.leafesman.leafeditor": "1.0.0"
+    "com.leafesman.leafeditor": "1.0.0",
+	"com.unity.mathematics": "1.3.3"
  },
   "author": {
     "name": "LeafesMan",
     "url": "https://github.com/LeafesMan"
   }
+  "files": [
+	"Runtime",
+	"Editor",
+	"Testing",
+	"README.md",
+	"CHANGELOG.md"
+  ]
 }
