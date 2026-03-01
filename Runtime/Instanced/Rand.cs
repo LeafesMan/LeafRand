@@ -151,7 +151,7 @@ namespace LeafRand.Instanced
         public  int Index<T>(IReadOnlyCollection<T> items) => state.Index(items);
         /// <include file="../Docs.xml" path="Doc/Shuffle"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public  void Shuffle<T>(IList<T> toShuffle) => state.Shuffle(toShuffle);
+        public  void Shuffle<T>(IList<T> items) => state.Shuffle(items);
         #endregion
     }
 }

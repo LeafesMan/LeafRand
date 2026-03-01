@@ -633,13 +633,13 @@ namespace LeafRand.Instanced
         /// <include file="../Docs.xml" path="Doc/Shuffle"/>
         public void Shuffle<T>(IList<T> items)
         {   // A Fisher–Yates shuffle
-            for (int i = items.Count - 1; i > 1; i--)
+            for (int i = 0; i < items.Count; i++)
             {
                 // Choose a random index to swap with in the remaining range
                 int randIndex = state.NextInt(0, i + 1);
 
                 // Swap
-                (items[i], items[randIndex]) = (items[i], items[randIndex]);
+                (items[i], items[randIndex]) = (items[randIndex], items[i]);
             }
         }
         #endregion
