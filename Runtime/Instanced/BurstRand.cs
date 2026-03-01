@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
-namespace LeafRand
+namespace LeafRand.Instanced
 {
     /// <summary>
     /// Burst-compatible RNG struct with high-level helper methods.<br></br>
@@ -13,13 +13,13 @@ namespace LeafRand
     public struct BurstRand
     {
         #region Core
-        /// <include file="Docs.xml" path="Doc/Items/Class"/>
+        /// <include file="../Docs.xml" path="Doc/Items/Class"/>
         Unity.Mathematics.Random state;
 
-        /// <include file="Docs.xml" path="Doc/Seed"/>
+        /// <include file="../Docs.xml" path="Doc/Seed"/>
         public BurstRand(uint seed = 1) => state = new(seed);
 
-        /// <include file="Docs.xml" path="Doc/Seed"/>
+        /// <include file="../Docs.xml" path="Doc/Seed"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SetSeed(uint seed) => state.InitState(seed);
         #endregion
@@ -32,29 +32,29 @@ namespace LeafRand
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public uint UInt(uint min, uint max) => state.NextUInt(min, max);
 
-        /// <include file="Docs.xml" path="Doc/Num/Int"/>
+        /// <include file="../Docs.xml" path="Doc/Num/Int"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int Int() => state.NextInt();
-        /// <include file="Docs.xml" path="Doc/Num/Int"/>
+        /// <include file="../Docs.xml" path="Doc/Num/Int"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int Int(int max) => state.NextInt(max);
-        /// <include file="Docs.xml" path="Doc/Num/IntInt"/>
+        /// <include file="../Docs.xml" path="Doc/Num/IntInt"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int Int(int min, int max) => state.NextInt(min, max);
-        /// <include file="Docs.xml" path="Doc/Num/Vector2Int"/>
+        /// <include file="../Docs.xml" path="Doc/Num/Vector2Int"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int Int(Vector2Int range) => state.NextInt(range.x, range.y);
 
-        /// <include file="Docs.xml" path="Doc/Num"/>
+        /// <include file="../Docs.xml" path="Doc/Num"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public float Float() => state.NextFloat();
-        /// <include file="Docs.xml" path="Doc/Num/Float"/>
+        /// <include file="../Docs.xml" path="Doc/Num/Float"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public float Float(float max) => state.NextFloat(max);
-        /// <include file="Docs.xml" path="Doc/Num/FloatFloat"/>
+        /// <include file="../Docs.xml" path="Doc/Num/FloatFloat"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public float Float(float min, float max) => state.NextFloat(min, max);
-        /// <include file="Docs.xml" path="Doc/Num/Vector2"/>
+        /// <include file="../Docs.xml" path="Doc/Num/Vector2"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public float Float(Vector2 range) => state.NextFloat(range.x, range.y);
 
@@ -64,12 +64,12 @@ namespace LeafRand
         public double Double(double max) => state.NextDouble(max);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public double Double(double min, double max) => state.NextDouble(min, max);
-        /// <include file="Docs.xml" path="Doc/Angle"/>
+        /// <include file="../Docs.xml" path="Doc/Angle"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public float Angle() => state.NextFloat(2 * Mathf.PI);
         #endregion
         #region Bool
-        /// <include file="Docs.xml" path="Doc/Bool"/>
+        /// <include file="../Docs.xml" path="Doc/Bool"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Bool() => state.NextBool();
 
@@ -81,22 +81,22 @@ namespace LeafRand
         public bool BoolUInt(float chance) => state.NextUInt() < (uint)(chance * uint.MaxValue);
 
 
-        /// <include file="Docs.xml" path="Doc/Bool"/>
+        /// <include file="../Docs.xml" path="Doc/Bool"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Bool(float successChance) => state.NextDouble() < successChance;
-        /// <include file="Docs.xml" path="Doc/Chance"/>
+        /// <include file="../Docs.xml" path="Doc/Chance"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Chance(float successChance = 0.5f) => Bool(successChance);
         #endregion
         #region Direction
-        /// <include file="Docs.xml" path="Doc/Sign"/>
+        /// <include file="../Docs.xml" path="Doc/Sign"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int Sign() => state.NextInt(2) * 2 - 1;
         #region 2D
-        /// <include file="Docs.xml" path="Doc/Dir2D"/>
+        /// <include file="../Docs.xml" path="Doc/Dir2D"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector2 Dir2D() => Dir2D(0, 360);
-        /// <include file="Docs.xml" path="Doc/Dir2D/FloatFloat"/>
+        /// <include file="../Docs.xml" path="Doc/Dir2D/FloatFloat"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector2 Dir2D(float minTheta, float maxTheta)
         {
@@ -104,10 +104,10 @@ namespace LeafRand
             return new(Mathf.Cos(thetaRadians), Mathf.Sin(thetaRadians));
         }
 
-        /// <include file="Docs.xml" path="Doc/Dir2D/Vector2"/>
+        /// <include file="../Docs.xml" path="Doc/Dir2D/Vector2"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector2 Dir2D(Vector2 thetaRange) => Dir2D(thetaRange.x, thetaRange.y);
-        /// <include file="Docs.xml" path="Doc/Dir2D/Vector2FloatFloat"/>
+        /// <include file="../Docs.xml" path="Doc/Dir2D/Vector2FloatFloat"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector2 Dir2D(Vector2 basis, float minDegrees, float maxDegrees)
         {   // Normalize the basis to ensure direction is normal
@@ -122,19 +122,19 @@ namespace LeafRand
 
             return new(newX, newY);
         }
-        /// <include file="Docs.xml" path="Doc/Dir2D/Vector2Vector2"/>
+        /// <include file="../Docs.xml" path="Doc/Dir2D/Vector2Vector2"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector2 Dir2D(Vector2 basis, Vector2 degreesRange) => Dir2D(basis, degreesRange.x, degreesRange.y);
 
-        /// <include file="Docs.xml" path="Doc/Dir2D/Vector2Float"/>
+        /// <include file="../Docs.xml" path="Doc/Dir2D/Vector2Float"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector2 Dir2D(Vector2 basis, float withinDegrees) => Dir2D(basis, -withinDegrees, withinDegrees);
         #endregion
         #region 3D
-        /// <include file="Docs.xml" path="Doc/Dir"/>
+        /// <include file="../Docs.xml" path="Doc/Dir"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector3 Dir() => Dir(0, 360, 0, 180);
-        /// <include file="Docs.xml" path="Doc/Dir/FloatFloatFloatFloat"/>
+        /// <include file="../Docs.xml" path="Doc/Dir/FloatFloatFloatFloat"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector3 Dir(float thetaRangeX, float thetaRangeY, float phiRangeX, float phiRangeY)
         {   // Get Random Theta
@@ -159,10 +159,10 @@ namespace LeafRand
             return new(x, y, z);
         }
 
-        /// <include file="Docs.xml" path="Doc/Dir/Vector2Vector2"/>
+        /// <include file="../Docs.xml" path="Doc/Dir/Vector2Vector2"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector3 Dir(Vector2 thetaRange, Vector2 phiRange) => Dir(thetaRange.x, thetaRange.y, phiRange.x, phiRange.y);
-        /// <include file="Docs.xml" path="Doc/Dir/Vector3FloatFloat"/>
+        /// <include file="../Docs.xml" path="Doc/Dir/Vector3FloatFloat"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector3 Dir(Vector3 basis, float minDegrees, float maxDegrees)
         {   // Normalize basis
@@ -176,10 +176,10 @@ namespace LeafRand
 
             return randRotation * chosenDirection;
         }
-        /// <include file="Docs.xml" path="Doc/Dir/Vector3Vector2"/>
+        /// <include file="../Docs.xml" path="Doc/Dir/Vector3Vector2"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector3 Dir(Vector3 basis, Vector2 degreesRange) => Dir(basis, degreesRange.x, degreesRange.y);
-        /// <include file="Docs.xml" path="Doc/Dir/Vector3Float"/>
+        /// <include file="../Docs.xml" path="Doc/Dir/Vector3Float"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector3 Dir(Vector3 basis, float withinDegrees)
         {
@@ -192,16 +192,16 @@ namespace LeafRand
         #endregion
         #endregion
         #region Color
-        /// <include file="Docs.xml" path="Doc/Color"/>
+        /// <include file="../Docs.xml" path="Doc/Color"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Color Color(Vector2 hueRange, Vector2 saturationRange, Vector2 valueRange) => UnityEngine.Color.HSVToRGB(state.NextFloat(hueRange.x, hueRange.y), state.NextFloat(saturationRange.x, saturationRange.y), state.NextFloat(valueRange.x, valueRange.y));
         #endregion
         #region Item
         #region Single
-        /// <include file="Docs.xml" path="Doc/Item/List"/>
+        /// <include file="../Docs.xml" path="Doc/Item/List"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public T Item<T>(IReadOnlyList<T> source) => source[state.NextInt(source.Count)];
-        /// <include file="Docs.xml" path="Doc/Item/ListList"/>
+        /// <include file="../Docs.xml" path="Doc/Item/ListList"/>
         public T Item<T>(IReadOnlyList<T> source, IReadOnlyList<float> weights)
         {   // Prevents O(n^2) picking for Non-Indexed Enumerables
             // (Count() and ElementAt() both execute in O(n) time for many Enumerables)
@@ -223,11 +223,11 @@ namespace LeafRand
             // This should be impossible!
             throw new Exception($"LeafNoise: state weight of: {state} > totalweight: {totalWeight}! Sorry! My fault LOL");
         }
-        /// <include file="Docs.xml" path="Doc/Item/WeightedList"/>
+        /// <include file="../Docs.xml" path="Doc/Item/WeightedList"/>
         public T Item<T>(WeightedList<T> weightedList) => Item(weightedList.Items, weightedList.Weights);
         #endregion
         #region Multi
-        /// <include file="Docs.xml" path="Doc/Items/WithReplacement/ListInt"/>
+        /// <include file="../Docs.xml" path="Doc/Items/WithReplacement/ListInt"/>
         public T[] ItemsWithReplacement<T>(IReadOnlyList<T> items, int count)
         {   // Input validation
             if (items == null) throw new ArgumentNullException(nameof(items));
@@ -236,7 +236,7 @@ namespace LeafRand
 
             return ItemsUniformWithReplacement(items, count);
         }
-        /// <include file="Docs.xml" path="Doc/Items/WithoutReplacement/ListInt"/>
+        /// <include file="../Docs.xml" path="Doc/Items/WithoutReplacement/ListInt"/>
         public T[] ItemsWithoutReplacement<T>(IReadOnlyList<T> items, int count)
         {   // Input validation
             if (items == null) throw new ArgumentNullException(nameof(items));
@@ -251,7 +251,7 @@ namespace LeafRand
             else return ItemsUniformWithoutReplacementRetryMethod(items, count);
         }
 
-        /// <include file="Docs.xml" path="Doc/Items/WithReplacement/ListListInt"/>
+        /// <include file="../Docs.xml" path="Doc/Items/WithReplacement/ListListInt"/>
         public T[] ItemsWithReplacement<T>(IReadOnlyList<T> items, IReadOnlyList<float> weights, int count)
         {   // Input Validation
             if (items == null) throw new ArgumentNullException(nameof(items));
@@ -264,7 +264,7 @@ namespace LeafRand
             if (items.Count * count < 100 || (float)items.Count / 5 > count) return ItemsWeightedWithReplacementBinarySearch(items, weights, count);
             else return ItemsWeightedWithReplacementAliasMethod(items, weights, count);
         }
-        /// <include file="Docs.xml" path="Doc/Items/WithoutReplacement/ListListInt"/>
+        /// <include file="../Docs.xml" path="Doc/Items/WithoutReplacement/ListListInt"/>
         public T[] ItemsWithoutReplacement<T>(IReadOnlyList<T> items, IReadOnlyList<float> weights, int count)
         {   // Input Validation
             if (items == null) throw new ArgumentNullException(nameof(items));
@@ -277,11 +277,11 @@ namespace LeafRand
 
             return ItemsWeightedWithoutReplacementBinarySearch(items, weights, count);
         }
-        /// <include file="Docs.xml" path="Doc/Items/WithReplacement/WeightedListInt"/>
+        /// <include file="../Docs.xml" path="Doc/Items/WithReplacement/WeightedListInt"/>
         public T[] ItemsWithReplacement<T>(WeightedList<T> weightedList, int count) => ItemsWithReplacement(weightedList.Items, weightedList.Weights, count);
-        /// <include file="Docs.xml" path="Doc/Items/WithoutReplacement/WeightedListInt"/>
+        /// <include file="../Docs.xml" path="Doc/Items/WithoutReplacement/WeightedListInt"/>
         public T[] ItemsWithoutReplacement<T>(WeightedList<T> weightedList, int count) => ItemsWithoutReplacement(weightedList.Items, weightedList.Weights, count);
-        /// <include file="Docs.xml" path="Doc/Items/Extract/ListInt"/>
+        /// <include file="../Docs.xml" path="Doc/Items/Extract/ListInt"/>
         public T[] ItemsExtract<T>(List<T> source, int count)
         {   // Input Validation
             if (source == null) throw new ArgumentNullException(nameof(source));
@@ -625,12 +625,12 @@ namespace LeafRand
         #endregion
         #endregion
         #region Index
-        /// <include file="Docs.xml" path="Doc/Index"/>
+        /// <include file="../Docs.xml" path="Doc/Index"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int Index<T>(IReadOnlyCollection<T> items) => state.NextInt(items.Count);
         #endregion
         #region Shuffle
-        /// <include file="Docs.xml" path="Doc/Shuffle"/>
+        /// <include file="../Docs.xml" path="Doc/Shuffle"/>
         public void Shuffle<T>(IList<T> toShuffle)
         {   // A Fisher–Yates shuffle
             for (int i = toShuffle.Count - 1; i > 1; i--)

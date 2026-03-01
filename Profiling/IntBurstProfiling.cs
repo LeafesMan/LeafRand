@@ -132,7 +132,7 @@ namespace LeafRand.Profiling
 
             public void Execute()
             {
-                var rand = new BurstRand(seed);
+                var rand = new Instanced.BurstRand(seed);
                 int sum = 0;
                 for (int i = 0; i < iterations; i++) sum += rand.Int();
 
@@ -149,7 +149,7 @@ namespace LeafRand.Profiling
 
             public void Execute()
             {
-                var rand = new BurstRand(seed);
+                var rand = new Instanced.BurstRand(seed);
                 int sum = 0;
                 for (int i = 0; i < iterations; i++) sum += rand.Int(max);
 
@@ -167,7 +167,7 @@ namespace LeafRand.Profiling
 
             public void Execute()
             {
-                var rand = new BurstRand(seed);
+                var rand = new Instanced.BurstRand(seed);
                 int sum = 0;
                 for (int i = 0; i < iterations; i++) sum += rand.Int(min, max);
 

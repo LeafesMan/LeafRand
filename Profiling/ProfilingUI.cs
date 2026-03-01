@@ -5,7 +5,7 @@ namespace LeafRand.Profiling
 {
     public class ProfilingUI : MonoBehaviour
     {
-        [InterfaceReference]
+        [RequireInterface(typeof(IProfileable))]
         public Object[] profileables;
 
         

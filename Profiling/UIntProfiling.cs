@@ -13,8 +13,8 @@ namespace LeafRand.Profiling
             uint result = 0;
 
             Unity.Mathematics.Random mathRand;
-            BurstRand burstRand;
-            ManagedRand managedRand;
+            Instanced.BurstRand burstRand;
+            Instanced.Rand managedRand;
 
             Stopwatch stopwatch = Stopwatch.StartNew();
 

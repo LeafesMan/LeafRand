@@ -166,7 +166,7 @@ namespace LeafRand.Profiling
 
             public void Execute()
             {
-                var rand = new BurstRand(seed);
+                var rand = new Instanced.BurstRand(seed);
                 int successes = 0;
                 for (int i = 0; i < iterations; i++)
                     if (rand.Bool()) successes++;
@@ -184,7 +184,7 @@ namespace LeafRand.Profiling
 
             public void Execute()
             {
-                var rand = new BurstRand(seed);
+                var rand = new Instanced.BurstRand(seed);
                 int successes = 0;
                 for (int i = 0; i < iterations; i++)
                     if (rand.BoolUInt(chance)) successes++;
@@ -202,7 +202,7 @@ namespace LeafRand.Profiling
 
             public void Execute()
             {
-                var rand = new BurstRand(seed);
+                var rand = new Instanced.BurstRand(seed);
                 int successes = 0;
                 for (int i = 0; i < iterations; i++)
                     if (rand.BoolFloat(chance)) successes++;
@@ -220,7 +220,7 @@ namespace LeafRand.Profiling
 
             public void Execute()
             {
-                var rand = new BurstRand(seed);
+                var rand = new Instanced.BurstRand(seed);
                 int successes = 0;
                 for (int i = 0; i < iterations; i++)
                     if (rand.BoolDouble(chance)) successes++;

@@ -16,8 +16,8 @@ namespace LeafRand.Profiling
             Stopwatch stopwatch = Stopwatch.StartNew();
             SysRandWrapper sysRand;
             Unity.Mathematics.Random mathRand;
-            BurstRand myBurstRand;
-            ManagedRand myManagedRand;
+            Instanced.BurstRand myBurstRand;
+            Instanced.Rand myManagedRand;
             float result = 0;
 
 

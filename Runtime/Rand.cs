@@ -12,7 +12,7 @@ namespace LeafRand
     {   // Just a BurstRand wrapped in a static class
         // This allows for calls like Rand.Num() for global access rather than something like Rand.Global.Num()
         #region Core
-        static BurstRand state = new((uint)Environment.TickCount);
+        static Instanced.BurstRand state = new((uint)Environment.TickCount);
 
         /// <include file="Docs.xml" path="Doc/Seed"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -125,7 +125,7 @@ namespace LeafRand.Profiling
 
             public void Execute()
             {
-                BurstRand mathRand = new(seed);
+                Instanced.BurstRand mathRand = new(seed);
 
                 for (int i = 0; i < iterations; i++) output[0] = mathRand.Float();
             }
@@ -141,7 +141,7 @@ namespace LeafRand.Profiling
 
             public void Execute()
             {
-                BurstRand mathRand = new(seed);
+                Instanced.BurstRand mathRand = new(seed);
 
                 for (int i = 0; i < iterations; i++) output[0] = mathRand.Float(max);
             }
@@ -157,7 +157,7 @@ namespace LeafRand.Profiling
 
             public void Execute()
             {
-                BurstRand mathRand = new(seed);
+                Instanced.BurstRand mathRand = new(seed);
 
                 for (int i = 0; i < iterations; i++) output[0] = mathRand.Float(min, max);
             }
