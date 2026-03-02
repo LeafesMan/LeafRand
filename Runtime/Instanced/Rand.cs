@@ -83,6 +83,7 @@ namespace LeafRand.Instanced
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public  bool Chance(float successChance) => state.Bool(successChance);
 
+
         /// <include file="../Docs.xml" path="Doc/Sign"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public  int Sign() => state.Sign();
@@ -122,15 +123,19 @@ namespace LeafRand.Instanced
         /// <include file="../Docs.xml" path="Doc/Dir/Vector3Float"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public  Vector3 Dir(Vector3 basis, float withinDegrees) => state.Dir(basis, withinDegrees);
+
+
         /// <include file="../Docs.xml" path="Doc/Color"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public  Color Color(Vector2 hueRange, Vector2 saturationRange, Vector2 valueRange) => state.Color(hueRange, saturationRange, valueRange);
+
+
         /// <include file="../Docs.xml" path="Doc/Item/List"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public  T Item<T>(IReadOnlyList<T> items) => state.Item(items);
         /// <include file="../Docs.xml" path="Doc/Item/ListList"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public  T Item<T>(IReadOnlyList<Weighted<T>> weightedItems) => state.Item(weightedItems);
+        public  T ItemWeighted<T>(IReadOnlyList<Weighted<T>> weightedItems) => state.ItemWeighted(weightedItems);
         /// <include file="../Docs.xml" path="Doc/Items/WithReplacement/ListInt"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public  T[] ItemsWithReplacement<T>(IReadOnlyList<T> items, int count) => state.ItemsWithReplacement(items, count);
@@ -139,16 +144,20 @@ namespace LeafRand.Instanced
         public  T[] ItemsWithoutReplacement<T>(IReadOnlyList<T> items, int count) => state.ItemsWithoutReplacement(items, count);
         /// <include file="../Docs.xml" path="Doc/Items/WithReplacement/ListListInt"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public  T[] ItemsWithReplacement<T>(IReadOnlyList<Weighted<T>> weightedItems, int count) => state.ItemsWithReplacement(weightedItems, count);
+        public  T[] ItemsWeightedWithReplacement<T>(IReadOnlyList<Weighted<T>> weightedItems, int count) => state.ItemsWeightedWithReplacement(weightedItems, count);
         /// <include file="../Docs.xml" path="Doc/Items/WithoutReplacement/ListListInt"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public  T[] ItemsWithoutReplacement<T>(IReadOnlyList<Weighted<T>> weightedItems, int count) => state.ItemsWithReplacement(weightedItems, count);
+        public  T[] ItemsWeightedWithoutReplacement<T>(IReadOnlyList<Weighted<T>> weightedItems, int count) => state.ItemsWeightedWithoutReplacement(weightedItems, count);
         /// <include file="../Docs.xml" path="Doc/Items/Extract/ListInt"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public  T[] ItemsExtract<T>(List<T> source, int count) => state.ItemsExtract(source, count);
+
+
         /// <include file="../Docs.xml" path="Doc/Index"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public  int Index<T>(IReadOnlyCollection<T> items) => state.Index(items);
+
+
         /// <include file="../Docs.xml" path="Doc/Shuffle"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public  void Shuffle<T>(IList<T> items) => state.Shuffle(items);

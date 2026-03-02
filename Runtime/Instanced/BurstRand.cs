@@ -202,7 +202,7 @@ namespace LeafRand.Instanced
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public T Item<T>(IReadOnlyList<T> items) => items[state.NextInt(items.Count)];
         /// <include file="../Docs.xml" path="Doc/Item/ListList"/>
-        public T Item<T>(IReadOnlyList<Weighted<T>> items)
+        public T ItemWeighted<T>(IReadOnlyList<Weighted<T>> items)
         {   
             float sumWeights = 0;
             foreach (var item in items) sumWeights += item.weight;
@@ -249,7 +249,7 @@ namespace LeafRand.Instanced
         }
 
         /// <include file="../Docs.xml" path="Doc/Items/WithReplacement/ListListInt"/>
-        public T[] ItemsWithReplacement<T>(IReadOnlyList<Weighted<T>> weightedItems, int count)
+        public T[] ItemsWeightedWithReplacement<T>(IReadOnlyList<Weighted<T>> weightedItems, int count)
         {   // Input Validation
             if (weightedItems == null) throw new ArgumentNullException(nameof(weightedItems));
             if (weightedItems.Count == 0) throw new ArgumentException("Items must be non-empty.", nameof(weightedItems));
@@ -260,7 +260,7 @@ namespace LeafRand.Instanced
             else return ItemsWeightedWithReplacementAliasMethod(weightedItems, count);
         }
         /// <include file="../Docs.xml" path="Doc/Items/WithoutReplacement/ListListInt"/>
-        public T[] ItemsWithoutReplacement<T>(IReadOnlyList<Weighted<T>> weightedItems, int count)
+        public T[] ItemsWeightedWithoutReplacement<T>(IReadOnlyList<Weighted<T>> weightedItems, int count)
         {   // Input Validation
             if (weightedItems == null) throw new ArgumentNullException(nameof(weightedItems));
             if (weightedItems.Count == 0) throw new ArgumentException("Items must be non-empty.", nameof(weightedItems));
