@@ -207,7 +207,7 @@ namespace LeafRand.Instanced
             float sumWeights = 0;
             foreach (var item in items) sumWeights += item.weight;
 
-            if (sumWeights == 0) return Item(items);
+            if (sumWeights == 0) throw new ArgumentException("Sum of weights must be positive!", nameof(sumWeights));
 
             // Return Weighted Random Element
             double randVal = state.NextDouble() * sumWeights;
@@ -351,11 +351,6 @@ namespace LeafRand.Instanced
         }
         /// <summary>
         /// Picks <paramref name="count"/> items from <paramref name="items"/> using uniform random sampling without replacement.<br/>
-        /// Time Complexity: O(n + k)
-        /// </summary>
-        internal T[] ItemsUniformWithoutReplacementSwapRemovedOnCopy<T>(ICollection<T> items, int count) => ItemsUniformWithoutReplacementSwapRemoved(items.ToList(), count);
-        /// <summary>
-        /// Picks <paramref name="count"/> items from <paramref name="items"/> using uniform random sampling without replacement.<br/>
         /// Note:  Picked items are removed and relative order is destroyed.<br/>
         /// Time Complexity: O(k)
         /// </summary>
@@ -386,10 +381,6 @@ namespace LeafRand.Instanced
             // A lovely method for effecient generation of weighted random values
             // Time Complexity: O(n) setup and O(1) picks
 
-            // For edge case where all weights are equal
-            bool allWeightsEqual = true;
-            float firstWeight = weightedItems[0].weight;
-
             #region Setup
             // Initialize work Arrays
             float[] weights = new float[weightedItems.Count];
@@ -404,21 +395,11 @@ namespace LeafRand.Instanced
             Stack<int> aboveIndices = new();
             float avg = weights.Sum() / weights.Length; // Calculate Average
             for (int i = 0; i < weights.Length; i++)
-            {   // While splitting weights see if all are equal to determine if this work may be skipped
-                if (weights[i] != firstWeight) allWeightsEqual = false;
-
+            {
                 if (weights[i] >= avg) aboveIndices.Push(i);
                 else belowIndices.Push(i);
             }
 
-            // Edge case: All weights are equal fall back to PickNonWeighted
-            if (allWeightsEqual)
-            {    
-                var selectedWeighteds = ItemsUniformWithReplacement(weightedItems, count);
-                T[] selected = new T[count];
-                for (int i = 0; i < selectedWeighteds.Length; i++) selected[i] = selectedWeighteds[i].item;
-                return selected;
-            }
 
             // Grab one from less and one from more
             while (belowIndices.Count != 0 && aboveIndices.Count != 0)
@@ -465,25 +446,11 @@ namespace LeafRand.Instanced
         /// Time Complexity: O(n + klog(n))
         /// </summary>
         internal T[] ItemsWeightedWithReplacementBinarySearch<T>(IReadOnlyList<Weighted<T>> weightedItems, int count)
-        {   // Get CumulativeWeights
-            // Simultaneously determine if all weights are same
-            bool allWeightsEqual = true;
-            float firstWeight = weightedItems[0].weight;
-            List<float> cumulativeWeights = new() { weightedItems[0].weight };
+        {   
+            // Biild CumulativeWeights
+            List<float> cumulativeWeights = new();
             for (int i = 1; i < weightedItems.Count; i++)
-            {
-                if (firstWeight != weightedItems[i].weight) allWeightsEqual = false;
                 cumulativeWeights.Add(cumulativeWeights[i - 1] + weightedItems[i].weight);
-            }
-
-            // Edge case: All weights are equal fall back to PickNonWeighted
-            if (allWeightsEqual)
-            {
-                var selectedWeighteds = ItemsUniformWithReplacement(weightedItems, count);
-                T[] selected = new T[count];
-                for (int i = 0; i < selectedWeighteds.Length; i++) selected[i] = selectedWeighteds[i].item;
-                return selected;
-            }
 
             // Choose
             T[] chosen = new T[count];
@@ -514,8 +481,6 @@ namespace LeafRand.Instanced
         /// </summary>
         internal T[] ItemsWeightedWithoutReplacementBinarySearch<T>(IReadOnlyList<Weighted<T>> weightedItems, int count)
         {   // Prep vars to detect edge cases
-            bool allWeightsEqual = true;
-            float firstWeight = weightedItems[0].weight;
             int numWeighted = weightedItems[0].weight != 0 ? 1 : 0;
             
             // Get CumulativeWeights
@@ -523,38 +488,13 @@ namespace LeafRand.Instanced
             for (int i = 1; i < weightedItems.Count; i++)
             {
                 if (weightedItems[i].weight != 0) numWeighted++;
-                if (weightedItems[i].weight != firstWeight) allWeightsEqual = false;
                 cumulativeWeights.Add(cumulativeWeights[i - 1] + weightedItems[i].weight);
             }
-
-            // Edge case: All weights are equal fall back to PickNonWeighted
-            if (allWeightsEqual) return ItemsWithoutReplacement(weightedItems, count);
+            
 
             // Edge Case: Requested pick of more items than the number of items with non-zero weights
-            // - All weighted items should be returned
-            // - Then perform non-weighted random picks for the remaining items
-            // (This is faster + this method breaks if there are no remaining weighted items. It would always pick the first item)
             T[] picked = new T[count];
-            if (numWeighted < count)
-            {
-                int pickIndex = 0;
-                int zeroWeightIndex = 0;
-                T[] nonWeightedItems = new T[weightedItems.Count - numWeighted];
-                // Grab weighted items into picked and non-weighted items into nonWeightedItems
-                for (int i = 0; i < weightedItems.Count; i++)
-                    if (weightedItems[i].weight == 0) nonWeightedItems[zeroWeightIndex++] = weightedItems[i].item;
-                    else picked[pickIndex++] = weightedItems[i].item;
-
-                // Than grab remaining items randomly from non weighted items
-                int remaining = count - numWeighted;
-                T[] nonWeightedPicks = ItemsWithoutReplacement(nonWeightedItems, remaining);
-
-                // Concat nonWeightedPicks with picked
-                for (int i = 0; i < remaining; i++)
-                    picked[pickIndex++] = nonWeightedPicks[i];
-
-                return picked;
-            }
+            if (numWeighted < count) throw new ArgumentException("Count should be greater than number of weighted items!", nameof(weightedItems));
 
             // Pick items
             for (int i = 0; i < count; i++)
