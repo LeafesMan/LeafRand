@@ -205,7 +205,7 @@ namespace LeafRand.Instanced
         public T ItemWeighted<T>(IReadOnlyList<Weighted<T>> items)
         {   
             float sumWeights = 0;
-            foreach (var item in items) sumWeights += item.weight;
+            foreach (var item in items) sumWeights += item.Weight;
 
             if (sumWeights == 0) throw new ArgumentException("Sum of weights must be positive!", nameof(sumWeights));
 
@@ -214,9 +214,9 @@ namespace LeafRand.Instanced
             float weightPosition = 0;
             for (int i = 0; i < items.Count; i++)
             {
-                weightPosition += items[i].weight;
+                weightPosition += items[i].Weight;
                 if (weightPosition > randVal)
-                    return items[i].item;
+                    return items[i].Item;
             }
 
             // Based on the logic above this should be impossible!
@@ -384,7 +384,7 @@ namespace LeafRand.Instanced
             #region Setup
             // Initialize work Arrays
             float[] weights = new float[weightedItems.Count];
-            for(int i = 0; i < weightedItems.Count; i++) weights[i] = weightedItems[i].weight; 
+            for(int i = 0; i < weightedItems.Count; i++) weights[i] = weightedItems[i].Weight; 
             float[] probability = new float[weights.Length];
             int[] alias = new int[weights.Length];
 
@@ -435,7 +435,7 @@ namespace LeafRand.Instanced
                 int bucket = state.NextInt(weights.Length);
 
                 // Flip a weighted coin between the two possibilities in this slot
-                picked[i] = weightedItems[Double() < probability[bucket] ? bucket : alias[bucket]].item;
+                picked[i] = weightedItems[Double() < probability[bucket] ? bucket : alias[bucket]].Item;
             }
             #endregion
 
@@ -450,7 +450,7 @@ namespace LeafRand.Instanced
             // Biild CumulativeWeights
             List<float> cumulativeWeights = new();
             for (int i = 1; i < weightedItems.Count; i++)
-                cumulativeWeights.Add(cumulativeWeights[i - 1] + weightedItems[i].weight);
+                cumulativeWeights.Add(cumulativeWeights[i - 1] + weightedItems[i].Weight);
 
             // Choose
             T[] chosen = new T[count];
@@ -469,7 +469,7 @@ namespace LeafRand.Instanced
                         bottom = mid + 1;
                 }
 
-                chosen[i] = weightedItems[top].item;
+                chosen[i] = weightedItems[top].Item;
             }
 
 
@@ -481,14 +481,14 @@ namespace LeafRand.Instanced
         /// </summary>
         internal T[] ItemsWeightedWithoutReplacementBinarySearch<T>(IReadOnlyList<Weighted<T>> weightedItems, int count)
         {   // Prep vars to detect edge cases
-            int numWeighted = weightedItems[0].weight != 0 ? 1 : 0;
+            int numWeighted = weightedItems[0].Weight != 0 ? 1 : 0;
             
             // Get CumulativeWeights
-            List<float> cumulativeWeights = new() { weightedItems[0].weight };
+            List<float> cumulativeWeights = new() { weightedItems[0].Weight };
             for (int i = 1; i < weightedItems.Count; i++)
             {
-                if (weightedItems[i].weight != 0) numWeighted++;
-                cumulativeWeights.Add(cumulativeWeights[i - 1] + weightedItems[i].weight);
+                if (weightedItems[i].Weight != 0) numWeighted++;
+                cumulativeWeights.Add(cumulativeWeights[i - 1] + weightedItems[i].Weight);
             }
             
 
@@ -513,7 +513,7 @@ namespace LeafRand.Instanced
                 }
 
                 // Cache the picked element
-                picked[i] = weightedItems[top].item;
+                picked[i] = weightedItems[top].Item;
 
                 float weightOfPicked = cumulativeWeights[top] - (top == 0 ? 0 : cumulativeWeights[top - 1]);
                 cumulativeWeights[top] = 0; // Zero picked weight
