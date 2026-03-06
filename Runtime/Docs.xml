@@ -218,7 +218,7 @@
     <ListInt>
       <Summary>
         Picks <paramref name="count"/> items from <paramref name="source"/> using uniform random sampling without replacement.<br/>
-        Picked items are removed and relative order is destroyed.<br/>
+        Picked items are removed from source and it's relative order is destroyed.<br/>
         Time Complexity: O(k)<br/><br/>
         Consider using the slower Rand.ItemsWithoutReplacement() if mutation is not acceptable.<br/>
       </Summary>

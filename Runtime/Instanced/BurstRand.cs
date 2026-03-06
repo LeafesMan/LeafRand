@@ -65,8 +65,7 @@ namespace LeafRand.Instanced
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public int Sign() => state.NextInt(2) * 2 - 1;
         #region 2D
         /// <include file="../Docs.xml" path="Doc/Dir2D"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Vector2 Dir2D() => Dir2D(0, 360);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public Vector2 Dir2D() => Dir2D(0, 360);
         /// <include file="../Docs.xml" path="Doc/Dir2D/FloatFloat"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector2 Dir2D(float minTheta, float maxTheta)
@@ -76,8 +75,7 @@ namespace LeafRand.Instanced
         }
 
         /// <include file="../Docs.xml" path="Doc/Dir2D/Vector2"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Vector2 Dir2D(Vector2 thetaRange) => Dir2D(thetaRange.x, thetaRange.y);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public Vector2 Dir2D(Vector2 thetaRange) => Dir2D(thetaRange.x, thetaRange.y);
         /// <include file="../Docs.xml" path="Doc/Dir2D/Vector2FloatFloat"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector2 Dir2D(Vector2 basis, float minDegrees, float maxDegrees)
@@ -94,17 +92,14 @@ namespace LeafRand.Instanced
             return new(newX, newY);
         }
         /// <include file="../Docs.xml" path="Doc/Dir2D/Vector2Vector2"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Vector2 Dir2D(Vector2 basis, Vector2 degreesRange) => Dir2D(basis, degreesRange.x, degreesRange.y);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public Vector2 Dir2D(Vector2 basis, Vector2 degreesRange) => Dir2D(basis, degreesRange.x, degreesRange.y);
 
         /// <include file="../Docs.xml" path="Doc/Dir2D/Vector2Float"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Vector2 Dir2D(Vector2 basis, float withinDegrees) => Dir2D(basis, -withinDegrees, withinDegrees);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public Vector2 Dir2D(Vector2 basis, float withinDegrees) => Dir2D(basis, -withinDegrees, withinDegrees);
         #endregion
         #region 3D
         /// <include file="../Docs.xml" path="Doc/Dir"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Vector3 Dir() => Dir(0, 360, 0, 180);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public Vector3 Dir() => Dir(0, 360, 0, 180);
         /// <include file="../Docs.xml" path="Doc/Dir/FloatFloatFloatFloat"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector3 Dir(float thetaRangeX, float thetaRangeY, float phiRangeX, float phiRangeY)
@@ -131,8 +126,7 @@ namespace LeafRand.Instanced
         }
 
         /// <include file="../Docs.xml" path="Doc/Dir/Vector2Vector2"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Vector3 Dir(Vector2 thetaRange, Vector2 phiRange) => Dir(thetaRange.x, thetaRange.y, phiRange.x, phiRange.y);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public Vector3 Dir(Vector2 thetaRange, Vector2 phiRange) => Dir(thetaRange.x, thetaRange.y, phiRange.x, phiRange.y);
         /// <include file="../Docs.xml" path="Doc/Dir/Vector3FloatFloat"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector3 Dir(Vector3 basis, float minDegrees, float maxDegrees)
@@ -148,8 +142,7 @@ namespace LeafRand.Instanced
             return randRotation * chosenDirection;
         }
         /// <include file="../Docs.xml" path="Doc/Dir/Vector3Vector2"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Vector3 Dir(Vector3 basis, Vector2 degreesRange) => Dir(basis, degreesRange.x, degreesRange.y);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public Vector3 Dir(Vector3 basis, Vector2 degreesRange) => Dir(basis, degreesRange.x, degreesRange.y);
         /// <include file="../Docs.xml" path="Doc/Dir/Vector3Float"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector3 Dir(Vector3 basis, float withinDegrees)
@@ -174,23 +167,23 @@ namespace LeafRand.Instanced
         #region Single
         /// <include file="../Docs.xml" path="Doc/Item/List"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public T Item<T>(IReadOnlyList<T> items) => items[state.NextInt(items.Count)];
+        public T Item<T>(IReadOnlyList<T> source) => source[state.NextInt(source.Count)];
         /// <include file="../Docs.xml" path="Doc/Item/ListList"/>
-        public T ItemWeighted<T>(IReadOnlyList<Weighted<T>> items)
+        public T ItemWeighted<T>(IReadOnlyList<Weighted<T>> source)
         {   
             float sumWeights = 0;
-            foreach (var item in items) sumWeights += item.Weight;
+            foreach (var item in source) sumWeights += item.Weight;
 
             if (sumWeights == 0) throw new ArgumentException("Sum of weights must be positive!", nameof(sumWeights));
 
             // Return Weighted Random Element
             double randVal = state.NextDouble() * sumWeights;
             float weightPosition = 0;
-            for (int i = 0; i < items.Count; i++)
+            for (int i = 0; i < source.Count; i++)
             {
-                weightPosition += items[i].Weight;
+                weightPosition += source[i].Weight;
                 if (weightPosition > randVal)
-                    return items[i].Item;
+                    return source[i].Item;
             }
 
             // Based on the logic above this should be impossible!
@@ -199,81 +192,81 @@ namespace LeafRand.Instanced
         #endregion
         #region Multi
         /// <include file="../Docs.xml" path="Doc/Items/WithReplacement/ListInt"/>
-        public T[] ItemsWithReplacement<T>(IReadOnlyList<T> items, int count)
+        public T[] ItemsWithReplacement<T>(IReadOnlyList<T> source, int count)
         {   // Input validation
-            if (items == null) throw new ArgumentNullException(nameof(items));
-            if (items.Count == 0) throw new ArgumentException("Items must be non-empty.", nameof(items));
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (source.Count == 0) throw new ArgumentException("Items must be non-empty.", nameof(source));
             if (count < 0) throw new ArgumentOutOfRangeException(nameof(count), count, "Count must be positive.");
 
-            return ItemsUniformWithReplacement(items, count);
+            return ItemsUniformWithReplacement(source, count);
         }
         /// <include file="../Docs.xml" path="Doc/Items/WithoutReplacement/ListInt"/>
-        public T[] ItemsWithoutReplacement<T>(IReadOnlyList<T> items, int count)
+        public T[] ItemsWithoutReplacement<T>(IReadOnlyList<T> source, int count)
         {   // Input validation
-            if (items == null) throw new ArgumentNullException(nameof(items));
-            if (items.Count == 0) throw new ArgumentException("Items must be non-empty.", nameof(items));
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (source.Count == 0) throw new ArgumentException("Items must be non-empty.", nameof(source));
             if (count < 0) throw new ArgumentOutOfRangeException(nameof(count), count, "Count must be positive.");
-            if (count > items.Count) throw new ArgumentOutOfRangeException(nameof(count), count, $"Count must not exceed the number of items.");
+            if (count > source.Count) throw new ArgumentOutOfRangeException(nameof(count), count, $"Count must not exceed the number of items.");
 
             // Without Replacement
             // Determine Best Algorithm based on use reservoir threshold
             float USERESERVOIRTHRESHOLD = 0.14f;
-            if ((float)count / items.Count > USERESERVOIRTHRESHOLD) return ItemsUniformWithoutReplacementReservoirMethod(items, count);
-            else return ItemsUniformWithoutReplacementRetryMethod(items, count);
+            if ((float)count / source.Count > USERESERVOIRTHRESHOLD) return ItemsUniformWithoutReplacementReservoirMethod(source, count);
+            else return ItemsUniformWithoutReplacementRetryMethod(source, count);
         }
 
         /// <include file="../Docs.xml" path="Doc/Items/WithReplacement/ListListInt"/>
-        public T[] ItemsWeightedWithReplacement<T>(IReadOnlyList<Weighted<T>> weightedItems, int count)
+        public T[] ItemsWeightedWithReplacement<T>(IReadOnlyList<Weighted<T>> source, int count)
         {   // Input Validation
-            if (weightedItems == null) throw new ArgumentNullException(nameof(weightedItems));
-            if (weightedItems.Count == 0) throw new ArgumentException("Items must be non-empty.", nameof(weightedItems));
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (source.Count == 0) throw new ArgumentException("Items must be non-empty.", nameof(source));
             if (count < 0) throw new ArgumentOutOfRangeException(nameof(count), count, "Count must be positive.");
 
             // Decide on best algorithm
-            if (weightedItems.Count * count < 100 || (float)weightedItems.Count / 5 > count) return ItemsWeightedWithReplacementBinarySearch(weightedItems, count);
-            else return ItemsWeightedWithReplacementAliasMethod(weightedItems, count);
+            if (source.Count * count < 100 || (float)source.Count / 5 > count) return ItemsWeightedWithReplacementBinarySearch(source, count);
+            else return ItemsWeightedWithReplacementAliasMethod(source, count);
         }
         /// <include file="../Docs.xml" path="Doc/Items/WithoutReplacement/ListListInt"/>
-        public T[] ItemsWeightedWithoutReplacement<T>(IReadOnlyList<Weighted<T>> weightedItems, int count)
+        public T[] ItemsWeightedWithoutReplacement<T>(IReadOnlyList<Weighted<T>> source, int count)
         {   // Input Validation
-            if (weightedItems == null) throw new ArgumentNullException(nameof(weightedItems));
-            if (weightedItems.Count == 0) throw new ArgumentException("Items must be non-empty.", nameof(weightedItems));
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (source.Count == 0) throw new ArgumentException("Items must be non-empty.", nameof(source));
             if (count < 0) throw new ArgumentOutOfRangeException(nameof(count), count, "Count must be positive.");
-            if (count > weightedItems.Count) throw new ArgumentOutOfRangeException(nameof(count), count, $"Count must not exceed the number of items.");
+            if (count > source.Count) throw new ArgumentOutOfRangeException(nameof(count), count, $"Count must not exceed the number of items.");
 
 
-            return ItemsWeightedWithoutReplacementBinarySearch(weightedItems, count);
+            return ItemsWeightedWithoutReplacementBinarySearch(source, count);
         }
         /// <include file="../Docs.xml" path="Doc/Items/Extract/ListInt"/>
-        public T[] ItemsExtract<T>(List<T> items, int count)
+        public T[] ItemsExtract<T>(List<T> source, int count)
         {   // Input Validation
-            if (items == null) throw new ArgumentNullException(nameof(items));
-            if (items.Count == 0) throw new ArgumentException("Items must be non-empty.", nameof(items));
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (source.Count == 0) throw new ArgumentException("Items must be non-empty.", nameof(source));
             if (count < 0) throw new ArgumentOutOfRangeException(nameof(count), count, "Count must be positive.");
-            if (count > items.Count) throw new ArgumentOutOfRangeException(nameof(count), count, $"Count must not exceed the number of items.");
+            if (count > source.Count) throw new ArgumentOutOfRangeException(nameof(count), count, $"Count must not exceed the number of items.");
 
-            return ItemsUniformWithoutReplacementSwapRemoved(items, count);
+            return ItemsUniformWithoutReplacementSwapRemoved(source, count);
         }
         #region Algorithms
         /// <summary>
-        /// Picks <paramref name="count"/> items from <paramref name="items"/> using uniform random sampling with replacement.<br/>
+        /// Picks <paramref name="count"/> items from <paramref name="source"/> using uniform random sampling with replacement.<br/>
         /// Time Complexity: O(k)
         /// </summary>
-        internal T[] ItemsUniformWithReplacement<T>(IReadOnlyList<T> items, int count)
+        internal T[] ItemsUniformWithReplacement<T>(IReadOnlyList<T> source, int count)
         {
             T[] chosen = new T[count];
 
-            for (int i = 0; i < count; i++) chosen[i] = items.ElementAt(state.NextInt(items.Count));
+            for (int i = 0; i < count; i++) chosen[i] = source.ElementAt(state.NextInt(source.Count));
 
             return chosen;
         }
         /// <summary>
-        /// Picks <paramref name="count"/> items from <paramref name="items"/> using uniform random sampling without replacement.<br/>
+        /// Picks <paramref name="count"/> items from <paramref name="source"/> using uniform random sampling without replacement.<br/>
         /// Time Complexity: O(k)-O(oo)
         /// </summary>
-        internal T[] ItemsUniformWithoutReplacementRetryMethod<T>(IReadOnlyList<T> items, int count)
+        internal T[] ItemsUniformWithoutReplacementRetryMethod<T>(IReadOnlyList<T> source, int count)
         {   // Kind of weird but pretty much O(infinity) worst case and O(k) best case
-            // in practice lightning fast for small pick ratios (Picking < 15% of items)
+            // in practice lightning fast for small pick ratios (Picking < 15% of source)
             // relative to somthing like reservoir sampling which will still take O(n) when k is small
 
             // Prep
@@ -289,21 +282,21 @@ namespace LeafRand.Instanced
             {
                 // Keep Picking Until Distinct Index found
                 // This can be very slow if Count is close to itemsLength
-                int randIndex = state.NextInt(items.Count());
+                int randIndex = state.NextInt(source.Count());
                 while (removed.ContainsKey(randIndex))
-                    randIndex = state.NextInt(items.Count());
+                    randIndex = state.NextInt(source.Count());
 
                 removed.Add(randIndex, true);
-                chosen[i] = items[randIndex];
+                chosen[i] = source[randIndex];
             }
 
             return chosen;
         }
         /// <summary>
-        /// Picks <paramref name="count"/> items from <paramref name="items"/> using uniform random sampling without replacement.<br/>
+        /// Picks <paramref name="count"/> items from <paramref name="source"/> using uniform random sampling without replacement.<br/>
         /// Time Complexity: O(n)
         /// </summary>
-        internal T[] ItemsUniformWithoutReplacementReservoirMethod<T>(IReadOnlyList<T> items, int count)
+        internal T[] ItemsUniformWithoutReplacementReservoirMethod<T>(IReadOnlyList<T> source, int count)
         {
             T[] reservoir = new T[count];
 
@@ -311,54 +304,54 @@ namespace LeafRand.Instanced
             int i = 0;
             for (; i < count; i++)
             {
-                reservoir[i] = items[i];
+                reservoir[i] = source[i];
             }
 
             // Roll for each item
-            for (; i < items.Count; i++)
+            for (; i < source.Count; i++)
             {
                 int random = state.NextInt(i + 1);
-                if (random < count) reservoir[random] = items[i];
+                if (random < count) reservoir[random] = source[i];
             }
 
             return reservoir;
         }
         /// <summary>
-        /// Picks <paramref name="count"/> items from <paramref name="items"/> using uniform random sampling without replacement.<br/>
-        /// Note:  Picked items are removed and relative order is destroyed.<br/>
+        /// Picks <paramref name="count"/> items from <paramref name="source"/> using uniform random sampling without replacement.<br/>
+        /// Note:  Picked items are removed from source and relative order is destroyed.<br/>
         /// Time Complexity: O(k)
         /// </summary>
-        internal T[] ItemsUniformWithoutReplacementSwapRemoved<T>(List<T> items, int count)
+        internal T[] ItemsUniformWithoutReplacementSwapRemoved<T>(List<T> source, int count)
         {
             T[] results = new T[count];
 
             for (int i = 0; i < count; i++)
             {   // Rand Selection
-                int randIndex = Index(items);
+                int randIndex = Index(source);
 
                 // Cache Result
-                results[i] = items[randIndex];
+                results[i] = source[randIndex];
 
                 // Swap Removal
-                (items[i], items[items.Count - 1]) = (items[items.Count - 1], items[i]);// Swap
-                items.RemoveAt(items.Count - 1);
+                (source[i], source[source.Count - 1]) = (source[source.Count - 1], source[i]);// Swap
+                source.RemoveAt(source.Count - 1);
             }
 
             return results;
         }
         /// <summary>
-        /// Picks <paramref name="count"/> items from <paramref name="items"/> using weighted random sampling with replacement.<br/>
+        /// Picks <paramref name="count"/> items from <paramref name="source"/> using weighted random sampling with replacement.<br/>
         /// Time Complexity: O(n)
         /// </summary>
-        internal T[] ItemsWeightedWithReplacementAliasMethod<T>(IReadOnlyList<Weighted<T>> weightedItems, int count)
+        internal T[] ItemsWeightedWithReplacementAliasMethod<T>(IReadOnlyList<Weighted<T>> source, int count)
         {   // Uses Vose's Alias method.
             // A lovely method for effecient generation of weighted random values
             // Time Complexity: O(n) setup and O(1) picks
 
             #region Setup
             // Initialize work Arrays
-            float[] weights = new float[weightedItems.Count];
-            for(int i = 0; i < weightedItems.Count; i++) weights[i] = weightedItems[i].Weight; 
+            float[] weights = new float[source.Count];
+            for(int i = 0; i < source.Count; i++) weights[i] = source[i].Weight; 
             float[] probability = new float[weights.Length];
             int[] alias = new int[weights.Length];
 
@@ -409,22 +402,22 @@ namespace LeafRand.Instanced
                 int bucket = state.NextInt(weights.Length);
 
                 // Flip a weighted coin between the two possibilities in this slot
-                picked[i] = weightedItems[Double() < probability[bucket] ? bucket : alias[bucket]].Item;
+                picked[i] = source[Double() < probability[bucket] ? bucket : alias[bucket]].Item;
             }
             #endregion
 
             return picked;
         }
         /// <summary>
-        /// Picks <paramref name="count"/> items from <paramref name="items"/> using weighted random sampling with replacement.<br/>
+        /// Picks <paramref name="count"/> items from <paramref name="source"/> using weighted random sampling with replacement.<br/>
         /// Time Complexity: O(n + klog(n))
         /// </summary>
-        internal T[] ItemsWeightedWithReplacementBinarySearch<T>(IReadOnlyList<Weighted<T>> weightedItems, int count)
+        internal T[] ItemsWeightedWithReplacementBinarySearch<T>(IReadOnlyList<Weighted<T>> source, int count)
         {   
             // Biild CumulativeWeights
             List<float> cumulativeWeights = new();
-            for (int i = 1; i < weightedItems.Count; i++)
-                cumulativeWeights.Add(cumulativeWeights[i - 1] + weightedItems[i].Weight);
+            for (int i = 1; i < source.Count; i++)
+                cumulativeWeights.Add(cumulativeWeights[i - 1] + source[i].Weight);
 
             // Choose
             T[] chosen = new T[count];
@@ -443,32 +436,32 @@ namespace LeafRand.Instanced
                         bottom = mid + 1;
                 }
 
-                chosen[i] = weightedItems[top].Item;
+                chosen[i] = source[top].Item;
             }
 
 
             return chosen;
         }
         /// <summary>
-        /// Picks <paramref name="count"/> items from <paramref name="items"/> using weighted random sampling without replacement.<br/>
+        /// Picks <paramref name="count"/> items from <paramref name="source"/> using weighted random sampling without replacement.<br/>
         /// Time Complexity: O(n + klog(n) + nk)
         /// </summary>
-        internal T[] ItemsWeightedWithoutReplacementBinarySearch<T>(IReadOnlyList<Weighted<T>> weightedItems, int count)
+        internal T[] ItemsWeightedWithoutReplacementBinarySearch<T>(IReadOnlyList<Weighted<T>> source, int count)
         {   // Prep vars to detect edge cases
-            int numWeighted = weightedItems[0].Weight != 0 ? 1 : 0;
+            int numWeighted = source[0].Weight != 0 ? 1 : 0;
             
             // Get CumulativeWeights
-            List<float> cumulativeWeights = new() { weightedItems[0].Weight };
-            for (int i = 1; i < weightedItems.Count; i++)
+            List<float> cumulativeWeights = new() { source[0].Weight };
+            for (int i = 1; i < source.Count; i++)
             {
-                if (weightedItems[i].Weight != 0) numWeighted++;
-                cumulativeWeights.Add(cumulativeWeights[i - 1] + weightedItems[i].Weight);
+                if (source[i].Weight != 0) numWeighted++;
+                cumulativeWeights.Add(cumulativeWeights[i - 1] + source[i].Weight);
             }
             
 
             // Edge Case: Requested pick of more items than the number of items with non-zero weights
             T[] picked = new T[count];
-            if (numWeighted < count) throw new ArgumentException("Count should be greater than number of weighted items!", nameof(weightedItems));
+            if (numWeighted < count) throw new ArgumentException("Count should be greater than number of weighted items!", nameof(source));
 
             // Pick items
             for (int i = 0; i < count; i++)
@@ -487,7 +480,7 @@ namespace LeafRand.Instanced
                 }
 
                 // Cache the picked element
-                picked[i] = weightedItems[top].Item;
+                picked[i] = source[top].Item;
 
                 float weightOfPicked = cumulativeWeights[top] - (top == 0 ? 0 : cumulativeWeights[top - 1]);
                 cumulativeWeights[top] = 0; // Zero picked weight
@@ -540,7 +533,7 @@ namespace LeafRand.Instanced
         #endregion
         #region Index
         /// <include file="../Docs.xml" path="Doc/Index"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public int Index<T>(IReadOnlyCollection<T> items) => state.NextInt(items.Count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public int Index<T>(IReadOnlyCollection<T> source) => state.NextInt(source.Count);
         #endregion
         #region Shuffle
         /// <include file="../Docs.xml" path="Doc/Shuffle"/>
