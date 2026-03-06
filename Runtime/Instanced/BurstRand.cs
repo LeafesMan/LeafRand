@@ -55,16 +55,10 @@ namespace LeafRand.Instanced
         #region Bool
         /// <include file="../Docs.xml" path="Doc/Bool"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public bool Bool() => state.NextBool();
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public bool BoolFloat(float chance) => state.NextFloat() < chance;
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public bool BoolDouble(double chance) => state.NextDouble() < chance;
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public bool BoolUInt(float chance) => state.NextUInt() < (uint)(chance * uint.MaxValue);
-
-
-        /// <include file="../Docs.xml" path="Doc/Bool"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public bool Bool(float successChance) => state.NextDouble() < successChance;
         /// <include file="../Docs.xml" path="Doc/Chance"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public bool Chance(float successChance = 0.5f) => Bool(successChance);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public bool Chance(float probability) => state.NextFloat() < probability;
+        /// <include file="../Docs.xml" path="Doc/Chance"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public bool Chance(double probability) => state.NextDouble() < probability;
         #endregion
         #region Direction
         /// <include file="../Docs.xml" path="Doc/Sign"/>

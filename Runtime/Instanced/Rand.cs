@@ -47,14 +47,11 @@ namespace LeafRand.Instanced
 
         /// <include file="../Docs.xml" path="Doc/Bool"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public bool Bool() => state.Bool();
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public bool BoolFloat(float chance) => state.BoolFloat(chance);
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public bool BoolDouble(double chance) => state.BoolDouble(chance);
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public bool BoolUInt(float chance) => state.BoolUInt(chance);
-
-        /// <include file="../Docs.xml" path="Doc/Bool"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public  bool Bool(float successChance) => state.Bool(successChance);
         /// <include file="../Docs.xml" path="Doc/Chance"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public  bool Chance(float successChance) => state.Bool(successChance);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public bool Chance(float probability) => state.Chance(probability);
+        /// <include file="../Docs.xml" path="Doc/Chance"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public bool Chance(double probability) => state.Chance(probability);
+
 
         /// <include file="../Docs.xml" path="Doc/Sign"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public  int Sign() => state.Sign();
