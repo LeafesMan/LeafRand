@@ -191,30 +191,139 @@ namespace LeafRand.Instanced
         }
         #endregion
         #region Multi
+        #region Uniform
+        #region With Replacement
         /// <include file="../Docs.xml" path="Doc/Items/WithReplacement/ListInt"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public T[] ItemsWithReplacement<T>(IReadOnlyList<T> source, int count)
-        {   // Input validation
+        {   
+            T[] selectedItems = new T[count];
+            ItemsWithReplacement(source, selectedItems);
+            return selectedItems;
+        }
+        /// <summary>
+        /// Picks <paramref name="output.Count"/> items from <paramref name="source"/> using uniform random sampling with replacement.<br/>
+        /// Time Complexity: O(k)
+        /// </summary>
+        public void ItemsWithReplacement<T>(IReadOnlyList<T> source, IList<T> output)
+        {
             if (source == null) throw new ArgumentNullException(nameof(source));
             if (source.Count == 0) throw new ArgumentException("Items must be non-empty.", nameof(source));
-            if (count < 0) throw new ArgumentOutOfRangeException(nameof(count), count, "Count must be positive.");
+            if (output == null) throw new ArgumentNullException(nameof(output));
 
-            return ItemsUniformWithReplacement(source, count);
+            for (int i = 0; i < output.Count; i++) output[i] = source.ElementAt(state.NextInt(source.Count));
+        }
+        #endregion
+        #region Without Replacement
+        /// <include file="../Docs.xml" path="Doc/Items/WithoutReplacement/ListInt"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public T[] ItemsWithoutReplacement<T>(IReadOnlyList<T> source, int count)
+        {   
+
+            T[] output = new T[count];
+            ItemsWithoutReplacement(source, output);
+            return output;
         }
         /// <include file="../Docs.xml" path="Doc/Items/WithoutReplacement/ListInt"/>
-        public T[] ItemsWithoutReplacement<T>(IReadOnlyList<T> source, int count)
+        public void ItemsWithoutReplacement<T>(IReadOnlyList<T> source, IList<T> output)
         {   // Input validation
             if (source == null) throw new ArgumentNullException(nameof(source));
             if (source.Count == 0) throw new ArgumentException("Items must be non-empty.", nameof(source));
-            if (count < 0) throw new ArgumentOutOfRangeException(nameof(count), count, "Count must be positive.");
-            if (count > source.Count) throw new ArgumentOutOfRangeException(nameof(count), count, $"Count must not exceed the number of items.");
+            if (output.Count > source.Count) throw new ArgumentException($"Cannot request more items than are in source! Requested {output.Count} items but only {source.Count} items in source!");
 
-            // Without Replacement
             // Determine Best Algorithm based on use reservoir threshold
             float USERESERVOIRTHRESHOLD = 0.14f;
-            if ((float)count / source.Count > USERESERVOIRTHRESHOLD) return ItemsUniformWithoutReplacementReservoirMethod(source, count);
-            else return ItemsUniformWithoutReplacementRetryMethod(source, count);
+            if ((float)output.Count / source.Count > USERESERVOIRTHRESHOLD) ItemsUniformWithoutReplacementReservoirMethod(source, output);
+            else ItemsUniformWithoutReplacementRetryMethod(source, output);
         }
+        /// <summary>
+        /// Picks <paramref name="count"/> items from <paramref name="source"/> using uniform random sampling without replacement.<br/>
+        /// Time Complexity: O(k)-O(oo)
+        /// </summary>
+        internal void ItemsUniformWithoutReplacementRetryMethod<T>(IReadOnlyList<T> source, IList<T> output)
+        {   // Kind of weird but pretty much O(infinity) worst case and O(k) best case
+            // in practice lightning fast for small pick ratios (Picking < 15% of source)
+            // relative to somthing like reservoir sampling which will still take O(n) when k is small
 
+            // Pre Hash to count Capacity
+            // We know final map size so no need to Rehash on the fly
+            Dictionary<int, bool> removed = new(output.Count);
+
+            // Pick items
+            for (int i = 0; i < output.Count; i++)
+            {
+                // Keep Picking Until Distinct Index found
+                // This can be very slow if Count is close to itemsLength
+                int randIndex = state.NextInt(source.Count());
+                while (removed.ContainsKey(randIndex))
+                    randIndex = state.NextInt(source.Count());
+
+                removed.Add(randIndex, true);
+                output[i] = source[randIndex];
+            }
+        }
+        /// <summary>
+        /// Picks <paramref name="count"/> items from <paramref name="source"/> using uniform random sampling without replacement.<br/>
+        /// Time Complexity: O(n)
+        /// </summary>
+        internal void ItemsUniformWithoutReplacementReservoirMethod<T>(IReadOnlyList<T> source, IList<T> output)
+        {
+            // Initial Resevior
+            int i = 0;
+            for (; i < output.Count; i++)
+            {
+                output[i] = source[i];
+            }
+
+            // Roll for each item
+            for (; i < source.Count; i++)
+            {
+                int random = state.NextInt(i + 1);
+                if (random < output.Count) output[random] = source[i];
+            }
+        }
+        #endregion
+        #region Extract
+        /// <include file="../Docs.xml" path="Doc/Items/Extract/ListInt"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public T[] ItemsExtract<T>(List<T> source, int count)
+        {
+            T[] output = new T[count];
+            ItemsExtract(source, output);
+            return output;
+        }
+        /// <include file="../Docs.xml" path="Doc/Items/Extract/ListInt"/>
+        public void ItemsExtract<T>(List<T> source, IList<T> output)
+        {   // Input Validation
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (source.Count == 0) throw new ArgumentException("Items must be non-empty.", nameof(source));
+            if (output == null) throw new ArgumentNullException(nameof(output));
+            if (output.Count > source.Count) throw new ArgumentException($"Cannot request more items than are in source! Requested {output.Count} items but only {source.Count} items in source!");
+
+            ItemsUniformWithoutReplacementSwapRemoved(source, output);
+        }
+        /// <summary>
+        /// Picks <paramref name="count"/> items from <paramref name="source"/> using uniform random sampling without replacement.<br/>
+        /// Note:  Picked items are removed from source and relative order is destroyed.<br/>
+        /// Time Complexity: O(k)
+        /// </summary>
+        internal void ItemsUniformWithoutReplacementSwapRemoved<T>(List<T> source, IList<T> output)
+        {
+            for (int i = 0; i < output.Count; i++)
+            {   // Rand Selection
+                int randIndex = Index(source);
+
+                // Cache Result
+                output[i] = source[randIndex];
+
+                // Swap Removal
+                (source[i], source[^1]) = (source[^1], source[i]);// Swap
+                source.RemoveAt(source.Count - 1);
+            }
+        }
+        #endregion
+        #endregion
+        #region Weighted
         /// <include file="../Docs.xml" path="Doc/Items/WithReplacement/ListListInt"/>
         public T[] ItemsWeightedWithReplacement<T>(IReadOnlyList<Weighted<T>> source, int count)
         {   // Input Validation
@@ -237,108 +346,9 @@ namespace LeafRand.Instanced
 
             return ItemsWeightedWithoutReplacementBinarySearch(source, count);
         }
-        /// <include file="../Docs.xml" path="Doc/Items/Extract/ListInt"/>
-        public T[] ItemsExtract<T>(List<T> source, int count)
-        {   // Input Validation
-            if (source == null) throw new ArgumentNullException(nameof(source));
-            if (source.Count == 0) throw new ArgumentException("Items must be non-empty.", nameof(source));
-            if (count < 0) throw new ArgumentOutOfRangeException(nameof(count), count, "Count must be positive.");
-            if (count > source.Count) throw new ArgumentOutOfRangeException(nameof(count), count, $"Count must not exceed the number of items.");
-
-            return ItemsUniformWithoutReplacementSwapRemoved(source, count);
-        }
+        #endregion
         #region Algorithms
-        /// <summary>
-        /// Picks <paramref name="count"/> items from <paramref name="source"/> using uniform random sampling with replacement.<br/>
-        /// Time Complexity: O(k)
-        /// </summary>
-        internal T[] ItemsUniformWithReplacement<T>(IReadOnlyList<T> source, int count)
-        {
-            T[] chosen = new T[count];
 
-            for (int i = 0; i < count; i++) chosen[i] = source.ElementAt(state.NextInt(source.Count));
-
-            return chosen;
-        }
-        /// <summary>
-        /// Picks <paramref name="count"/> items from <paramref name="source"/> using uniform random sampling without replacement.<br/>
-        /// Time Complexity: O(k)-O(oo)
-        /// </summary>
-        internal T[] ItemsUniformWithoutReplacementRetryMethod<T>(IReadOnlyList<T> source, int count)
-        {   // Kind of weird but pretty much O(infinity) worst case and O(k) best case
-            // in practice lightning fast for small pick ratios (Picking < 15% of source)
-            // relative to somthing like reservoir sampling which will still take O(n) when k is small
-
-            // Prep
-            // Avoid copy if possible
-            T[] chosen = new T[count];
-
-            // Pre Hash to count Capacity
-            // We know final map size so no need to Rehash on the fly
-            Dictionary<int, bool> removed = new(count);
-
-            // Pick items
-            for (int i = 0; i < count; i++)
-            {
-                // Keep Picking Until Distinct Index found
-                // This can be very slow if Count is close to itemsLength
-                int randIndex = state.NextInt(source.Count());
-                while (removed.ContainsKey(randIndex))
-                    randIndex = state.NextInt(source.Count());
-
-                removed.Add(randIndex, true);
-                chosen[i] = source[randIndex];
-            }
-
-            return chosen;
-        }
-        /// <summary>
-        /// Picks <paramref name="count"/> items from <paramref name="source"/> using uniform random sampling without replacement.<br/>
-        /// Time Complexity: O(n)
-        /// </summary>
-        internal T[] ItemsUniformWithoutReplacementReservoirMethod<T>(IReadOnlyList<T> source, int count)
-        {
-            T[] reservoir = new T[count];
-
-            // Initial Resevior
-            int i = 0;
-            for (; i < count; i++)
-            {
-                reservoir[i] = source[i];
-            }
-
-            // Roll for each item
-            for (; i < source.Count; i++)
-            {
-                int random = state.NextInt(i + 1);
-                if (random < count) reservoir[random] = source[i];
-            }
-
-            return reservoir;
-        }
-        /// <summary>
-        /// Picks <paramref name="count"/> items from <paramref name="source"/> using uniform random sampling without replacement.<br/>
-        /// Note:  Picked items are removed from source and relative order is destroyed.<br/>
-        /// Time Complexity: O(k)
-        /// </summary>
-        internal T[] ItemsUniformWithoutReplacementSwapRemoved<T>(List<T> source, int count)
-        {
-            T[] results = new T[count];
-
-            for (int i = 0; i < count; i++)
-            {   // Rand Selection
-                int randIndex = Index(source);
-
-                // Cache Result
-                results[i] = source[randIndex];
-
-                // Swap Removal
-                (source[i], source[source.Count - 1]) = (source[source.Count - 1], source[i]);// Swap
-                source.RemoveAt(source.Count - 1);
-            }
-
-            return results;
-        }
         /// <summary>
         /// Picks <paramref name="count"/> items from <paramref name="source"/> using weighted random sampling with replacement.<br/>
         /// Time Complexity: O(n)
