@@ -17,81 +17,58 @@ namespace LeafRand.Instanced
         Unity.Mathematics.Random state;
 
         /// <include file="../Docs.xml" path="Doc/Seed"/>
-        public BurstRand(uint seed = 1) => state = new(seed);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public BurstRand(uint seed = 1) => state = new(seed);
 
         /// <include file="../Docs.xml" path="Doc/Seed"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void SetSeed(uint seed) => state.InitState(seed);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public void SetSeed(uint seed) => state.InitState(seed);
         #endregion
         #region Helpers
         #region Num
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public uint UInt() => state.NextUInt();
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public uint UInt(uint max) => state.NextUInt(max);
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public uint UInt(uint min, uint max) => state.NextUInt(min, max);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public uint UInt() => state.NextUInt();
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public uint UInt(uint max) => state.NextUInt(max);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public uint UInt(uint min, uint max) => state.NextUInt(min, max);
 
         /// <include file="../Docs.xml" path="Doc/Num/Int"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public int Int() => state.NextInt();
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public int Int() => state.NextInt();
         /// <include file="../Docs.xml" path="Doc/Num/Int"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public int Int(int max) => state.NextInt(max);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public int Int(int max) => state.NextInt(max);
         /// <include file="../Docs.xml" path="Doc/Num/IntInt"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public int Int(int min, int max) => state.NextInt(min, max);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public int Int(int min, int max) => state.NextInt(min, max);
         /// <include file="../Docs.xml" path="Doc/Num/Vector2Int"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public int Int(Vector2Int range) => state.NextInt(range.x, range.y);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public int Int(Vector2Int range) => state.NextInt(range.x, range.y);
 
         /// <include file="../Docs.xml" path="Doc/Num"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public float Float() => state.NextFloat();
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public float Float() => state.NextFloat();
         /// <include file="../Docs.xml" path="Doc/Num/Float"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public float Float(float max) => state.NextFloat(max);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public float Float(float max) => state.NextFloat(max);
         /// <include file="../Docs.xml" path="Doc/Num/FloatFloat"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public float Float(float min, float max) => state.NextFloat(min, max);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public float Float(float min, float max) => state.NextFloat(min, max);
         /// <include file="../Docs.xml" path="Doc/Num/Vector2"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public float Float(Vector2 range) => state.NextFloat(range.x, range.y);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public float Float(Vector2 range) => state.NextFloat(range.x, range.y);
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public double Double() => state.NextDouble();
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public double Double(double max) => state.NextDouble(max);
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public double Double(double min, double max) => state.NextDouble(min, max);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public double Double() => state.NextDouble();
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public double Double(double max) => state.NextDouble(max);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public double Double(double min, double max) => state.NextDouble(min, max);
         /// <include file="../Docs.xml" path="Doc/Angle"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public float Angle() => state.NextFloat(2 * Mathf.PI);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public float Angle() => state.NextFloat(2 * Mathf.PI);
         #endregion
         #region Bool
         /// <include file="../Docs.xml" path="Doc/Bool"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool Bool() => state.NextBool();
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public bool Bool() => state.NextBool();
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool BoolFloat(float chance) => state.NextFloat() < chance;
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool BoolDouble(double chance) => state.NextDouble() < chance;
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool BoolUInt(float chance) => state.NextUInt() < (uint)(chance * uint.MaxValue);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public bool BoolFloat(float chance) => state.NextFloat() < chance;
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public bool BoolDouble(double chance) => state.NextDouble() < chance;
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public bool BoolUInt(float chance) => state.NextUInt() < (uint)(chance * uint.MaxValue);
 
 
         /// <include file="../Docs.xml" path="Doc/Bool"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool Bool(float successChance) => state.NextDouble() < successChance;
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public bool Bool(float successChance) => state.NextDouble() < successChance;
         /// <include file="../Docs.xml" path="Doc/Chance"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool Chance(float successChance = 0.5f) => Bool(successChance);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public bool Chance(float successChance = 0.5f) => Bool(successChance);
         #endregion
         #region Direction
         /// <include file="../Docs.xml" path="Doc/Sign"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public int Sign() => state.NextInt(2) * 2 - 1;
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public int Sign() => state.NextInt(2) * 2 - 1;
         #region 2D
         /// <include file="../Docs.xml" path="Doc/Dir2D"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -194,7 +171,10 @@ namespace LeafRand.Instanced
         #region Color
         /// <include file="../Docs.xml" path="Doc/Color"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Color Color(Vector2 hueRange, Vector2 saturationRange, Vector2 valueRange) => UnityEngine.Color.HSVToRGB(state.NextFloat(hueRange.x, hueRange.y), state.NextFloat(saturationRange.x, saturationRange.y), state.NextFloat(valueRange.x, valueRange.y));
+        public Color Color(Vector2 hueRange, Vector2 saturationRange, Vector2 valueRange)
+        {
+            return UnityEngine.Color.HSVToRGB(state.NextFloat(hueRange.x, hueRange.y), state.NextFloat(saturationRange.x, saturationRange.y), state.NextFloat(valueRange.x, valueRange.y));
+        }
         #endregion
         #region Item
         #region Single
@@ -566,8 +546,7 @@ namespace LeafRand.Instanced
         #endregion
         #region Index
         /// <include file="../Docs.xml" path="Doc/Index"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public int Index<T>(IReadOnlyCollection<T> items) => state.NextInt(items.Count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public int Index<T>(IReadOnlyCollection<T> items) => state.NextInt(items.Count);
         #endregion
         #region Shuffle
         /// <include file="../Docs.xml" path="Doc/Shuffle"/>
