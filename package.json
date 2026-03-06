@@ -15,7 +15,7 @@
   "files": [
 	"Runtime",
 	"Editor",
-	"Testing",
+	"Tests",
 	"README.md",
 	"CHANGELOG.md"
   ]
