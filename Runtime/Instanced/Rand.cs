@@ -89,15 +89,20 @@ namespace LeafRand.Instanced
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public  T ItemWeighted<T>(IReadOnlyList<Weighted<T>> source) => state.ItemWeighted(source);
         /// <include file="../Docs.xml" path="Doc/Items/WithReplacement/ListInt"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public  T[] ItemsWithReplacement<T>(IReadOnlyList<T> source, int count) => state.ItemsWithReplacement(source, count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public void ItemsWithReplacement<T>(IReadOnlyList<T> source, IList<T> output) => state.ItemsWithReplacement(source, output);
         /// <include file="../Docs.xml" path="Doc/Items/WithoutReplacement/ListInt"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public  T[] ItemsWithoutReplacement<T>(IReadOnlyList<T> source, int count) => state.ItemsWithoutReplacement(source, count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public void ItemsWithoutReplacement<T>(IReadOnlyList<T> source, IList<T> output) => state.ItemsWithoutReplacement(source, output);
         /// <include file="../Docs.xml" path="Doc/Items/WithReplacement/ListListInt"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public  T[] ItemsWeightedWithReplacement<T>(IReadOnlyList<Weighted<T>> source, int count) => state.ItemsWeightedWithReplacement(source, count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public void ItemsWeightedWithReplacement<T>(IReadOnlyList<Weighted<T>> source, IList<T> output) => state.ItemsWeightedWithReplacement(source, output);
+
         /// <include file="../Docs.xml" path="Doc/Items/WithoutReplacement/ListListInt"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public  T[] ItemsWeightedWithoutReplacement<T>(IReadOnlyList<Weighted<T>> source, int count) => state.ItemsWeightedWithoutReplacement(source, count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public void ItemsWeightedWithoutReplacement<T>(IReadOnlyList<Weighted<T>> source, IList<T> output) => state.ItemsWeightedWithoutReplacement(source, output);
         /// <include file="../Docs.xml" path="Doc/Items/Extract/ListInt"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public  T[] ItemsExtract<T>(List<T> source, int count) => state.ItemsExtract(source, count);
-        //[MethodImpl(MethodImplOptions.AggressiveInlining)] public T[] ItemsExtract<T>(List<T> source, IList<T> output) => state.ItemsExtract(source, output);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public void ItemsExtract<T>(List<T> source, IList<T> output) => state.ItemsExtract(source, output);
 
 
         /// <include file="../Docs.xml" path="Doc/Index"/>
