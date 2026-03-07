@@ -31,6 +31,10 @@ namespace LeafRand
         /// <include file="Docs.xml" path="Doc/Num/Vector2Int"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public static int Int(Vector2Int range) => state.Int(range.x, range.y);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static int IntInclusive(int max) => state.IntInclusive(max);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static int IntInclusive(int min, int max) => state.IntInclusive(min, max);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static int IntInclusive(Vector2Int range) => state.IntInclusive(range);
+
         /// <include file="Docs.xml" path="Doc/Num"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public static float Float() => state.Float();
         /// <include file="Docs.xml" path="Doc/Num/Float"/>

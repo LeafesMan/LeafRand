@@ -23,6 +23,7 @@ namespace LeafRand.Instanced
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public uint UInt() => state.UInt();
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public uint UInt(uint max) => state.UInt(max);
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public uint UInt(uint min, uint max) => state.UInt(min, max);
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public int Int() => state.Int();
         /// <include file="../Docs.xml" path="Doc/Num/Int"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public int Int(int max) => state.Int(max);
@@ -30,6 +31,11 @@ namespace LeafRand.Instanced
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public int Int(int min, int max) => state.Int(min, max);
         /// <include file="../Docs.xml" path="Doc/Num/Vector2Int"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public  int Int(Vector2Int range) => state.Int(range.x, range.y);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public int IntInclusive(int max) => state.IntInclusive(max);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public int IntInclusive(int min, int max) => state.IntInclusive(min, max);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public int IntInclusive(Vector2Int range) => state.IntInclusive(range);
+
         /// <include file="../Docs.xml" path="Doc/Num"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public  float Float() => state.Float();
         /// <include file="../Docs.xml" path="Doc/Num/Float"/>

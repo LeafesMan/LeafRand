@@ -38,6 +38,10 @@ namespace LeafRand.Instanced
         /// <include file="../Docs.xml" path="Doc/Num/Vector2Int"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public int Int(Vector2Int range) => state.NextInt(range.x, range.y);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public int IntInclusive(int max) => state.NextInt(max + 1);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public int IntInclusive(int min, int max) => state.NextInt(min, max + 1);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public int IntInclusive(Vector2Int range) => state.NextInt(range.x, range.y + 1);
+
         /// <include file="../Docs.xml" path="Doc/Num"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public float Float() => state.NextFloat();
         /// <include file="../Docs.xml" path="Doc/Num/Float"/>
