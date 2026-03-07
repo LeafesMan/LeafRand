@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Unity.Collections;
 
 namespace LeafRand.Instanced
 {
@@ -164,6 +165,7 @@ namespace LeafRand.Instanced
         }
         #endregion
         #region Item
+        #region Single
         /// <include file="../Docs.xml" path="Doc/Item/List"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public T Item<T>(IReadOnlyList<T> source) => source[state.NextInt(source.Count)];
@@ -176,7 +178,7 @@ namespace LeafRand.Instanced
             if (sumWeights == 0) throw new ArgumentException("Sum of weights must be positive!", nameof(sumWeights));
 
             // Return Weighted Random Element
-            double randVal = state.NextDouble() * sumWeights;
+            float randVal = state.NextFloat() * sumWeights;
             float weightPosition = 0;
             for (int i = 0; i < source.Count; i++)
             {
@@ -188,6 +190,7 @@ namespace LeafRand.Instanced
             // Based on the logic above this should be impossible!
             throw new Exception($"I don't know how this could possibly have occured!");
         }
+        #endregion
         #region Uniform With Replacement
         /// <include file="../Docs.xml" path="Doc/Items/WithReplacement/ListInt"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -242,8 +245,8 @@ namespace LeafRand.Instanced
             // relative to somthing like reservoir sampling which will still take O(n) when k is small
 
             // Pre Hash to count Capacity
-            // We know final map size so no need to Rehash on the fly
-            Dictionary<int, bool> removed = new(output.Count);
+            // We know final map size so no need to Rehash on the fly            
+            NativeHashSet<int> removed = new(output.Count, Allocator.Temp);
 
             // Pick items
             for (int i = 0; i < output.Count; i++)
@@ -251,12 +254,14 @@ namespace LeafRand.Instanced
                 // Keep Picking Until Distinct Index found
                 // This can be very slow if Count is close to itemsLength
                 int randIndex = state.NextInt(source.Count());
-                while (removed.ContainsKey(randIndex))
+                while (removed.Contains(randIndex))
                     randIndex = state.NextInt(source.Count());
 
-                removed.Add(randIndex, true);
+                removed.Add(randIndex);
                 output[i] = source[randIndex];
             }
+
+            removed.Dispose();
         }
         /// <summary>
         /// Picks <paramref name="count"/> items from <paramref name="source"/> using uniform random sampling without replacement.<br/>
@@ -341,29 +346,33 @@ namespace LeafRand.Instanced
 
             #region Setup
             // Initialize work Arrays
-            float[] weights = new float[source.Count];
+            NativeArray<float> weights =       new(source.Count, Allocator.Temp);
             for (int i = 0; i < source.Count; i++) weights[i] = source[i].Weight;
-            float[] probability = new float[weights.Length];
-            int[] alias = new int[weights.Length];
-
+            NativeArray<float> probability =   new(weights.Length, Allocator.Temp);
+            NativeArray<int> alias =           new(weights.Length, Allocator.Temp);
+            NativeList<int> aboveIndices = new(source.Count, Allocator.Temp);
+            NativeList<int> belowIndices = new(source.Count, Allocator.Temp);
 
             // Split all Probabilities into 
             // stacks above or below average
-            Stack<int> belowIndices = new();
-            Stack<int> aboveIndices = new();
-            float avg = weights.Sum() / weights.Length; // Calculate Average
+            float sumWeights = 0;
+            for (int i = 0; i < weights.Length; i++) sumWeights += weights[i];
+            float avg = sumWeights / weights.Length; // Calculate Average
             for (int i = 0; i < weights.Length; i++)
             {
-                if (weights[i] >= avg) aboveIndices.Push(i);
-                else belowIndices.Push(i);
+                if (weights[i] >= avg) aboveIndices.Add(i);
+                else belowIndices.Add(i);
             }
 
-
             // Grab one from less and one from more
-            while (belowIndices.Count != 0 && aboveIndices.Count != 0)
+            while (belowIndices.Length != 0 && aboveIndices.Length != 0)
             {
-                int belowIndex = belowIndices.Pop();
-                int aboveIndex = aboveIndices.Pop();
+                int aboveIndex = aboveIndices[aboveIndices.Length - 1];
+                int belowIndex = belowIndices[belowIndices.Length - 1];
+
+                aboveIndices.RemoveAt(aboveIndices.Length - 1);
+                belowIndices.RemoveAt(belowIndices.Length - 1);
+
 
                 // Scale Probabilities
                 probability[belowIndex] = weights[belowIndex] / avg;
@@ -373,8 +382,8 @@ namespace LeafRand.Instanced
                 weights[aboveIndex] += weights[belowIndex] - avg;
 
                 // Place above back into aboveAverage or belowAverage bucket based on it's new weight
-                if (weights[aboveIndex] >= avg) aboveIndices.Push(aboveIndex);
-                else belowIndices.Push(aboveIndex);
+                if (weights[aboveIndex] >= avg) aboveIndices.Add(aboveIndex);
+                else belowIndices.Add(aboveIndex);
             }
 
 
@@ -391,8 +400,15 @@ namespace LeafRand.Instanced
                 int bucket = state.NextInt(weights.Length);
 
                 // Flip a weighted coin between the two possibilities in this slot
-                output[i] = source[Double() < probability[bucket] ? bucket : alias[bucket]].Item;
+                output[i] = source[Float() < probability[bucket] ? bucket : alias[bucket]].Item;
             }
+            #endregion
+            #region Dispose
+            weights.Dispose();
+            probability.Dispose();
+            alias.Dispose();
+            belowIndices.Dispose();
+            aboveIndices.Dispose();
             #endregion
         }
         /// <summary>
@@ -402,29 +418,32 @@ namespace LeafRand.Instanced
         internal void ItemsWeightedWithReplacementBinarySearch<T>(IReadOnlyList<Weighted<T>> source, IList<T> output)
         {
             // Build CumulativeWeights
-            List<float> cumulativeWeights = new();
-            cumulativeWeights.Add(source[0].Weight);
+            NativeList<float> cumulativeWeights = new(source.Count, Allocator.Temp);
+            cumulativeWeights.ResizeUninitialized(source.Count);
+            cumulativeWeights[0] = source[0].Weight;
             for (int i = 1; i < source.Count; i++)
-                cumulativeWeights.Add(cumulativeWeights[i - 1] + source[i].Weight);
+                cumulativeWeights[i] = cumulativeWeights[i - 1] + source[i].Weight;
 
             // Choose
             for (int i = 0; i < output.Count; i++)
             {
                 // Return Weighted Random Element
-                double randVal = Double() * cumulativeWeights[cumulativeWeights.Count - 1];
+                float randVal = state.NextFloat() * cumulativeWeights[cumulativeWeights.Length - 1];
                 int bottom = 0; // The current split size
-                int top = cumulativeWeights.Count - 1;
+                int top = cumulativeWeights.Length - 1;
                 while (bottom != top)
                 {
                     int mid = (bottom + top) / 2;
                     if (randVal < cumulativeWeights[mid])
                         top = mid;
-                    else if (randVal >= cumulativeWeights[mid])
+                    else
                         bottom = mid + 1;
                 }
 
                 output[i] = source[top].Item;
             }
+
+            cumulativeWeights.Dispose();
         }
         #endregion
         #region Weighted Without Replacement
@@ -447,34 +466,38 @@ namespace LeafRand.Instanced
             if (output == null) throw new ArgumentNullException(nameof(output));
 
 
-            // Prep vars to detect edge cases
+            // Get cumulative weights and num weighted
+            NativeList<float> cumulativeWeights = new(source.Count, Allocator.Temp);
+            cumulativeWeights.ResizeUninitialized(source.Count);
+            cumulativeWeights[0] = source[0].Weight;
             int numWeighted = source[0].Weight != 0 ? 1 : 0;
-
-            // Get CumulativeWeights
-            List<float> cumulativeWeights = new() { source[0].Weight };
             for (int i = 1; i < source.Count; i++)
             {
-                if (source[i].Weight != 0) numWeighted++;
-                cumulativeWeights.Add(cumulativeWeights[i - 1] + source[i].Weight);
+                if (source[0].Weight != 0) numWeighted++;
+                cumulativeWeights[i] = cumulativeWeights[i - 1] + source[i].Weight;
             }
-
+                
 
             // Edge Case: Requested pick of more items than the number of items with non-zero weights
-            if (numWeighted < output.Count) throw new ArgumentException("Count must not exceed the number of weighted items!");
+            if (numWeighted < output.Count)
+            {
+                cumulativeWeights.Dispose();
+                throw new ArgumentException("Count must not exceed the number of weighted items!");
+            }
 
             // Pick items
             for (int i = 0; i < output.Count; i++)
             {
                 // Return Weighted Random Element
-                double randVal = Double() * cumulativeWeights[cumulativeWeights.Count - 1];
+                float randVal = state.NextFloat() * cumulativeWeights[cumulativeWeights.Length - 1];
                 int bottom = 0; // The current split size
-                int top = cumulativeWeights.Count - 1;
+                int top = cumulativeWeights.Length- 1;
                 while (bottom != top)
                 {
                     int mid = (bottom + top) / 2;
                     if (randVal < cumulativeWeights[mid])
                         top = mid;
-                    else if (randVal >= cumulativeWeights[mid])
+                    else
                         bottom = mid + 1;
                 }
 
@@ -482,9 +505,11 @@ namespace LeafRand.Instanced
                 output[i] = source[top].Item;
 
                 float weightOfPicked = cumulativeWeights[top] - (top == 0 ? 0 : cumulativeWeights[top - 1]);
-                cumulativeWeights[top] = 0; // Zero picked weight
-                for (int j = top + 1; j < cumulativeWeights.Count; j++) cumulativeWeights[j] -= weightOfPicked; // Apply weight change to cumulative weights
+                cumulativeWeights[top] -= weightOfPicked; // Adjust the selected elements weight in cumulative weights
+                for (int j = top + 1; j < cumulativeWeights.Length; j++) cumulativeWeights[j] -= weightOfPicked; // Apply cascading change
             }
+
+            cumulativeWeights.Dispose();
         }
         #endregion
         #endregion
