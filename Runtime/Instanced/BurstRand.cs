@@ -1,8 +1,8 @@
 using UnityEngine;
-using System.Collections.Generic;
-using System;
-using System.Runtime.CompilerServices;
 using Unity.Collections;
+using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using LeafRand.Extensions;
 
 namespace LeafRand.Instanced
@@ -171,8 +171,9 @@ namespace LeafRand.Instanced
         #region Item
         #region Single
         /// <include file="../Docs.xml" path="Doc/Item/List"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public T Item<T>(ReadOnlySpan<T> source) => source[state.NextInt(source.Length)];
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T Item<T>(ReadOnlySpan<T> source) => source[state.NextInt(source.Length)];
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T Item<T>(List<T> source) => Item(source.AsReadOnlySpan());
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T Item<T>(T[] source) => Item(source.AsReadOnlySpan());
         /// <include file="../Docs.xml" path="Doc/Item/ListList"/>
         public T ItemWeighted<T>(ReadOnlySpan<Weighted<T>> source)
         {   
@@ -194,6 +195,8 @@ namespace LeafRand.Instanced
             // Based on the logic above this should be impossible!
             throw new Exception($"I don't know how this could possibly have occured!");
         }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T ItemWeighted<T>(List<Weighted<T>> source) => ItemWeighted(source.AsReadOnlySpan());
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T ItemWeighted<T>(Weighted<T>[] source) => ItemWeighted(source.AsReadOnlySpan());
         #endregion
         #region Uniform With Replacement
         /// <include file="../Docs.xml" path="Doc/Items/WithReplacement/ListInt"/>
@@ -204,6 +207,8 @@ namespace LeafRand.Instanced
             ItemsWithReplacement(source, selectedItems);
             return selectedItems;
         }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[] ItemsWithReplacement<T>(List<T> source, int count) => ItemsWithReplacement(source.AsReadOnlySpan(), count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[] ItemsWithReplacement<T>(T[] source, int count) => ItemsWithReplacement(source.AsReadOnlySpan(), count);
         /// <summary>
         /// Picks <paramref name="output.Count"/> items from <paramref name="source"/> using uniform random sampling with replacement.<br/>
         /// Time Complexity: O(k)
@@ -227,6 +232,8 @@ namespace LeafRand.Instanced
             ItemsWithoutReplacement(source, output);
             return output;
         }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[] ItemsWithoutReplacement<T>(List<T> source, int count) => ItemsWithoutReplacement(source.AsReadOnlySpan(), count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[] ItemsWithoutReplacement<T>(T[] source, int count) => ItemsWithoutReplacement(source.AsReadOnlySpan(), count);
         /// <include file="../Docs.xml" path="Doc/Items/WithoutReplacement/ListInt"/>
         public void ItemsWithoutReplacement<T>(ReadOnlySpan<T> source, Span<T> output)
         {   // Input validation
@@ -327,6 +334,8 @@ namespace LeafRand.Instanced
             ItemsWeightedWithReplacement(source, output);
             return output;
         }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[] ItemsWeightedWithReplacement<T>(List<Weighted<T>> source, int count) => ItemsWeightedWithReplacement(source.AsReadOnlySpan(), count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[] ItemsWeightedWithReplacement<T>(Weighted<T>[] source, int count) => ItemsWeightedWithReplacement(source.AsReadOnlySpan(), count);
         /// <include file="../Docs.xml" path="Doc/Items/WithReplacement/ListListInt"/>
         public void ItemsWeightedWithReplacement<T>(ReadOnlySpan<Weighted<T>> source, Span<T> output)
         {   // Input Validation
@@ -459,6 +468,8 @@ namespace LeafRand.Instanced
             ItemsWeightedWithoutReplacement(source, output);
             return output;
         }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[] ItemsWeightedWithoutReplacement<T>(List<Weighted<T>> source, int count) => ItemsWeightedWithoutReplacement(source.AsReadOnlySpan(), count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[] ItemsWeightedWithoutReplacement<T>(Weighted<T>[] source, int count) => ItemsWeightedWithoutReplacement(source.AsReadOnlySpan(), count);
         /// <summary>
         /// Picks <paramref name="count"/> items from <paramref name="source"/> using weighted random sampling without replacement.<br/>
         /// Time Complexity: O(n + klog(n) + nk)
@@ -520,6 +531,8 @@ namespace LeafRand.Instanced
         #region Index
         /// <include file="../Docs.xml" path="Doc/Index"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public int Index<T>(ReadOnlySpan<T> source) => state.NextInt(source.Length);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public int Index<T>(List<T> source) => Index(source.AsReadOnlySpan());
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public int Index<T>(T[] source) => Index(source.AsReadOnlySpan());
         #endregion
         #region Shuffle
         /// <include file="../Docs.xml" path="Doc/Shuffle"/>
@@ -534,6 +547,8 @@ namespace LeafRand.Instanced
                 (items[i], items[randIndex]) = (items[randIndex], items[i]);
             }
         }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public void Shuffle<T>(List<T> items) => Shuffle(items.AsSpan());
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public void Shuffle<T>(T[] items) => Shuffle(items.AsSpan());
         #endregion
         #endregion
     }

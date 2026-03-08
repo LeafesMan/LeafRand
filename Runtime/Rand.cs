@@ -87,31 +87,62 @@ namespace LeafRand
         /// <include file="Docs.xml" path="Doc/Color"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public static Color Color(Vector2 hueRange, Vector2 saturationRange, Vector2 valueRange) => state.Color(hueRange, saturationRange, valueRange);
 
+
         /// <include file="Docs.xml" path="Doc/Item/List"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public static T Item<T>(ReadOnlySpan<T> source) => state.Item(source);
-        /// <include file="Docs.xml" path="Doc/Item/ListList"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static T Item<T>(List<T> source) => state.Item(source);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static T Item<T>(T[] source) => state.Item(source);
+
+
+        /// <include file="../Docs.xml" path="Doc/Item/ListList"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public static T ItemWeighted<T>(ReadOnlySpan<Weighted<T>> source) => state.ItemWeighted(source);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static T ItemWeighted<T>(List<Weighted<T>> source) => state.ItemWeighted(source);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static T ItemWeighted<T>(Weighted<T>[] source) => state.ItemWeighted(source);
+
+
         /// <include file="Docs.xml" path="Doc/Items/WithReplacement/ListInt"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public static T[] ItemsWithReplacement<T>(ReadOnlySpan<T> source, int count) => state.ItemsWithReplacement(source, count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static T[] ItemsWithReplacement<T>(List<T> source, int count) => state.ItemsWithReplacement(source, count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static T[] ItemsWithReplacement<T>(T[] source, int count) => state.ItemsWithReplacement(source, count);
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public static void ItemsWithReplacement<T>(ReadOnlySpan<T> source, Span<T> output) => state.ItemsWithReplacement(source, output);
+
+
         /// <include file="Docs.xml" path="Doc/Items/WithoutReplacement/ListInt"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public static T[] ItemsWithoutReplacement<T>(ReadOnlySpan<T> source, int count) => state.ItemsWithoutReplacement(source, count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static T[] ItemsWithoutReplacement<T>(List<T> source, int count) => state.ItemsWithoutReplacement(source, count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static T[] ItemsWithoutReplacement<T>(T[] source, int count) => state.ItemsWithoutReplacement(source, count);
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public static void ItemsWithoutReplacement<T>(ReadOnlySpan<T> source, Span<T> output) => state.ItemsWithoutReplacement(source, output);
+
+
         /// <include file="../Docs.xml" path="Doc/Items/WithReplacement/ListListInt"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public static T[] ItemsWeightedWithReplacement<T>(ReadOnlySpan<Weighted<T>> source, int count) => state.ItemsWeightedWithReplacement(source, count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static T[] ItemsWeightedWithReplacement<T>(List<Weighted<T>> source, int count) => state.ItemsWeightedWithReplacement(source, count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static T[] ItemsWeightedWithReplacement<T>(Weighted<T>[] source, int count) => state.ItemsWeightedWithReplacement(source, count);
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public static void ItemsWeightedWithReplacement<T>(ReadOnlySpan<Weighted<T>> source, Span<T> output) => state.ItemsWeightedWithReplacement(source, output);
+
+
         /// <include file="../Docs.xml" path="Doc/Items/WithoutReplacement/ListListInt"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public static T[] ItemsWeightedWithoutReplacement<T>(ReadOnlySpan<Weighted<T>> source, int count) => state.ItemsWeightedWithoutReplacement(source, count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static T[] ItemsWeightedWithoutReplacement<T>(List<Weighted<T>> source, int count) => state.ItemsWeightedWithoutReplacement(source, count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static T[] ItemsWeightedWithoutReplacement<T>(Weighted<T>[] source, int count) => state.ItemsWeightedWithoutReplacement(source, count);
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public static void ItemsWeightedWithoutReplacement<T>(ReadOnlySpan<Weighted<T>> source, Span<T> output) => state.ItemsWeightedWithoutReplacement(source, output);
+
+
         /// <include file="Docs.xml" path="Doc/Items/Extract/ListInt"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public static T[] ItemsExtract<T>(List<T> source, int count) => state.ItemsExtract(source, count);
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public static void ItemsExtract<T>(List<T> source, Span<T> output) => state.ItemsExtract(source, output);
 
+
         /// <include file="Docs.xml" path="Doc/Index"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public static int Index<T>(ReadOnlySpan<T> source) => state.Index(source);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static int Index<T>(List<T> source) => state.Index(source);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static int Index<T>(T[] source) => state.Index(source);
+
 
         /// <include file="Docs.xml" path="Doc/Shuffle"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public static void Shuffle<T>(Span<T> items) => state.Shuffle(items);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static void Shuffle<T>(List<T> items) => state.Shuffle(items);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static void Shuffle<T>(T[] items) => state.Shuffle(items);
         #endregion
     }
 }
