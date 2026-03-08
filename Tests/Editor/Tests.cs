@@ -1,8 +1,10 @@
 using LeafRand.Instanced;
+using LeafRand.Extensions;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.PerformanceTesting;
+using Unity.Collections;
 
 
 namespace LeafRand.Tests.Editor
@@ -18,7 +20,7 @@ namespace LeafRand.Tests.Editor
             rand = new BurstRand(1);
             new List<int>() { };
 
-            Measure.Method(() => rand.ItemsWithReplacement(pickFrom, pickCount)).MeasurementCount(100).GC().Run();
+            Measure.Method(() => rand.ItemsWithReplacement(pickFrom.AsReadOnlySpan(), pickCount)).MeasurementCount(100).GC().Run();
         }
 
         [Test, Performance, TestCase(100)]
@@ -27,7 +29,7 @@ namespace LeafRand.Tests.Editor
             rand = new BurstRand(1);
             string[] outputCached = new string[pickCount];
 
-            Measure.Method(() => rand.ItemsWithReplacement(pickFrom, outputCached)).MeasurementCount(100).GC().Run();
+            Measure.Method(() => rand.ItemsWithReplacement(pickFrom.AsReadOnlySpan(), outputCached)).MeasurementCount(100).GC().Run();
         }
     }
 }

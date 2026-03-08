@@ -5,8 +5,7 @@
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "Unity.PerformanceTesting",
-        "LeafRand",
-        "Unity.InternalAPIEngineBridge.001"
+        "LeafRand"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

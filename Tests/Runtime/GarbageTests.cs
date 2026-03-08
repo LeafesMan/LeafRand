@@ -1,6 +1,6 @@
+using LeafRand.Extensions;
 using LeafRand.Instanced;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.PerformanceTesting;
@@ -28,7 +28,7 @@ namespace LeafRand.Tests.Runtime
         [Test, Performance, TestCase(NUMPICKSPERSAMPLE)]
         public void ItemsUniformWithReplacement(int pickCount)
         {
-            Measure.Method(() => rand.ItemsWithReplacement<string>(UnityInternals.AsSpan(strings), pickCount)).MeasurementCount(SAMPLECOUNT).GC().Run();
+            Measure.Method(() => rand.ItemsWithReplacement(strings.AsReadOnlySpan(), pickCount)).MeasurementCount(SAMPLECOUNT).GC().Run();
         }
 
         [Test, Performance, TestCase(NUMPICKSPERSAMPLE)]
@@ -36,34 +36,34 @@ namespace LeafRand.Tests.Runtime
         {
             string[] outputCached = new string[pickCount];
 
-            Measure.Method(() => rand.ItemsWithReplacement<string>(UnityInternals.AsSpan(strings), outputCached)).MeasurementCount(SAMPLECOUNT).GC().Run();
+            Measure.Method(() => rand.ItemsWithReplacement(strings.AsReadOnlySpan(), outputCached)).MeasurementCount(SAMPLECOUNT).GC().Run();
         }
         #endregion
         #region Uniform Without Replacement
         [Test, Performance, TestCase(NUMPICKSPERSAMPLE)]
         public void ItemsUniformWithoutReplacementReservoirMethod(int pickCount)
         {
-            Measure.Method(() => rand.ItemsUniformWithoutReplacementReservoirMethod<string>(UnityInternals.AsSpan(strings), new string[pickCount])).MeasurementCount(SAMPLECOUNT).GC().Run();
+            Measure.Method(() => rand.ItemsUniformWithoutReplacementReservoirMethod(strings.AsReadOnlySpan(), new string[pickCount])).MeasurementCount(SAMPLECOUNT).GC().Run();
         }
         [Test, Performance, TestCase(NUMPICKSPERSAMPLE)]
         public void ItemsUniformWithoutReplacementReservoirMethodCachedOutput(int pickCount)
         {
             string[] outputCached = new string[pickCount];
 
-            Measure.Method(() => rand.ItemsUniformWithoutReplacementReservoirMethod<string>(UnityInternals.AsSpan(strings), outputCached)).MeasurementCount(SAMPLECOUNT).GC().Run();
+            Measure.Method(() => rand.ItemsUniformWithoutReplacementReservoirMethod(strings.AsReadOnlySpan(), outputCached)).MeasurementCount(SAMPLECOUNT).GC().Run();
         }
 
         [Test, Performance, TestCase(NUMPICKSPERSAMPLE)]
         public void ItemsUniformWithoutReplacementRetryMethod(int pickCount)
         {
-            Measure.Method(() => rand.ItemsUniformWithoutReplacementRetryMethod<string>(UnityInternals.AsSpan(strings), new string[pickCount])).MeasurementCount(SAMPLECOUNT).GC().Run();
+            Measure.Method(() => rand.ItemsUniformWithoutReplacementRetryMethod(strings.AsReadOnlySpan(), new string[pickCount])).MeasurementCount(SAMPLECOUNT).GC().Run();
         }
         [Test, Performance, TestCase(NUMPICKSPERSAMPLE)]
         public void ItemsUniformWithoutReplacementRetryMethodCachedOutput(int pickCount)
         {
             string[] outputCached = new string[pickCount];
 
-            Measure.Method(() => rand.ItemsUniformWithoutReplacementRetryMethod<string>(UnityInternals.AsSpan(strings), outputCached)).MeasurementCount(SAMPLECOUNT).GC().Run();
+            Measure.Method(() => rand.ItemsUniformWithoutReplacementRetryMethod(strings.AsReadOnlySpan(), outputCached)).MeasurementCount(SAMPLECOUNT).GC().Run();
         }
         #endregion
         #region Uniform Extract
@@ -84,34 +84,34 @@ namespace LeafRand.Tests.Runtime
         [Test, Performance, TestCase(NUMPICKSPERSAMPLE)]
         public void ItemsWeightedWithReplacementBinarySearch(int pickCount)
         {
-            Measure.Method(() => rand.ItemsWeightedWithReplacementBinarySearch<string>(UnityInternals.AsSpan(weightedStrings), new string[pickCount])).MeasurementCount(SAMPLECOUNT).GC().Run();
+            Measure.Method(() => rand.ItemsWeightedWithReplacementBinarySearch(weightedStrings.AsReadOnlySpan(), new string[pickCount])).MeasurementCount(SAMPLECOUNT).GC().Run();
         }
         [Test, Performance, TestCase(NUMPICKSPERSAMPLE)]
         public void ItemsWeightedWithReplacementBinarySearchCachedOutput(int pickCount)
         {
             string[] outputCached = new string[pickCount];
 
-            Measure.Method(() => rand.ItemsWeightedWithReplacementBinarySearch<string>(UnityInternals.AsSpan(weightedStrings), outputCached)).MeasurementCount(SAMPLECOUNT).GC().Run();
+            Measure.Method(() => rand.ItemsWeightedWithReplacementBinarySearch(weightedStrings.AsReadOnlySpan(), outputCached)).MeasurementCount(SAMPLECOUNT).GC().Run();
         }
 
         [Test, Performance, TestCase(NUMPICKSPERSAMPLE)]
         public void ItemsWeightedWithReplacementAliasMethod(int pickCount)
         {
-            Measure.Method(() => rand.ItemsWeightedWithReplacementAliasMethod<string>(UnityInternals.AsSpan(weightedStrings), new string[pickCount])).MeasurementCount(SAMPLECOUNT).GC().Run();
+            Measure.Method(() => rand.ItemsWeightedWithReplacementAliasMethod(weightedStrings.AsReadOnlySpan(), new string[pickCount])).MeasurementCount(SAMPLECOUNT).GC().Run();
         }
         [Test, Performance, TestCase(NUMPICKSPERSAMPLE)]
         public void ItemsWeightedWithReplacementAliasMethodCachedOutput(int pickCount)
         {
             string[] outputCached = new string[pickCount];
 
-            Measure.Method(() => rand.ItemsWeightedWithReplacementAliasMethod<string>(UnityInternals.AsSpan(weightedStrings), outputCached)).MeasurementCount(SAMPLECOUNT).GC().Run();
+            Measure.Method(() => rand.ItemsWeightedWithReplacementAliasMethod(weightedStrings.AsReadOnlySpan(), outputCached)).MeasurementCount(SAMPLECOUNT).GC().Run();
         }
         #endregion
         #region Weighted Without Replacement
         [Test, Performance, TestCase(NUMPICKSPERSAMPLE)]
         public void ItemsWeightedWithoutReplacement(int pickCount)
         {
-            Measure.Method(() => rand.ItemsWeightedWithoutReplacement<string>(UnityInternals.AsSpan(weightedStrings), pickCount)).MeasurementCount(SAMPLECOUNT).GC().Run();
+            Measure.Method(() => rand.ItemsWeightedWithoutReplacement(weightedStrings.AsReadOnlySpan(), pickCount)).MeasurementCount(SAMPLECOUNT).GC().Run();
         }
 
         [Test, Performance, TestCase(NUMPICKSPERSAMPLE)]
@@ -119,7 +119,7 @@ namespace LeafRand.Tests.Runtime
         {
             string[] outputCached = new string[pickCount];
 
-            Measure.Method(() => rand.ItemsWeightedWithoutReplacement<string>(UnityInternals.AsSpan(weightedStrings), outputCached)).MeasurementCount(SAMPLECOUNT).GC().Run();
+            Measure.Method(() => rand.ItemsWeightedWithoutReplacement(weightedStrings.AsReadOnlySpan(), outputCached)).MeasurementCount(SAMPLECOUNT).GC().Run();
         }
         #endregion
     }

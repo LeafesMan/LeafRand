@@ -1,9 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using Unity.Collections;
+using LeafRand.Extensions;
 
 namespace LeafRand.Instanced
 {
@@ -307,7 +307,7 @@ namespace LeafRand.Instanced
 
             for (int i = 0; i < output.Length; i++)
             {   // Rand Selection
-                int randIndex = Index<T>(UnityInternals.AsSpan(source));
+                int randIndex = Index(source.AsReadOnlySpan());
 
                 // Cache Result
                 output[i] = source[randIndex];
