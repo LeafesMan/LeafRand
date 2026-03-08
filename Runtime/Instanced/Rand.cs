@@ -15,7 +15,7 @@ namespace LeafRand.Instanced
         BurstRand state = new((uint)Environment.TickCount);
 
         /// <include file="../Docs.xml" path="Doc/Seed"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public Rand(uint seed = 1) => state = new(seed);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public Rand(uint seed) => state = new(seed);
         /// <include file="../Docs.xml" path="Doc/Seed"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public void SetSeed(uint seed) => state.SetSeed(seed);
         #endregion

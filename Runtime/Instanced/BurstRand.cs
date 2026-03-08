@@ -18,7 +18,7 @@ namespace LeafRand.Instanced
         Unity.Mathematics.Random state;
 
         /// <include file="../Docs.xml" path="Doc/Seed"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public BurstRand(uint seed = 1) => state = new(seed);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public BurstRand(uint seed) => state = new();
 
         /// <include file="../Docs.xml" path="Doc/Seed"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public void SetSeed(uint seed) => state.InitState(seed);
