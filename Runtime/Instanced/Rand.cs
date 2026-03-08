@@ -18,6 +18,8 @@ namespace LeafRand.Instanced
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public Rand(uint seed) => state = new(seed);
         /// <include file="../Docs.xml" path="Doc/Seed"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public void SetSeed(uint seed) => state.SetSeed(seed);
+        /// <include file="../Docs.xml" path="Doc/CreateScrambled"/>
+        public BurstRand CreateScrambled(uint seed) => state.CreateScrambled(seed);
         #endregion
         #region Wrapped
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public uint UInt() => state.UInt();

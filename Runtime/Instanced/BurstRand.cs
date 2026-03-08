@@ -22,6 +22,8 @@ namespace LeafRand.Instanced
 
         /// <include file="../Docs.xml" path="Doc/Seed"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public void SetSeed(uint seed) => state.InitState(seed);
+        /// <include file="../Docs.xml" path="Doc/CreateScrambled"/>
+        public BurstRand CreateScrambled(uint seed) => new() { state = Unity.Mathematics.Random.CreateFromIndex(seed) };
         #endregion
         #region Helpers
         #region Num
