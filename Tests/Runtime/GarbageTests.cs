@@ -5,7 +5,7 @@ using System.Linq;
 using Unity.PerformanceTesting;
 
 
-namespace LeafRand.Tests.Editor
+namespace LeafRand.Tests.Runtime
 {
     public class GarbageTests
     {
