@@ -172,9 +172,9 @@ namespace LeafRand.Instanced
         #region Single
         /// <include file="../Docs.xml" path="Doc/Item/List"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public T Item<T>(IReadOnlyList<T> source) => source[state.NextInt(source.Count)];
+        public T Item<T>(ReadOnlySpan<T> source) => source[state.NextInt(source.Length)];
         /// <include file="../Docs.xml" path="Doc/Item/ListList"/>
-        public T ItemWeighted<T>(IReadOnlyList<Weighted<T>> source)
+        public T ItemWeighted<T>(ReadOnlySpan<Weighted<T>> source)
         {   
             float sumWeights = 0;
             foreach (var item in source) sumWeights += item.Weight;
@@ -184,7 +184,7 @@ namespace LeafRand.Instanced
             // Return Weighted Random Element
             float randVal = state.NextFloat() * sumWeights;
             float weightPosition = 0;
-            for (int i = 0; i < source.Count; i++)
+            for (int i = 0; i < source.Length; i++)
             {
                 weightPosition += source[i].Weight;
                 if (weightPosition > randVal)
@@ -198,7 +198,7 @@ namespace LeafRand.Instanced
         #region Uniform With Replacement
         /// <include file="../Docs.xml" path="Doc/Items/WithReplacement/ListInt"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public T[] ItemsWithReplacement<T>(IReadOnlyList<T> source, int count)
+        public T[] ItemsWithReplacement<T>(ReadOnlySpan<T> source, int count)
         {   
             T[] selectedItems = new T[count];
             ItemsWithReplacement(source, selectedItems);
@@ -208,19 +208,19 @@ namespace LeafRand.Instanced
         /// Picks <paramref name="output.Count"/> items from <paramref name="source"/> using uniform random sampling with replacement.<br/>
         /// Time Complexity: O(k)
         /// </summary>
-        public void ItemsWithReplacement<T>(IReadOnlyList<T> source, IList<T> output)
+        public void ItemsWithReplacement<T>(ReadOnlySpan<T> source, Span<T> output)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
-            if (source.Count == 0) throw new ArgumentException("Items must be non-empty.", nameof(source));
+            if (source.Length == 0) throw new ArgumentException("Items must be non-empty.", nameof(source));
             if (output == null) throw new ArgumentNullException(nameof(output));
 
-            for (int i = 0; i < output.Count; i++) output[i] = source.ElementAt(state.NextInt(source.Count));
+            for (int i = 0; i < output.Length; i++) output[i] = source[state.NextInt(source.Length)];
         }
         #endregion
         #region Uniform Without Replacement
         /// <include file="../Docs.xml" path="Doc/Items/WithoutReplacement/ListInt"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public T[] ItemsWithoutReplacement<T>(IReadOnlyList<T> source, int count)
+        public T[] ItemsWithoutReplacement<T>(ReadOnlySpan<T> source, int count)
         {   
 
             T[] output = new T[count];
@@ -228,38 +228,38 @@ namespace LeafRand.Instanced
             return output;
         }
         /// <include file="../Docs.xml" path="Doc/Items/WithoutReplacement/ListInt"/>
-        public void ItemsWithoutReplacement<T>(IReadOnlyList<T> source, IList<T> output)
+        public void ItemsWithoutReplacement<T>(ReadOnlySpan<T> source, Span<T> output)
         {   // Input validation
             if (source == null) throw new ArgumentNullException(nameof(source));
-            if (source.Count == 0) throw new ArgumentException("Items must be non-empty.", nameof(source));
-            if (output.Count > source.Count) throw new ArgumentException($"Cannot request more items than are in source! Requested {output.Count} items but only {source.Count} items in source!");
+            if (source.Length == 0) throw new ArgumentException("Items must be non-empty.", nameof(source));
+            if (output.Length > source.Length) throw new ArgumentException($"Cannot request more items than are in source! Requested {output.Length} items but only {source.Length} items in source!");
 
             // Determine Best Algorithm based on use reservoir threshold
             float USERESERVOIRTHRESHOLD = 0.14f;
-            if ((float)output.Count / source.Count > USERESERVOIRTHRESHOLD) ItemsUniformWithoutReplacementReservoirMethod(source, output);
+            if ((float)output.Length / source.Length > USERESERVOIRTHRESHOLD) ItemsUniformWithoutReplacementReservoirMethod(source, output);
             else ItemsUniformWithoutReplacementRetryMethod(source, output);
         }
         /// <summary>
         /// Picks <paramref name="count"/> items from <paramref name="source"/> using uniform random sampling without replacement.<br/>
         /// Time Complexity: O(k)-O(oo)
         /// </summary>
-        internal void ItemsUniformWithoutReplacementRetryMethod<T>(IReadOnlyList<T> source, IList<T> output)
+        internal void ItemsUniformWithoutReplacementRetryMethod<T>(ReadOnlySpan<T> source, Span<T> output)
         {   // Kind of weird but pretty much O(infinity) worst case and O(k) best case
             // in practice lightning fast for small pick ratios (Picking < 15% of source)
             // relative to somthing like reservoir sampling which will still take O(n) when k is small
 
             // Pre Hash to count Capacity
             // We know final map size so no need to Rehash on the fly            
-            NativeHashSet<int> removed = new(output.Count, Allocator.Temp);
+            NativeHashSet<int> removed = new(output.Length, Allocator.Temp);
 
             // Pick items
-            for (int i = 0; i < output.Count; i++)
+            for (int i = 0; i < output.Length; i++)
             {
                 // Keep Picking Until Distinct Index found
                 // This can be very slow if Count is close to itemsLength
-                int randIndex = state.NextInt(source.Count());
+                int randIndex = state.NextInt(source.Length);
                 while (removed.Contains(randIndex))
-                    randIndex = state.NextInt(source.Count());
+                    randIndex = state.NextInt(source.Length);
 
                 removed.Add(randIndex);
                 output[i] = source[randIndex];
@@ -271,20 +271,20 @@ namespace LeafRand.Instanced
         /// Picks <paramref name="count"/> items from <paramref name="source"/> using uniform random sampling without replacement.<br/>
         /// Time Complexity: O(n)
         /// </summary>
-        internal void ItemsUniformWithoutReplacementReservoirMethod<T>(IReadOnlyList<T> source, IList<T> output)
+        internal void ItemsUniformWithoutReplacementReservoirMethod<T>(ReadOnlySpan<T> source, Span<T> output)
         {
             // Initial Resevior
             int i = 0;
-            for (; i < output.Count; i++)
+            for (; i < output.Length; i++)
             {
                 output[i] = source[i];
             }
 
             // Roll for each item
-            for (; i < source.Count; i++)
+            for (; i < source.Length; i++)
             {
                 int random = state.NextInt(i + 1);
-                if (random < output.Count) output[random] = source[i];
+                if (random < output.Length) output[random] = source[i];
             }
         }
         #endregion
@@ -298,16 +298,16 @@ namespace LeafRand.Instanced
             return output;
         }
         /// <include file="../Docs.xml" path="Doc/Items/Extract/ListInt"/>
-        public void ItemsExtract<T>(List<T> source, IList<T> output)
+        public void ItemsExtract<T>(List<T> source, Span<T> output)
         {   // Input Validation
             if (source == null) throw new ArgumentNullException(nameof(source));
             if (source.Count == 0) throw new ArgumentException("Items must be non-empty.", nameof(source));
             if (output == null) throw new ArgumentNullException(nameof(output));
-            if (output.Count > source.Count) throw new ArgumentException($"Cannot request more items than are in source! Requested {output.Count} items but only {source.Count} items in source!");
+            if (output.Length > source.Count) throw new ArgumentException($"Cannot request more items than are in source! Requested {output.Length} items but only {source.Count} items in source!");
 
-            for (int i = 0; i < output.Count; i++)
+            for (int i = 0; i < output.Length; i++)
             {   // Rand Selection
-                int randIndex = Index(source);
+                int randIndex = Index<T>(UnityInternals.AsSpan(source));
 
                 // Cache Result
                 output[i] = source[randIndex];
@@ -321,41 +321,41 @@ namespace LeafRand.Instanced
         #region Weighted With Replacement
         /// <include file="../Docs.xml" path="Doc/Items/WithReplacement/ListListInt"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public T[] ItemsWeightedWithReplacement<T>(IReadOnlyList<Weighted<T>> source, int count)
+        public T[] ItemsWeightedWithReplacement<T>(ReadOnlySpan<Weighted<T>> source, int count)
         {   
             T[] output = new T[count];
             ItemsWeightedWithReplacement(source, output);
             return output;
         }
         /// <include file="../Docs.xml" path="Doc/Items/WithReplacement/ListListInt"/>
-        public void ItemsWeightedWithReplacement<T>(IReadOnlyList<Weighted<T>> source, IList<T> output)
+        public void ItemsWeightedWithReplacement<T>(ReadOnlySpan<Weighted<T>> source, Span<T> output)
         {   // Input Validation
             if (source == null) throw new ArgumentNullException(nameof(source));
-            if (source.Count == 0) throw new ArgumentException("Items must be non-empty.", nameof(source));
+            if (source.Length == 0) throw new ArgumentException("Items must be non-empty.", nameof(source));
             if (output == null) throw new ArgumentNullException(nameof(output));
 
 
             // Decide on best algorithm
-            if (source.Count * output.Count < 100 || (float)source.Count / 5 > output.Count) ItemsWeightedWithReplacementBinarySearch(source, output);
+            if (source.Length * output.Length < 100 || (float)source.Length / 5 > output.Length) ItemsWeightedWithReplacementBinarySearch(source, output);
             else ItemsWeightedWithReplacementAliasMethod(source, output);
         }
         /// <summary>
         /// Picks <paramref name="count"/> items from <paramref name="source"/> using weighted random sampling with replacement.<br/>
         /// Time Complexity: O(n)
         /// </summary>
-        internal void ItemsWeightedWithReplacementAliasMethod<T>(IReadOnlyList<Weighted<T>> source, IList<T> output)
+        internal void ItemsWeightedWithReplacementAliasMethod<T>(ReadOnlySpan<Weighted<T>> source, Span<T> output)
         {   // Uses Vose's Alias method.
             // A lovely method for effecient generation of weighted random values
             // Time Complexity: O(n) setup and O(1) picks
 
             #region Setup
             // Initialize work Arrays
-            NativeArray<float> weights =       new(source.Count, Allocator.Temp);
-            for (int i = 0; i < source.Count; i++) weights[i] = source[i].Weight;
+            NativeArray<float> weights =       new(source.Length, Allocator.Temp);
+            for (int i = 0; i < source.Length; i++) weights[i] = source[i].Weight;
             NativeArray<float> probability =   new(weights.Length, Allocator.Temp);
             NativeArray<int> alias =           new(weights.Length, Allocator.Temp);
-            NativeList<int> aboveIndices = new(source.Count, Allocator.Temp);
-            NativeList<int> belowIndices = new(source.Count, Allocator.Temp);
+            NativeList<int> aboveIndices = new(source.Length, Allocator.Temp);
+            NativeList<int> belowIndices = new(source.Length, Allocator.Temp);
 
             // Split all Probabilities into 
             // stacks above or below average
@@ -399,7 +399,7 @@ namespace LeafRand.Instanced
 
             #endregion
             #region Pick
-            for (int i = 0; i < output.Count; i++)
+            for (int i = 0; i < output.Length; i++)
             {
                 int bucket = state.NextInt(weights.Length);
 
@@ -419,17 +419,17 @@ namespace LeafRand.Instanced
         /// Picks <paramref name="count"/> items from <paramref name="source"/> using weighted random sampling with replacement.<br/>
         /// Time Complexity: O(n + klog(n))
         /// </summary>
-        internal void ItemsWeightedWithReplacementBinarySearch<T>(IReadOnlyList<Weighted<T>> source, IList<T> output)
+        internal void ItemsWeightedWithReplacementBinarySearch<T>(ReadOnlySpan<Weighted<T>> source, Span<T> output)
         {
             // Build CumulativeWeights
-            NativeList<float> cumulativeWeights = new(source.Count, Allocator.Temp);
-            cumulativeWeights.ResizeUninitialized(source.Count);
+            NativeList<float> cumulativeWeights = new(source.Length, Allocator.Temp);
+            cumulativeWeights.ResizeUninitialized(source.Length);
             cumulativeWeights[0] = source[0].Weight;
-            for (int i = 1; i < source.Count; i++)
+            for (int i = 1; i < source.Length; i++)
                 cumulativeWeights[i] = cumulativeWeights[i - 1] + source[i].Weight;
 
             // Choose
-            for (int i = 0; i < output.Count; i++)
+            for (int i = 0; i < output.Length; i++)
             {
                 // Return Weighted Random Element
                 float randVal = state.NextFloat() * cumulativeWeights[cumulativeWeights.Length - 1];
@@ -453,7 +453,7 @@ namespace LeafRand.Instanced
         #region Weighted Without Replacement
         /// <include file="../Docs.xml" path="Doc/Items/WithoutReplacement/ListListInt"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] 
-        public T[] ItemsWeightedWithoutReplacement<T>(IReadOnlyList<Weighted<T>> source, int count)
+        public T[] ItemsWeightedWithoutReplacement<T>(ReadOnlySpan<Weighted<T>> source, int count)
         {
             T[] output = new T[count];
             ItemsWeightedWithoutReplacement(source, output);
@@ -463,19 +463,19 @@ namespace LeafRand.Instanced
         /// Picks <paramref name="count"/> items from <paramref name="source"/> using weighted random sampling without replacement.<br/>
         /// Time Complexity: O(n + klog(n) + nk)
         /// </summary>
-        public void ItemsWeightedWithoutReplacement<T>(IReadOnlyList<Weighted<T>> source, IList<T> output)
+        public void ItemsWeightedWithoutReplacement<T>(ReadOnlySpan<Weighted<T>> source, Span<T> output)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
-            if (source.Count == 0) throw new ArgumentException("Items must be non-empty.", nameof(source));
+            if (source.Length == 0) throw new ArgumentException("Items must be non-empty.", nameof(source));
             if (output == null) throw new ArgumentNullException(nameof(output));
 
 
             // Get cumulative weights and num weighted
-            NativeList<float> cumulativeWeights = new(source.Count, Allocator.Temp);
-            cumulativeWeights.ResizeUninitialized(source.Count);
+            NativeList<float> cumulativeWeights = new(source.Length, Allocator.Temp);
+            cumulativeWeights.ResizeUninitialized(source.Length);
             cumulativeWeights[0] = source[0].Weight;
             int numWeighted = source[0].Weight != 0 ? 1 : 0;
-            for (int i = 1; i < source.Count; i++)
+            for (int i = 1; i < source.Length; i++)
             {
                 if (source[0].Weight != 0) numWeighted++;
                 cumulativeWeights[i] = cumulativeWeights[i - 1] + source[i].Weight;
@@ -483,14 +483,14 @@ namespace LeafRand.Instanced
                 
 
             // Edge Case: Requested pick of more items than the number of items with non-zero weights
-            if (numWeighted < output.Count)
+            if (numWeighted < output.Length)
             {
                 cumulativeWeights.Dispose();
                 throw new ArgumentException("Count must not exceed the number of weighted items!");
             }
 
             // Pick items
-            for (int i = 0; i < output.Count; i++)
+            for (int i = 0; i < output.Length; i++)
             {
                 // Return Weighted Random Element
                 float randVal = state.NextFloat() * cumulativeWeights[cumulativeWeights.Length - 1];
@@ -519,13 +519,13 @@ namespace LeafRand.Instanced
         #endregion
         #region Index
         /// <include file="../Docs.xml" path="Doc/Index"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public int Index<T>(IReadOnlyCollection<T> source) => state.NextInt(source.Count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public int Index<T>(ReadOnlySpan<T> source) => state.NextInt(source.Length);
         #endregion
         #region Shuffle
         /// <include file="../Docs.xml" path="Doc/Shuffle"/>
-        public void Shuffle<T>(IList<T> items)
+        public void Shuffle<T>(Span<T> items)
         {   // A Fisher–Yates shuffle
-            for (int i = 0; i < items.Count; i++)
+            for (int i = 0; i < items.Length; i++)
             {
                 // Choose a random index to swap with in the remaining range
                 int randIndex = state.NextInt(0, i + 1);
