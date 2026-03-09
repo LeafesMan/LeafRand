@@ -3,7 +3,7 @@ using Unity.Collections;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using LeafRand.Extensions;
+using LeafRand.Collections;
 
 namespace LeafRand.Instanced
 {

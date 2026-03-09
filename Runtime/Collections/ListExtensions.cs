@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-namespace LeafRand.Extensions
+namespace LeafRand.Collections
 {
     public static class ListExtensions
     {

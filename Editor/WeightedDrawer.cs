@@ -2,8 +2,9 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
+using LeafRand.Collections;
 
-namespace LeafRand
+namespace LeafRand.Editor
 {
     [CustomPropertyDrawer(typeof(Weighted<>))]
     public class WeightedDrawer : PropertyDrawer

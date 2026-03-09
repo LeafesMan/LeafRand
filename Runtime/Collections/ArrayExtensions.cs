@@ -1,6 +1,6 @@
 using System;
 using System.Runtime.CompilerServices;
-namespace LeafRand.Extensions
+namespace LeafRand.Collections
 {
     public static class ArrayExtensions
     {

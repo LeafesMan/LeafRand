@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using LeafRand.Collections;
 using UnityEngine;
 
-namespace LeafRand
+namespace LeafRand.Global
 {
     /// <summary>
     /// Global RNG class with high-level helper methods.<br></br> 

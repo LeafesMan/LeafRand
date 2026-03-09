@@ -1,7 +1,7 @@
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace LeafRand
+namespace LeafRand.Collections
 {
     /// <summary>
     /// An item-weight pair.
