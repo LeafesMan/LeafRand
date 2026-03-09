@@ -23,7 +23,7 @@ namespace LeafRand.Instanced
         /// <include file="../Docs.xml" path="Doc/Seed"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public void SetSeed(uint seed) => state.InitState(seed);
         /// <include file="../Docs.xml" path="Doc/CreateScrambled"/>
-        public BurstRand CreateScrambled(uint seed) => new() { state = Unity.Mathematics.Random.CreateFromIndex(seed) };
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public BurstRand CreateScrambled(uint seed) => new() { state = Unity.Mathematics.Random.CreateFromIndex(seed) };
         #endregion
         #region Helpers
         #region Num
@@ -31,7 +31,8 @@ namespace LeafRand.Instanced
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public uint UInt(uint max) => state.NextUInt(max);
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public uint UInt(uint min, uint max) => state.NextUInt(min, max);
 
-        /// <include file="../Docs.xml" path="Doc/Num/Int"/>
+        /// <include file="../Docs.xml" path="Doc/Num/Int">
+        /// </include>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public int Int() => state.NextInt();
         /// <include file="../Docs.xml" path="Doc/Num/Int"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public int Int(int max) => state.NextInt(max);
@@ -169,6 +170,13 @@ namespace LeafRand.Instanced
         {
             return UnityEngine.Color.HSVToRGB(state.NextFloat(hueRange.x, hueRange.y), state.NextFloat(saturationRange.x, saturationRange.y), state.NextFloat(valueRange.x, valueRange.y));
         }
+        #endregion
+        #region Selectors
+        internal interface ISelector<T, O>{ O Select(ReadOnlySpan<T> from, int index);  }
+        internal readonly struct ItemSelector<T>  : ISelector<T, T>   { [MethodImpl(MethodImplOptions.AggressiveInlining)] public readonly  T  Select(ReadOnlySpan<T> from, int index) => from[index]; }
+        internal readonly struct IndexSelector<T> : ISelector<T, int> { [MethodImpl(MethodImplOptions.AggressiveInlining)] public readonly int Select(ReadOnlySpan<T> from, int index) => index; }
+        internal readonly struct WeightedItemSelector<T> : ISelector<Weighted<T>, T> { [MethodImpl(MethodImplOptions.AggressiveInlining)] public readonly T Select(ReadOnlySpan<Weighted<T>> from, int index) => from[index].Item; }
+        internal readonly struct WeightedIndexSelector<T> : ISelector<Weighted<T>, int> { [MethodImpl(MethodImplOptions.AggressiveInlining)] public readonly int Select(ReadOnlySpan<Weighted<T>> from, int index) => index; }
         #endregion
         #region Item
         #region Single
