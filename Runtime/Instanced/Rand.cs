@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
-using static LeafRand.Instanced.BurstRand;
 
 namespace LeafRand.Instanced
 {
@@ -18,10 +17,13 @@ namespace LeafRand.Instanced
 
         /// <include file="../Docs.xml" path="Doc/Seed"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public Rand(uint seed) => state = new(seed);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] private Rand() { } // Should only be used for CreateScrambled
         /// <include file="../Docs.xml" path="Doc/Seed"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public void SetSeed(uint seed) => state.SetSeed(seed);
         /// <include file="../Docs.xml" path="Doc/CreateScrambled"/>
-        public BurstRand CreateScrambled(uint seed) => state.CreateScrambled(seed);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static Rand CreateScrambled(uint seed) => new() { state = BurstRand.CreateScrambled(seed) };
+
+
         #endregion
         #region Wrapped
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public uint UInt() => state.UInt();
