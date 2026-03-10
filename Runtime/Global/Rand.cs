@@ -134,10 +134,33 @@ namespace LeafRand.Global
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public static void ItemsExtract<T>(List<T> source, Span<T> output) => state.ItemsExtract(source, output);
 
 
-        /// <include file="Docs.xml" path="Doc/Index"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static int Index<T>(ReadOnlySpan<T> source) => state.Index(source);
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public static int Index<T>(List<T> source) => state.Index(source);
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public static int Index<T>(T[] source) => state.Index(source);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static int Index<T>(ReadOnlySpan<T> source) => state.Index(source);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static int IndexWeighted<T>(List<Weighted<T>> source) => state.IndexWeighted(source);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static int IndexWeighted<T>(Weighted<T>[] source) => state.IndexWeighted(source);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static int IndexWeighted<T>(ReadOnlySpan<Weighted<T>> source) => state.IndexWeighted(source);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static int[] IndicesWithReplacement<T>(List<T> source, int count) => state.IndicesWithReplacement(source, count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static int[] IndicesWithReplacement<T>(T[] source, int count) => state.IndicesWithReplacement(source, count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static int[] IndicesWithReplacement<T>(ReadOnlySpan<T> source, int count) => state.IndicesWithReplacement(source, count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static void IndicesWithReplacement<T>(ReadOnlySpan<T> source, Span<int> output) => state.IndicesWithReplacement(source, output);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static int[] IndicesWithoutReplacement<T>(List<T> source, int count) => state.IndicesWithoutReplacement(source, count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static int[] IndicesWithoutReplacement<T>(T[] source, int count) => state.IndicesWithoutReplacement(source, count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static int[] IndicesWithoutReplacement<T>(ReadOnlySpan<T> source, int count) => state.IndicesWithoutReplacement(source, count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static void IndicesWithoutReplacement<T>(ReadOnlySpan<T> source, Span<int> output) => state.IndicesWithoutReplacement(source, output);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static int[] IndicesWeightedWithReplacement<T>(List<Weighted<T>> source, int count) => state.IndicesWeightedWithReplacement(source, count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static int[] IndicesWeightedWithReplacement<T>(Weighted<T>[] source, int count) => state.IndicesWeightedWithReplacement(source, count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static int[] IndicesWeightedWithReplacement<T>(ReadOnlySpan<Weighted<T>> source, int count) => state.IndicesWeightedWithReplacement(source, count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static void IndicesWeightedWithReplacement<T>(ReadOnlySpan<Weighted<T>> source, Span<int> output) => state.IndicesWeightedWithReplacement(source, output);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static int[] IndicesWeightedWithoutReplacement<T>(List<Weighted<T>> source, int count) => state.IndicesWeightedWithoutReplacement(source, count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static int[] IndicesWeightedWithoutReplacement<T>(Weighted<T>[] source, int count) => state.IndicesWeightedWithoutReplacement(source, count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static int[] IndicesWeightedWithoutReplacement<T>(ReadOnlySpan<Weighted<T>> source, int count) => state.IndicesWeightedWithoutReplacement(source, count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static void IndicesWeightedWithoutReplacement<T>(ReadOnlySpan<Weighted<T>> source, Span<int> output) => state.IndicesWeightedWithoutReplacement(source, output);
 
 
         /// <include file="Docs.xml" path="Doc/Shuffle"/>
