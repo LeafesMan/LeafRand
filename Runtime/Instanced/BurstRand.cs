@@ -471,36 +471,6 @@ namespace LeafRand.Instanced
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[]  ItemsWeightedWithoutReplacement<T>(Weighted<T>[] source, int count) => ItemsWeightedWithoutReplacement(source.AsReadOnlySpan(), count);
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[]  ItemsWeightedWithoutReplacement<T>(ReadOnlySpan<Weighted<T>> source, int count) { T[] output = new T[count]; ItemsWeightedWithoutReplacement(source, output); return output; }
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public void ItemsWeightedWithoutReplacement<T>(ReadOnlySpan<Weighted<T>> source, Span<T> output) => SampleWeightedWithoutReplacement<T, T, WeightedItemSelector<T>>(source, output);
-        #region Extract
-        /// <include file="../Docs.xml" path="Doc/Items/Extract/ListInt"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public T[] ItemsExtract<T>(List<T> source, int count)
-        {
-            T[] output = new T[count];
-            ItemsExtract(source, output);
-            return output;
-        }
-        /// <include file="../Docs.xml" path="Doc/Items/Extract/ListInt"/>
-        public void ItemsExtract<T>(List<T> source, Span<T> output)
-        {   // Input Validation
-            if (source == null) throw new ArgumentNullException(nameof(source));
-            if (source.Count == 0) throw new ArgumentException("Items must be non-empty.", nameof(source));
-            if (output == null) throw new ArgumentNullException(nameof(output));
-            if (output.Length > source.Count) throw new ArgumentException($"Cannot request more items than are in source! Requested {output.Length} items but only {source.Count} items in source!");
-
-            for (int i = 0; i < output.Length; i++)
-            {   // Rand Selection
-                int randIndex = Index(source.AsReadOnlySpan());
-
-                // Cache Result
-                output[i] = source[randIndex];
-
-                // Swap Removal
-                (source[randIndex], source[^1]) = (source[^1], source[randIndex]); // Swap
-                source.RemoveAt(source.Count - 1);
-            }
-        }
-        #endregion
         #endregion
         #region Index Wrappers
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public int Index<T>(List<T> source) => Index(source.AsReadOnlySpan());

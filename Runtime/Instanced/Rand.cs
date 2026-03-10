@@ -136,11 +136,6 @@ namespace LeafRand.Instanced
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public void ItemsWeightedWithoutReplacement<T>(ReadOnlySpan<Weighted<T>> source, Span<T> output) => state.ItemsWeightedWithoutReplacement(source, output);
 
 
-        /// <include file="../Docs.xml" path="Doc/Items/Extract/ListInt"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public  T[] ItemsExtract<T>(List<T> source, int count) => state.ItemsExtract(source, count);
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public void ItemsExtract<T>(List<T> source, Span<T> output) => state.ItemsExtract(source, output);
-
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public int Index<T>(List<T> source) => state.Index(source);
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public int Index<T>(T[] source) => state.Index(source);
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public int Index<T>(ReadOnlySpan<T> source) => state.Index(source);

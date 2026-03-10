@@ -63,25 +63,6 @@ namespace LeafRand.Tests.Runtime
             Measure.Method(() => rand.SampleUniformWithoutReplacementRetryMethod<string, string, BurstRand.ItemSelector<string>>(strings.AsReadOnlySpan(), outputCached)).GC().MeasurementCount(MEASUREMENTCOUNT).Run();
         }
         #endregion
-        #region Uniform Extract
-        [Test, Performance, TestCase(NUMPICKSPERSAMPLE)]
-        public void ItemsUniformExtract(int pickCount)
-        {
-            List<string> workingStrings;
-
-
-            Measure.Method(() => { workingStrings = new(strings); rand.ItemsExtract(workingStrings, pickCount); }).GC().MeasurementCount(MEASUREMENTCOUNT).Run();
-            
-        }
-        [Test, Performance, TestCase(NUMPICKSPERSAMPLE)]
-        public void ItemsUniformExtractCachedOutput(int pickCount)
-        {
-            List<string> workingStrings;
-            string[] outputCached = new string[pickCount];
-
-            Measure.Method(() => { workingStrings = new(strings); rand.ItemsExtract(workingStrings, outputCached); }).GC().MeasurementCount(MEASUREMENTCOUNT).Run();
-        }
-        #endregion
         #region Weighted With Replacement
         [Test, Performance, TestCase(NUMPICKSPERSAMPLE)]
         public void ItemsWeightedWithReplacementBinarySearch(int pickCount)
