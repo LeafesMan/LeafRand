@@ -18,7 +18,7 @@ namespace LeafRand.Instanced
         Unity.Mathematics.Random state;
 
         /// <include file="../Docs.xml" path="Doc/Seed"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public BurstRand(uint seed) => state = new();
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public BurstRand(uint seed) => state = new(seed);
 
         /// <include file="../Docs.xml" path="Doc/Seed"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public void SetSeed(uint seed) => state.InitState(seed);
@@ -482,6 +482,7 @@ namespace LeafRand.Instanced
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[] ItemsWithReplacement<T>(ReadOnlySpan<T> source, int count) { T[] selectedItems = new T[count]; ItemsWithReplacement(source, selectedItems); return selectedItems; }
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public void ItemsWithReplacement<T>(ReadOnlySpan<T> source, Span<T> output) => SampleUniformWithReplacement<T,T,ItemSelector<T>>(source, output);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[] ItemsWithReplacementOld<T>(ReadOnlySpan<T> source, int count) { T[] selectedItems = new T[count]; ItemsWithReplacementOld(source, selectedItems); return selectedItems; }
         public void ItemsWithReplacementOld<T>(ReadOnlySpan<T> source, Span<T> output)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
@@ -497,6 +498,8 @@ namespace LeafRand.Instanced
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[] ItemsWithoutReplacement<T>(ReadOnlySpan<T> source, int count) { T[] output = new T[count]; ItemsWithoutReplacement(source, output); return output; }
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public void ItemsWithoutReplacement<T>(ReadOnlySpan<T> source, Span<T> output) => SampleUniformWithoutReplacement<T, T, ItemSelector<T>>(source, output);
 
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[] ItemsWithoutReplacementOld<T>(ReadOnlySpan<T> source, int count) { T[] output = new T[count]; ItemsWithoutReplacementOld(source, output); return output; }
         public void ItemsWithoutReplacementOld<T>(ReadOnlySpan<T> source, Span<T> output)
         {   // Input validation
             if (source == null) throw new ArgumentNullException(nameof(source));
@@ -555,6 +558,7 @@ namespace LeafRand.Instanced
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[] ItemsWeightedWithReplacement<T>(ReadOnlySpan<Weighted<T>> source, int count) { T[] output = new T[count]; ItemsWeightedWithReplacement(source, output); return output; }
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public void ItemsWeightedWithReplacement<T>(ReadOnlySpan<Weighted<T>> source, Span<T> output) => SampleWeightedWithReplacement<T, T, WeightedItemSelector<T>>(source, output);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[] ItemsWeightedWithReplacementOld<T>(ReadOnlySpan<Weighted<T>> source, int count) { T[] output = new T[count]; ItemsWeightedWithReplacementOld(source, output); return output; }
         public void ItemsWeightedWithReplacementOld<T>(ReadOnlySpan<Weighted<T>> source, Span<T> output)
         {   // Input Validation
             if (source == null) throw new ArgumentNullException(nameof(source));
@@ -675,6 +679,7 @@ namespace LeafRand.Instanced
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[] ItemsWeightedWithoutReplacement<T>(ReadOnlySpan<Weighted<T>> source, int count) { T[] output = new T[count]; ItemsWeightedWithoutReplacement(source, output); return output; }
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public void ItemsWeightedWithoutReplacement<T>(ReadOnlySpan<Weighted<T>> source, Span<T> output) => SampleWeightedWithoutReplacement<T, T, WeightedItemSelector<T>>(source, output);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[] ItemsWeightedWithoutReplacementOld<T>(ReadOnlySpan<Weighted<T>> source, int count) { T[] output = new T[count]; ItemsWeightedWithoutReplacementOld(source, output); return output; }
         public void ItemsWeightedWithoutReplacementOld<T>(ReadOnlySpan<Weighted<T>> source, Span<T> output)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
