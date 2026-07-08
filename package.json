@@ -11,12 +11,4 @@
   "author": {
     "name": "LeafesMan",
     "url": "https://github.com/LeafesMan"
-  }
-  "files": [
-	"Runtime",
-	"Editor",
-	"Tests",
-	"README.md",
-	"CHANGELOG.md"
-  ]
-}
+	}
