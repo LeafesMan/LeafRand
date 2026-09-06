@@ -59,7 +59,7 @@ namespace LeafRand.Global
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public static bool Chance(double probability) => state.Chance(probability);
 
         /// <include file="Docs.xml" path="Doc/Sign"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static int Sign() => state.Sign();
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static int Dir1D() => state.Dir1D();
         /// <include file="Docs.xml" path="Doc/Dir2D"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public static Vector2 Dir2D() => state.Dir2D();
         /// <include file="Docs.xml" path="Doc/Dir2D/FloatFloat"/>

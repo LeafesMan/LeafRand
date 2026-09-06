@@ -70,7 +70,7 @@ namespace LeafRand.Instanced
         #endregion
         #region Direction
         /// <include file="../Docs.xml" path="Doc/Sign"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public int Sign() => state.NextInt(2) * 2 - 1;
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public int Dir1D() => state.NextInt(2) * 2 - 1;
         #region 2D
         /// <include file="../Docs.xml" path="Doc/Dir2D"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public Vector2 Dir2D() => Dir2D(0, 360);
@@ -452,24 +452,24 @@ namespace LeafRand.Instanced
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public T ItemWeighted<T>(Weighted<T>[] source) => ItemWeighted(source.AsReadOnlySpan());
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public T ItemWeighted<T>(ReadOnlySpan<Weighted<T>> source) => SampleWeighted<T, T, WeightedItemSelector<T>>(source);
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[]  ItemsWithReplacement<T>(List<T> source, int count) => ItemsWithReplacement(source.AsReadOnlySpan(), count);
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[]  ItemsWithReplacement<T>(T[] source, int count) => ItemsWithReplacement(source.AsReadOnlySpan(), count);
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[]  ItemsWithReplacement<T>(ReadOnlySpan<T> source, int count) { T[] selectedItems = new T[count]; ItemsWithReplacement(source, selectedItems); return selectedItems; }
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public void ItemsWithReplacement<T>(ReadOnlySpan<T> source, Span<T> output) => SampleUniformWithReplacement<T,T,ItemSelector<T>>(source, output);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[] ItemsWithReplacement<T>(List<T> source, int count) => ItemsWithReplacement(source.AsReadOnlySpan(), count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[] ItemsWithReplacement<T>(T[] source, int count) => ItemsWithReplacement(source.AsReadOnlySpan(), count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[] ItemsWithReplacement<T>(ReadOnlySpan<T> source, int count) { T[] selectedItems = new T[count]; ItemsWithReplacement(source, selectedItems); return selectedItems; }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public void ItemsWithReplacement<T>(ReadOnlySpan<T> source, Span<T> output) => SampleUniformWithReplacement<T, T, ItemSelector<T>>(source, output);
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[]  ItemsWithoutReplacement<T>(List<T> source, int count) => ItemsWithoutReplacement(source.AsReadOnlySpan(), count);
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[]  ItemsWithoutReplacement<T>(T[] source, int count) => ItemsWithoutReplacement(source.AsReadOnlySpan(), count);
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[]  ItemsWithoutReplacement<T>(ReadOnlySpan<T> source, int count) { T[] output = new T[count]; ItemsWithoutReplacement(source, output); return output; }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[] ItemsWithoutReplacement<T>(List<T> source, int count) => ItemsWithoutReplacement(source.AsReadOnlySpan(), count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[] ItemsWithoutReplacement<T>(T[] source, int count) => ItemsWithoutReplacement(source.AsReadOnlySpan(), count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[] ItemsWithoutReplacement<T>(ReadOnlySpan<T> source, int count) { T[] output = new T[count]; ItemsWithoutReplacement(source, output); return output; }
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public void ItemsWithoutReplacement<T>(ReadOnlySpan<T> source, Span<T> output) => SampleUniformWithoutReplacement<T, T, ItemSelector<T>>(source, output);
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[]  ItemsWeightedWithReplacement<T>(List<Weighted<T>> source, int count) => ItemsWeightedWithReplacement(source.AsReadOnlySpan(), count);
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[]  ItemsWeightedWithReplacement<T>(Weighted<T>[] source, int count) => ItemsWeightedWithReplacement(source.AsReadOnlySpan(), count);
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[]  ItemsWeightedWithReplacement<T>(ReadOnlySpan<Weighted<T>> source, int count) { T[] output = new T[count]; ItemsWeightedWithReplacement(source, output); return output; }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[] ItemsWeightedWithReplacement<T>(List<Weighted<T>> source, int count) => ItemsWeightedWithReplacement(source.AsReadOnlySpan(), count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[] ItemsWeightedWithReplacement<T>(Weighted<T>[] source, int count) => ItemsWeightedWithReplacement(source.AsReadOnlySpan(), count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[] ItemsWeightedWithReplacement<T>(ReadOnlySpan<Weighted<T>> source, int count) { T[] output = new T[count]; ItemsWeightedWithReplacement(source, output); return output; }
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public void ItemsWeightedWithReplacement<T>(ReadOnlySpan<Weighted<T>> source, Span<T> output) => SampleWeightedWithReplacement<T, T, WeightedItemSelector<T>>(source, output);
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[]  ItemsWeightedWithoutReplacement<T>(List<Weighted<T>> source, int count) => ItemsWeightedWithoutReplacement(source.AsReadOnlySpan(), count);
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[]  ItemsWeightedWithoutReplacement<T>(Weighted<T>[] source, int count) => ItemsWeightedWithoutReplacement(source.AsReadOnlySpan(), count);
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[]  ItemsWeightedWithoutReplacement<T>(ReadOnlySpan<Weighted<T>> source, int count) { T[] output = new T[count]; ItemsWeightedWithoutReplacement(source, output); return output; }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[] ItemsWeightedWithoutReplacement<T>(List<Weighted<T>> source, int count) => ItemsWeightedWithoutReplacement(source.AsReadOnlySpan(), count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[] ItemsWeightedWithoutReplacement<T>(Weighted<T>[] source, int count) => ItemsWeightedWithoutReplacement(source.AsReadOnlySpan(), count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public T[] ItemsWeightedWithoutReplacement<T>(ReadOnlySpan<Weighted<T>> source, int count) { T[] output = new T[count]; ItemsWeightedWithoutReplacement(source, output); return output; }
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public void ItemsWeightedWithoutReplacement<T>(ReadOnlySpan<Weighted<T>> source, Span<T> output) => SampleWeightedWithoutReplacement<T, T, WeightedItemSelector<T>>(source, output);
         #endregion
         #region Index Wrappers
@@ -484,28 +484,28 @@ namespace LeafRand.Instanced
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public int[] IndicesWithReplacement<T>(List<T> source, int count) => IndicesWithReplacement(source.AsReadOnlySpan(), count);
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public int[] IndicesWithReplacement<T>(T[] source, int count) => IndicesWithReplacement(source.AsReadOnlySpan(), count);
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public int[] IndicesWithReplacement<T>(ReadOnlySpan<T> source, int count) { int[] selectedIndices = new int[count]; IndicesWithReplacement(source, selectedIndices); return selectedIndices; }
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public void  IndicesWithReplacement<T>(ReadOnlySpan<T> source, Span<int> output) => SampleUniformWithReplacement<T, int, IndexSelector<T>>(source, output);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public void IndicesWithReplacement<T>(ReadOnlySpan<T> source, Span<int> output) => SampleUniformWithReplacement<T, int, IndexSelector<T>>(source, output);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public int[] IndicesWithoutReplacement<T>(List<T> source, int count) => IndicesWithoutReplacement(source.AsReadOnlySpan(), count);
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public int[] IndicesWithoutReplacement<T>(T[] source, int count) => IndicesWithoutReplacement(source.AsReadOnlySpan(), count);
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public int[] IndicesWithoutReplacement<T>(ReadOnlySpan<T> source, int count) { int[] output = new int[count]; IndicesWithoutReplacement(source, output); return output; }
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public void  IndicesWithoutReplacement<T>(ReadOnlySpan<T> source, Span<int> output) => SampleUniformWithoutReplacement<T, int, IndexSelector<T>>(source, output);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public void IndicesWithoutReplacement<T>(ReadOnlySpan<T> source, Span<int> output) => SampleUniformWithoutReplacement<T, int, IndexSelector<T>>(source, output);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public int[] IndicesWeightedWithReplacement<T>(List<Weighted<T>> source, int count) => IndicesWeightedWithReplacement(source.AsReadOnlySpan(), count);
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public int[] IndicesWeightedWithReplacement<T>(Weighted<T>[] source, int count) => IndicesWeightedWithReplacement(source.AsReadOnlySpan(), count);
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public int[] IndicesWeightedWithReplacement<T>(ReadOnlySpan<Weighted<T>> source, int count) { int[] output = new int[count]; IndicesWeightedWithReplacement(source, output); return output; }
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public void  IndicesWeightedWithReplacement<T>(ReadOnlySpan<Weighted<T>> source, Span<int> output) => SampleWeightedWithReplacement<T, int, WeightedIndexSelector<T>>(source, output);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public void IndicesWeightedWithReplacement<T>(ReadOnlySpan<Weighted<T>> source, Span<int> output) => SampleWeightedWithReplacement<T, int, WeightedIndexSelector<T>>(source, output);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public int[] IndicesWeightedWithoutReplacement<T>(List<Weighted<T>> source, int count) => IndicesWeightedWithoutReplacement(source.AsReadOnlySpan(), count);
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public int[] IndicesWeightedWithoutReplacement<T>(Weighted<T>[] source, int count) => IndicesWeightedWithoutReplacement(source.AsReadOnlySpan(), count);
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public int[] IndicesWeightedWithoutReplacement<T>(ReadOnlySpan<Weighted<T>> source, int count) { int[] output = new int[count]; IndicesWeightedWithoutReplacement(source, output); return output; }
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public void  IndicesWeightedWithoutReplacement<T>(ReadOnlySpan<Weighted<T>> source, Span<int> output) => SampleWeightedWithoutReplacement<T, int, WeightedIndexSelector<T>>(source, output);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public void IndicesWeightedWithoutReplacement<T>(ReadOnlySpan<Weighted<T>> source, Span<int> output) => SampleWeightedWithoutReplacement<T, int, WeightedIndexSelector<T>>(source, output);
         #endregion
         #endregion
         #region Shuffle
         /// <include file="../Docs.xml" path="Doc/Shuffle"/>
         public void Shuffle<T>(Span<T> items)
-        {   // A Fisher–Yates shuffle
+        {   // A Fisherï¿½Yates shuffle
             for (int i = 0; i < items.Length; i++)
             {
                 // Choose a random index to swap with in the remaining range

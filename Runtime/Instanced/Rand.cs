@@ -36,26 +36,26 @@ namespace LeafRand.Instanced
         /// <include file="../Docs.xml" path="Doc/Num/IntInt"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public int Int(int min, int max) => state.Int(min, max);
         /// <include file="../Docs.xml" path="Doc/Num/Vector2Int"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public  int Int(Vector2Int range) => state.Int(range.x, range.y);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public int Int(Vector2Int range) => state.Int(range.x, range.y);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public int IntInclusive(int max) => state.IntInclusive(max);
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public int IntInclusive(int min, int max) => state.IntInclusive(min, max);
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public int IntInclusive(Vector2Int range) => state.IntInclusive(range);
 
         /// <include file="../Docs.xml" path="Doc/Num"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public  float Float() => state.Float();
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public float Float() => state.Float();
         /// <include file="../Docs.xml" path="Doc/Num/Float"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public  float Float(float max) => state.Float(max);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public float Float(float max) => state.Float(max);
         /// <include file="../Docs.xml" path="Doc/Num/FloatFloat"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public  float Float(float min, float max) => state.Float(min, max);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public float Float(float min, float max) => state.Float(min, max);
         /// <include file="../Docs.xml" path="Doc/Num/Vector2"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public  float Float(Vector2 range) => state.Float(range.x, range.y);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public float Float(Vector2 range) => state.Float(range.x, range.y);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public double Double() => state.Double();
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public double Double(double max) => state.Double(max);
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public double Double(double min, double max) => state.Double(min, max);
         /// <include file="../Docs.xml" path="Doc/Angle"/>
-        public  float Angle() => state.Angle();
+        public float Angle() => state.Angle();
 
         /// <include file="../Docs.xml" path="Doc/Bool"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public bool Bool() => state.Bool();
@@ -66,34 +66,34 @@ namespace LeafRand.Instanced
 
 
         /// <include file="../Docs.xml" path="Doc/Sign"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public  int Sign() => state.Sign();
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public int Dir1D() => state.Dir1D();
         /// <include file="../Docs.xml" path="Doc/Dir2D"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public  Vector2 Dir2D() => state.Dir2D();
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public Vector2 Dir2D() => state.Dir2D();
         /// <include file="../Docs.xml" path="Doc/Dir2D/FloatFloat"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public  Vector2 Dir2D(float minTheta, float maxTheta) => state.Dir2D(minTheta, maxTheta);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public Vector2 Dir2D(float minTheta, float maxTheta) => state.Dir2D(minTheta, maxTheta);
         /// <include file="../Docs.xml" path="Doc/Dir2D/Vector2"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public  Vector2 Dir2D(Vector2 thetaRange) => state.Dir2D(thetaRange.x, thetaRange.y);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public Vector2 Dir2D(Vector2 thetaRange) => state.Dir2D(thetaRange.x, thetaRange.y);
         /// <include file="../Docs.xml" path="Doc/Dir2D/Vector2FloatFloat"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public  Vector2 Dir2D(Vector2 basis, float minDegrees, float maxDegrees) => state.Dir2D(basis, minDegrees, maxDegrees);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public Vector2 Dir2D(Vector2 basis, float minDegrees, float maxDegrees) => state.Dir2D(basis, minDegrees, maxDegrees);
         /// <include file="../Docs.xml" path="Doc/Dir2D/Vector2Vector2"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public  Vector2 Dir2D(Vector2 basis, Vector2 degreesRange) => state.Dir2D(basis, degreesRange.x, degreesRange.y);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public Vector2 Dir2D(Vector2 basis, Vector2 degreesRange) => state.Dir2D(basis, degreesRange.x, degreesRange.y);
         /// <include file="../Docs.xml" path="Doc/Dir2D/Vector2Float"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public  Vector2 Dir2D(Vector2 basis, float withinDegrees) => state.Dir2D(basis, -withinDegrees, withinDegrees);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public Vector2 Dir2D(Vector2 basis, float withinDegrees) => state.Dir2D(basis, -withinDegrees, withinDegrees);
         /// <include file="../Docs.xml" path="Doc/Dir"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public  Vector3 Dir() => state.Dir(0, 360, 0, 180);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public Vector3 Dir() => state.Dir(0, 360, 0, 180);
         /// <include file="../Docs.xml" path="Doc/Dir/FloatFloatFloatFloat"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public  Vector3 Dir(float thetaRangeX, float thetaRangeY, float phiRangeX, float phiRangeY) => state.Dir(thetaRangeX, thetaRangeY, phiRangeX, phiRangeY);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public Vector3 Dir(float thetaRangeX, float thetaRangeY, float phiRangeX, float phiRangeY) => state.Dir(thetaRangeX, thetaRangeY, phiRangeX, phiRangeY);
         /// <include file="../Docs.xml" path="Doc/Dir/Vector2Vector2"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public  Vector3 Dir(Vector2 thetaRange, Vector2 phiRange) => state.Dir(thetaRange.x, thetaRange.y, phiRange.x, phiRange.y);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public Vector3 Dir(Vector2 thetaRange, Vector2 phiRange) => state.Dir(thetaRange.x, thetaRange.y, phiRange.x, phiRange.y);
         /// <include file="../Docs.xml" path="Doc/Dir/Vector3FloatFloat"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public  Vector3 Dir(Vector3 basis, float minDegrees, float maxDegrees) => state.Dir(basis, minDegrees, maxDegrees);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public Vector3 Dir(Vector3 basis, float minDegrees, float maxDegrees) => state.Dir(basis, minDegrees, maxDegrees);
         /// <include file="../Docs.xml" path="Doc/Dir/Vector3Vector2"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public  Vector3 Dir(Vector3 basis, Vector2 degreesRange) => state.Dir(basis, degreesRange.x, degreesRange.y);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public Vector3 Dir(Vector3 basis, Vector2 degreesRange) => state.Dir(basis, degreesRange.x, degreesRange.y);
         /// <include file="../Docs.xml" path="Doc/Dir/Vector3Float"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public  Vector3 Dir(Vector3 basis, float withinDegrees) => state.Dir(basis, withinDegrees);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public Vector3 Dir(Vector3 basis, float withinDegrees) => state.Dir(basis, withinDegrees);
 
         /// <include file="../Docs.xml" path="Doc/Color"
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public  Color Color(Vector2 hueRange, Vector2 saturationRange, Vector2 valueRange) => state.Color(hueRange, saturationRange, valueRange);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public Color Color(Vector2 hueRange, Vector2 saturationRange, Vector2 valueRange) => state.Color(hueRange, saturationRange, valueRange);
 
 
         /// <include file="../Docs.xml" path="Doc/Item/List"/>
